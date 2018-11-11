@@ -16,9 +16,7 @@ describe('MyService', () => {
     const myHelperServiceMock = magic.mock(MyHelperService, MyHelperServiceMock);
     const service = magic.injection(MyService);
     const myTestHelperService = magic.injection(MyTestHelperService);
-
     beforeEach(magic.happen);
-
     it('should work', () => {
         expect(service).toBeTruthy();
     });
