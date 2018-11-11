@@ -9,7 +9,7 @@ A magic test bed for angular. This Wrapper for the well known angular test bed (
 *Reconfiguration of the test bed in beforeEach is reduced to of 1 line
 *Creation of jasmine Spys for all your mocks' functions is done on the fly
 
-#Sample
+# Sample
 
 describe('MyService', () => {
     const magic = new NgMagicTestBed();
