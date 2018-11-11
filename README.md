@@ -34,7 +34,7 @@ describe('MyService', () => {
     
 });
 
-More details <a href="www.google.de">here</a>
+More details <a href="https://github.com/peejay-solutions/ng-magic-test-bed/blob/master/ng-magic-test-bed-presentation/projects/ng-magic-test-bed/src/test-bed/ng-magic-test.bed.class.spec.ts">here</a>
 
 # Concept
 
