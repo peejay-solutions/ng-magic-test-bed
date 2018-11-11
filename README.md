@@ -34,3 +34,14 @@ describe('MyService', () => {
     
 });
 
+More details <a href="www.google.de">here</a>
+
+# Concept
+
+Working with Reflection and pointers should not be considered as bad style to create a freshly initialized sterile test environment with mocks and spies for each test case. With this mindset and the methods Object.getOwnPropertyNames and Object.getPrototypeOf as well as Object.setPrototypeOf I was able to create a this library. 
+
+
+
+
+
+
