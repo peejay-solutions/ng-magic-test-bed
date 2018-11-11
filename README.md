@@ -12,6 +12,10 @@ A magic test bed for angular. This Wrapper for the well known angular test bed (
 
 - Creation of jasmine spies for all your mocks' functions is done on the fly
 
+# Installation 
+
+npm install @peejay-solutions/ng-magic-test-bed --save
+
 # Sample
 
 describe('MyService', () => {
