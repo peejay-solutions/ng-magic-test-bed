@@ -1,5 +1,10 @@
 {
   "name": "ng-magic-test-bed-presentation",
+  "description": "A magic test bed for angular",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/peejay-solutions/ng-magic-test-bed"
+  },
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",

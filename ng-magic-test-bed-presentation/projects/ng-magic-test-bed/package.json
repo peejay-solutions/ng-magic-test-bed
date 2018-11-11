@@ -1,5 +1,14 @@
 {
-  "name": "ng-magic-test-bed",
+  "name": "@peejay-solutions/ng-magic-test-bed",
+  "description": "A magic test bed for angular",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/peejay-solutions/ng-magic-test-bed"
+  },
+  "author": {
+    "name": "Philipp Jäckel"
+  },
+  "license": "MIT",
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^7.0.0",
