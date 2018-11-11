@@ -16,6 +16,8 @@ A magic test bed for angular. This Wrapper for the well known angular test bed (
 
 npm install @peejay-solutions/ng-magic-test-bed --save
 
+https://www.npmjs.com/package/@peejay-solutions/ng-magic-test-bed
+
 # Sample
 
 describe('MyService', () => {
