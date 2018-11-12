@@ -1,7 +1,8 @@
 import { Type } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { make } from '../make/make.function';
-import { spyOnMethodsOf } from '../spy-on-mock/spy-on-mock.function';
+import { spyOnFunctionsOf } from '../spy-on-mock/spy-on-functions-of.function';
+import { spyOnOwnFunctionsOf } from '../spy-on-mock/spy-on-own-functions-of.function';
 
 interface IInjectionMeta {
     instance: any;
@@ -9,33 +10,28 @@ interface IInjectionMeta {
 }
 
 interface IMockMeta extends IInjectionMeta {
+    forwardMock: () => Type<any>;
     Mock: Type<any>;
+    doSpy: boolean;
 }
 
 export class NgMagicTestBed {
 
     private mocks: IMockMeta[] = [];
     private injections: IInjectionMeta[] = [];
-    private dontSpy = false;
 
     public happen = this.reset.bind(this);
 
-    public mock<M>(Service: Type<any>, Mock: Type<M>, dontSpy: boolean = false): M {
-        this.dontSpy = dontSpy;
-        if (!this.dontSpy) {
-            spyOnMethodsOf(Mock.prototype, true);
-        }
-        const instance = new Mock();
-        if (!this.dontSpy) {
-            spyOnMethodsOf(instance);
-        }
+    public mock<M>(Service: Type<any>, forwardMock: () => Type<M>, dontSpy: boolean = false): M {
         const mockMeta: IMockMeta = {
-            instance: instance,
-            Mock: Mock,
-            Service: Service
+            instance: {},
+            Mock: null,
+            forwardMock: forwardMock,
+            Service: Service,
+            doSpy: !dontSpy
         };
         this.mocks.push(mockMeta);
-        return instance;
+        return mockMeta.instance;
     }
 
     public injection<S>(Service: Type<S>): S {
@@ -51,9 +47,15 @@ export class NgMagicTestBed {
     public reset() {
         const providers = [];
         this.mocks.forEach(mockMeta => {
+            if (!mockMeta.Mock) {
+                mockMeta.Mock = mockMeta.forwardMock();
+                if (mockMeta.doSpy) {
+                    spyOnFunctionsOf(mockMeta.Mock.prototype);
+                }
+            }
             const newInstance = new mockMeta.Mock();
-            if (!this.dontSpy) {
-                spyOnMethodsOf(newInstance);
+            if (mockMeta.doSpy) {
+                spyOnOwnFunctionsOf(newInstance);
             }
             make(mockMeta.instance, newInstance);
             const provider = {

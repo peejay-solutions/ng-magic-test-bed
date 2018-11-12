@@ -1,6 +1,6 @@
-declare const jasmine: any;
+import { spyOnFunctionOf } from './spy-on-function-of.function';
 
-export function spyOnMethodsOf(target: any, deep: boolean = false) {
+export function spyOnFunctionsOf(target: any) {
     if (typeof target !== 'object') {
         throw new Error('NgMagicTestBed: expected parameter target to be object');
     }
@@ -13,9 +13,9 @@ export function spyOnMethodsOf(target: any, deep: boolean = false) {
                 keys.push(key);
             }
         });
-        currentPrototype = deep ? Object.getPrototypeOf(currentPrototype) : false;
+        currentPrototype = Object.getPrototypeOf(currentPrototype);
     }
     keys.forEach(key => {
-        target[key] = jasmine.createSpy(key).and.callFake(target[key]);
+        spyOnFunctionOf(target, key);
     });
 }

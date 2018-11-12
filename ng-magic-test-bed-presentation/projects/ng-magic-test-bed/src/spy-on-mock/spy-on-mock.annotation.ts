@@ -1,8 +1,8 @@
-import { spyOnMethodsOf } from './spy-on-mock.function';
+import { spyOnFunctionsOf } from './spy-on-functions-of.function';
 
 export function spyOnMock() {
     return function (cls) {
-        spyOnMethodsOf(cls.prototype);
+        spyOnFunctionsOf(cls.prototype);
         return cls;
     };
 }

@@ -39,17 +39,9 @@ export class MyTestHelperService {
 }
 
 
-export class MyHelperServiceMock {
-    constructor() {
-
-    }
-    public doSomething = (param) => {
-    }
-}
-
 describe('TestBed', () => {
     const magic = new NgMagicTestBed();
-    const myHelperServiceMock = magic.mock(MyHelperService, MyHelperServiceMock);
+    const myHelperServiceMock = magic.mock(MyHelperService, () => MyHelperServiceMock);
     const service = magic.injection(MyService);
     const myTestHelperService = magic.injection(MyTestHelperService);
 
@@ -69,3 +61,11 @@ describe('TestBed', () => {
         expect(service.counter).toEqual(1);
     });
 });
+
+export class MyHelperServiceMock {
+    constructor() {
+
+    }
+    public doSomething = (param) => {
+    }
+}
