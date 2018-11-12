@@ -24,7 +24,7 @@ describe('MyService', () => {
 
     const magic = new NgMagicTestBed();
     
-    const myHelperServiceMock = magic.mock(MyHelperService, MyHelperServiceMock);
+    const myHelperServiceMock = magic.mock(MyHelperService, () => MyHelperServiceMock);
     
     const service = magic.injection(MyService);
     
@@ -39,6 +39,15 @@ describe('MyService', () => {
     });
     
 });
+
+export class MyHelperServiceMock {
+
+    public doSomething = (param) => {
+    
+    }
+    
+}
+
 
 More details including the usage of the implicitly generated spies can be found <a href="https://github.com/peejay-solutions/ng-magic-test-bed/blob/master/ng-magic-test-bed-presentation/projects/ng-magic-test-bed/src/test-bed/ng-magic-test.bed.class.spec.ts">here</a>
 
