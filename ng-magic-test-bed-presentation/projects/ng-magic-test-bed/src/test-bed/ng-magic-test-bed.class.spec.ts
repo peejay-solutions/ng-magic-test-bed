@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { NgMagicTestBed } from './ng-magic-test-bed.class';
 
+
 @Injectable({
     providedIn: 'root'
 })
@@ -37,7 +38,6 @@ export class MyTestHelperService {
         return value;
     }
 }
-
 
 describe('TestBed', () => {
     const magic = new NgMagicTestBed();

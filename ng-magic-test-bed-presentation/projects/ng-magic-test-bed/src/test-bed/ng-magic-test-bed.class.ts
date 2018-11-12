@@ -45,9 +45,8 @@ export class NgMagicTestBed {
     }
 
     public reset() {
-        const providers = [];
-        this.mocks.forEach(mockMeta => {
-            if (!mockMeta.Mock) {
+        const providers = this.mocks.map(mockMeta => {
+            if (mockMeta.Mock === null) {
                 mockMeta.Mock = mockMeta.forwardMock();
                 if (mockMeta.doSpy) {
                     spyOnFunctionsOf(mockMeta.Mock.prototype);
@@ -58,11 +57,10 @@ export class NgMagicTestBed {
                 spyOnOwnFunctionsOf(newInstance);
             }
             make(mockMeta.instance, newInstance);
-            const provider = {
+            return {
                 useValue: mockMeta.instance,
                 provide: mockMeta.Service
             };
-            providers.push(provider);
         });
         TestBed.configureTestingModule({
             providers: providers
