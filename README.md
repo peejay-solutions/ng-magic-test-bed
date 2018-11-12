@@ -40,7 +40,7 @@ describe('MyService', () => {
     
 });
 
-export class MyHelperServiceMock {
+class MyHelperServiceMock {
 
     public doSomething = (param) => {
     
