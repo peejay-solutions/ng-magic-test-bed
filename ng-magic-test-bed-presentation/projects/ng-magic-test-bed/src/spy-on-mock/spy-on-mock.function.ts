@@ -6,7 +6,7 @@ export function spyOnMethodsOf(target: any, deep: boolean = false) {
     }
     const keys = [];
     let currentPrototype = target;
-    while (currentPrototype && currentPrototype !== Object && currentPrototype !== Array) {
+    while (currentPrototype && currentPrototype.constructor !== Object && currentPrototype.constructor !== Array) {
         const newKeys = Object.getOwnPropertyNames(currentPrototype);
         newKeys.forEach(key => {
             if (key !== 'constructor' && keys.indexOf(key) < 0 && typeof target[key] === 'function') {
