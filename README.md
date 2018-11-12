@@ -10,7 +10,7 @@ A magic test bed for angular. This Wrapper for the well known angular test bed (
 
 - Reconfiguration of the test bed in beforeEach is reduced to of 1 line
 
-- Creation of jasmine spies for all your mocks' functions is done on the fly
+- Creation of jest or jasmine (karma) spies for all your mocks' functions is done on the fly
 
 # Installation 
 
@@ -53,7 +53,7 @@ More details including the usage of the implicitly generated spies can be found 
 
 # Concept
 
-Working with Reflection and pointers should not be considered as bad style to create a freshly initialized sterile test environment with mocks and spies for each test case. With this mindset and the methods Object.getOwnPropertyNames and Object.getPrototypeOf as well as Object.setPrototypeOf I was able to create a this library. 
+Working with Reflection and pointers should not be considered as bad style to create a freshly initialized sterile test environment with mocks and spies for each test case. With this mindset and some static methods that can be found on <a href="https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a> I was able to create this library. 
 
 
 # Documentation
