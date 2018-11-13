@@ -49,7 +49,7 @@ class MyHelperServiceMock {
 }
 
 
-More details including the usage of the implicitly generated spies can be found <a href="https://github.com/peejay-solutions/ng-magic-test-bed/blob/master/ng-magic-test-bed-presentation/projects/ng-magic-test-bed/src/test-bed/ng-magic-test.bed.class.spec.ts">here</a>
+More details including the usage of the implicitly generated spies can be found <a href="https://github.com/peejay-solutions/ng-magic-test-bed/blob/master/ng-magic-test-bed-presentation/projects/ng-magic-test-bed/src/integration-tests/standard-use-case.spec.ts">here</a>
 
 # Concept
 
