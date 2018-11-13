@@ -27,8 +27,7 @@ export class MyService {
     }
 }
 
-
-describe('TestBed for standard use case', () => {
+describe('Simple integration test for TestBed', () => {
     const magic = new NgMagicTestBed();
     const myHelperServiceMock = magic.mock(MyHelperService, () => MyHelperServiceMock);
     const service = magic.injection(MyService);

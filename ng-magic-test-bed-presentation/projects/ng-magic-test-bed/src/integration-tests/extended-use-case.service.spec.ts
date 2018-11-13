@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { NgMagicTestBed } from './ng-magic-test-bed.class';
+import { NgMagicTestBed } from '../test-bed/ng-magic-test-bed.class';
 
 
 @Injectable({
@@ -43,7 +43,7 @@ export class MyService {
 
 @Injectable({
     providedIn: 'root',
-    deps: [MyHelperService],
+    deps: [MyAbstractHelperService],
     useFactory: function (myHelperService: MyAbstractHelperService) {
         const instance = {
             counter: 1,
@@ -72,15 +72,15 @@ export class MyTestHelperService {
     }
 }
 
-describe('TestBed for standard use case', () => {
+describe('Extended integration test for TestBed', () => {
     const magic = new NgMagicTestBed();
     const myHelperServiceMock = magic.mock(MyHelperService, () => MyHelperServiceMock);
     const myAbstractHelperServiceMock = magic.mock(MyAbstractHelperService, () => MyAbstractHelperServiceMock);
     const service = magic.injection(MyService);
-    const abstractService = magic.injection(MyAbstractService);
+    const myAbstractService = magic.injection(MyAbstractService);
     const myTestHelperService = magic.injection(MyTestHelperService);
-    const myUnregisteredMock = magic.mock(() => new MyHelperServiceMock());
-    const myNonTestBededService = new MyService(myUnregisteredMock);
+    const myUnregisteredMock = magic.mock(() => new MyUnregisteredHelperServiceMock());
+    const myNonTestBededService = magic.object(() => new MyService(myUnregisteredMock));
 
     beforeEach(magic.happen);
 
@@ -99,45 +99,46 @@ describe('TestBed for standard use case', () => {
     });
 
     it('should work for abstract', () => {
-        abstractService.doSomething('hello');
+        myAbstractService.doSomething('hello');
         expect(myAbstractHelperServiceMock.doSomething).toHaveBeenCalledWith('hello');
         expect(myTestHelperService.getValue('x')).toEqual('x');
-        expect(abstractService.counter).toEqual(1);
+        expect(myAbstractService.counter).toEqual(1);
     });
 
     it('should work for abstract even for a second time', () => {
-        abstractService.doSomething('hello');
+        myAbstractService.doSomething('hello');
         expect(myAbstractHelperServiceMock.doSomething).toHaveBeenCalledWith('hello');
         expect(myTestHelperService.getValue('x')).toEqual('x');
-        expect(abstractService.counter).toEqual(1);
+        expect(myAbstractService.counter).toEqual(1);
     });
 
     it('should work for simply unregistered', () => {
         myNonTestBededService.doSomething('hello');
         expect(myUnregisteredMock.doSomething).toHaveBeenCalledWith('hello');
         expect(myTestHelperService.getValue('x')).toEqual('x');
-        expect(abstractService.counter).toEqual(1);
+        expect(myNonTestBededService.counter).toEqual(1);
     });
 
     it('should work for simply unregistered even for a second time', () => {
         myNonTestBededService.doSomething('hello');
         expect(myUnregisteredMock.doSomething).toHaveBeenCalledWith('hello');
         expect(myTestHelperService.getValue('x')).toEqual('x');
-        expect(abstractService.counter).toEqual(1);
+        expect(myNonTestBededService.counter).toEqual(1);
     });
 });
 
 
-class MyHelperServiceMock {
-    constructor() {
+class MyUnregisteredHelperServiceMock {
+    public doSomething() {
     }
+}
+
+class MyHelperServiceMock {
     public doSomething() {
     }
 }
 
 class MyAbstractHelperServiceMock {
-    constructor() {
-    }
     public doSomething() {
     }
 }

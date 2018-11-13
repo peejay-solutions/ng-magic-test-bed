@@ -38,6 +38,10 @@ export class NgMagicTestBed {
         this.addedProviders.push(provider);
     }
 
+    public object<M extends Object>(getMock: () => M) {
+        return this.mock(getMock, true);
+    }
+
     public mock<M extends Object>(getMock: () => M, dontSpy?: boolean): M;
     public mock<M>(token: any, forwardMockClass: () => Type<M>, dontSpy?: boolean): M;
     public mock<M>(tokenOrGetMock: () => M | any, forwardMockOrDontSpy: boolean | (() => Type<M>), dontSpy: boolean = false): M {
@@ -65,6 +69,7 @@ export class NgMagicTestBed {
             getMock: getMock,
             doSpy: !dontSpy
         };
+        this.objectMocks.push(objectMockMeta);
         return objectMockMeta.instance;
     }
 
