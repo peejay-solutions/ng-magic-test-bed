@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { NgMagicTestBed } from './ng-magic-test-bed.class';
+import { NgMagicTestBed } from '../test-bed/ng-magic-test-bed.class';
 
 
 @Injectable({
@@ -27,45 +27,31 @@ export class MyService {
     }
 }
 
-@Injectable({
-    providedIn: 'root'
-})
-export class MyTestHelperService {
-    constructor() {
-    }
 
-    public getValue(value: any) {
-        return value;
-    }
-}
-
-describe('TestBed', () => {
+describe('TestBed for standard use case', () => {
     const magic = new NgMagicTestBed();
     const myHelperServiceMock = magic.mock(MyHelperService, () => MyHelperServiceMock);
     const service = magic.injection(MyService);
-    const myTestHelperService = magic.injection(MyTestHelperService);
 
     beforeEach(magic.happen);
 
     it('should work', () => {
         service.doSomething('hello');
         expect(myHelperServiceMock.doSomething).toHaveBeenCalledWith('hello');
-        expect(myTestHelperService.getValue('x')).toEqual('x');
         expect(service.counter).toEqual(1);
     });
 
-    it('should work even for second time', () => {
+    it('should work even for a second time', () => {
         service.doSomething('hello');
         expect(myHelperServiceMock.doSomething).toHaveBeenCalledWith('hello');
-        expect(myTestHelperService.getValue('x')).toEqual('x');
         expect(service.counter).toEqual(1);
     });
 });
 
-export class MyHelperServiceMock {
-    constructor() {
 
+class MyHelperServiceMock {
+    constructor() {
     }
-    public doSomething = (param) => {
+    public doSomething() {
     }
 }
