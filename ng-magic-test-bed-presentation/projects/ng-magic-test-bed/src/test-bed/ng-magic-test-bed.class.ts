@@ -1,7 +1,6 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { make } from '../make/make.function';
 import { spyOnFunctionsOf } from '../spy-on-mock/spy-on-functions-of.function';
-import { spyOnOwnFunctionsOf } from '../spy-on-mock/spy-on-own-functions-of.function';
 import { Type } from '@angular/core';
 
 type AbstractType<T> = Function & { prototype: T };
@@ -11,7 +10,7 @@ interface IMagicMeta {
 }
 
 interface IInjectionMeta extends IMagicMeta {
-    Service: Type<any>;
+    token: Type<any>;
 }
 
 interface IServiceMockMeta extends IInjectionMeta {
@@ -30,16 +29,27 @@ export class NgMagicTestBed {
     private serviceMocks: IServiceMockMeta[] = [];
     private objectMocks: IObjectMockMeta[] = [];
     private injections: IInjectionMeta[] = [];
+    private fixtures: IInjectionMeta[] = [];
     private addedProviders: any[] = [];
 
     public happen = this.reset.bind(this);
 
-    public addProvider(provider: any) {
+    public provider(provider: any) {
         this.addedProviders.push(provider);
+        //TODO!!!
     }
 
     public object<M extends Object>(getMock: () => M) {
         return this.mock(getMock, true);
+    }
+
+    public fixture<C>(componentClass: Type<C>): ComponentFixture<C> {
+        const fixtureMeta: IInjectionMeta = {
+            instance: {},
+            token: componentClass
+        };
+        this.fixtures.push(fixtureMeta);
+        return fixtureMeta.instance;
     }
 
     public mock<M extends Object>(getMock: () => M, dontSpy?: boolean): M;
@@ -56,7 +66,7 @@ export class NgMagicTestBed {
             instance: {},
             Mock: null,
             forwardMockClass: forwardMockClass,
-            Service: token,
+            token: token,
             doSpy: !dontSpy
         };
         this.serviceMocks.push(serviceMockMeta);
@@ -77,10 +87,10 @@ export class NgMagicTestBed {
     /* tslint:disable */
     public injection<S>(token: any): S;
     /* tslint:enable */
-    public injection<S>(Service: AbstractType<S> | any): S {
+    public injection<S>(token: AbstractType<S> | any): S {
         const injectionMeta: IInjectionMeta = {
             instance: {},
-            Service: Service
+            token: token
         };
         this.injections.push(injectionMeta);
         return injectionMeta.instance;
@@ -93,21 +103,30 @@ export class NgMagicTestBed {
             }
             const newInstance = new serviceMockMeta.Mock();
             if (serviceMockMeta.doSpy) {
-                spyOnFunctionsOf(serviceMockMeta.Mock.prototype);
-                spyOnOwnFunctionsOf(newInstance);
+                spyOnFunctionsOf(newInstance);
             }
             make(serviceMockMeta.instance, newInstance);
             return {
                 useValue: serviceMockMeta.instance,
-                provide: serviceMockMeta.Service
+                provide: serviceMockMeta.token
             };
         });
         const providers = this.addedProviders.concat(mockProviders);
+        const declarations = this.fixtures.map(fixtureMeta => fixtureMeta.token);
+
         TestBed.configureTestingModule({
-            providers: providers
+            providers: providers,
+            declarations: declarations
+        });
+        if (this.fixtures.length) {
+            TestBed.compileComponents();
+        }
+        this.fixtures.forEach(fixtureMeta => {
+            const newInstance = TestBed.createComponent(fixtureMeta.token);
+            make(fixtureMeta.instance, newInstance);
         });
         this.injections.forEach(injectionMeta => {
-            const newInstance = TestBed.get(injectionMeta.Service);
+            const newInstance = TestBed.get(injectionMeta.token);
             make(injectionMeta.instance, newInstance);
         });
         this.objectMocks.forEach(objectMockMeta => {
