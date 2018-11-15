@@ -30,7 +30,7 @@ describe('MyService', () => {
     
     const myTestHelperService = magic.injection(MyTestHelperService);
     
-    beforeEach(magic.happen);
+    beforeEach(magic.happens);
     
     it('should work', () => {
     
