@@ -32,7 +32,7 @@ describe('Simple integration test for TestBed', () => {
     const myHelperServiceMock = magic.mock(MyHelperService, () => MyHelperServiceMock);
     const service = magic.injection(MyService);
 
-    beforeEach(magic.happen);
+    beforeEach(magic.happens);
 
     it('should work', () => {
         service.doSomething('hello');

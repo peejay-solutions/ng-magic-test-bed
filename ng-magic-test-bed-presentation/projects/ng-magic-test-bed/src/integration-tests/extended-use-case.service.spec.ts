@@ -82,7 +82,7 @@ describe('Extended integration test for TestBed', () => {
     const myUnregisteredMock = magic.mock(() => new MyUnregisteredHelperServiceMock());
     const myNonTestBededService = magic.object(() => new MyService(myUnregisteredMock));
 
-    beforeEach(magic.happen);
+    beforeEach(magic.happens);
 
     it('should work', () => {
         service.doSomething('hello');

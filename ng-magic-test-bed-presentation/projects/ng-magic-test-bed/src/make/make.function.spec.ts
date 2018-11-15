@@ -12,7 +12,43 @@ describe('make(a:anyObject, b:anyObject', () => {
         expect((<D><any>a).doD()).toEqual('D');
     });
 
+    it('make(a, b) should support not conversion from object to array', () => {
+        const a = {};
+        const b = [];
+        make(a, b);
+        const itWorks = Array.isArray(a);
+        expect(itWorks).toBeFalsy();
+    });
+
+    it('make(a, b) should support not functions', () => {
+        const a = {};
+        const b = () => 100;
+        make(a, b);
+        expect(() => {
+            expect(a).not.toEqual(100);
+        }).toThrow();
+    });
+
+    it('make(a, b) should support not strings', () => {
+        const a = {};
+        const b = 'string';
+        make(a, b);
+        expect(() => {
+            expect(a).not.toEqual(b);
+        }).toThrow();
+    });
+
+    it('make(a, b) should support not Maps', () => {
+        const a: any = {};
+        const b = new Map();
+        b.set('a', 100);
+        make(a, b);
+        expect(() => {
+            expect((<Map<string, number>>a).get('a')).not.toEqual(100);
+        }).toThrow();
+    });
 });
+
 
 class A {
     public value1 = 'A';
