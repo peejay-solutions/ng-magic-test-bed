@@ -51,8 +51,16 @@ export class NgMagicTestBed {
         return returnedInstance;
     }
 
-    public object<M extends Object>(getObject: () => M) {
-        return this.mock(getObject, true);
+    public object<O extends Object>(getObject: () => O, dontSpy?: boolean): O {
+        const returnedInstance: any = {};
+        const targetJobs = this.postJobs.length > 0 ? this.postJobs : this.preJobs;
+        targetJobs.push(config => {
+            make(returnedInstance, getObject());
+            if (!dontSpy) {
+                spyOnFunctionsOf(returnedInstance);
+            }
+        });
+        return returnedInstance;
     }
 
     public fixture<C>(componentClass: Type<C>, dontCompileAfterWards: boolean = false): ComponentFixture<C> {
@@ -70,22 +78,30 @@ export class NgMagicTestBed {
         return returnedInstance;
     }
 
-    public mock<M extends Object>(getMock: () => M, dontSpy?: boolean): M;
-    public mock<M>(token: any, forwardMockClass: () => Type<M>, dontSpy?: boolean): M;
-    public mock<M>(tokenOrGetMock: () => M | any, forwardMockOrDontSpy: boolean | (() => Type<M>), dontSpy: boolean = false): M {
-        if (typeof forwardMockOrDontSpy === 'undefined' || typeof forwardMockOrDontSpy === 'boolean') {
-            return this.mockObject(tokenOrGetMock, forwardMockOrDontSpy);
-        }
-        return this.mockService(tokenOrGetMock, forwardMockOrDontSpy, dontSpy);
+    public providerMock<M>(token: any, forwardMockClass: () => Type<M>, dontSpy: true) {
+        return this.mock(token, forwardMockClass, dontSpy);
     }
 
-    private mockService<M>(token: any, forwardMockClass: () => Type<M>, dontSpy: boolean = false): M {
+    public serviceMock<S, M extends Partial<S>>(serviceClass: AbstractType<S>, forwardMockClass: () => Type<M>,
+        dontSpy: true): Partial<S> & M;
+    public serviceMock<S, M extends Partial<S>>(serviceClass: AbstractType<S>, forwardMockClass: () => Type<M>):
+        jasmine.SpyObj<Partial<S> & M>;
+    public serviceMock<S, M extends Partial<S>>(serviceClass: AbstractType<S>): jasmine.SpyObj<Partial<S>>;
+    public serviceMock<S, M extends Partial<S>>(serviceClass: AbstractType<S>, forwardMockClass?: () => Type<M>, dontSpy?: boolean):
+        Partial<S> & M | jasmine.SpyObj<Partial<S> & M> | jasmine.SpyObj<Partial<S>> {
+
+        return this.mock(serviceClass, forwardMockClass, dontSpy, serviceClass);
+    }
+
+
+    private mock<S, M extends Partial<S>>(token: any, forwardMockClass?: () => Type<M>, dontSpy?: boolean, spySource?: AbstractType<S>):
+        Partial<S> & M | jasmine.SpyObj<Partial<S> & M> | jasmine.SpyObj<Partial<S>> {
         const returnedInstance: any = {};
         this.preJobs.push(config => {
-            const Mock = forwardMockClass();
-            make(returnedInstance, new Mock());
+            const mock = forwardMockClass ? new (forwardMockClass())() : {};
+            make(returnedInstance, mock);
             if (!dontSpy) {
-                spyOnFunctionsOf(returnedInstance);
+                spyOnFunctionsOf(returnedInstance, spySource.prototype);
             }
             config.providers.push({
                 useValue: returnedInstance,
@@ -95,17 +111,6 @@ export class NgMagicTestBed {
         return returnedInstance;
     }
 
-    private mockObject<T extends Object>(getMock: <M extends Object>() => M & T, dontSpy?: boolean): T {
-        const returnedInstance: any = {};
-        const targetJobs = this.postJobs.length > 0 ? this.postJobs : this.preJobs;
-        targetJobs.push(config => {
-            make(returnedInstance, getMock());
-            if (!dontSpy) {
-                spyOnFunctionsOf(returnedInstance);
-            }
-        });
-        return returnedInstance;
-    }
 
     public injection<S>(Service: AbstractType<S>): S;
     /* tslint:disable */

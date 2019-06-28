@@ -29,7 +29,7 @@ export class MyService {
 
 describe('Simple integration test for TestBed', () => {
     const magic = new NgMagicTestBed();
-    const myHelperServiceMock = magic.mock(MyHelperService, () => MyHelperServiceMock);
+    const myHelperServiceMock = magic.serviceMock(MyHelperService, () => MyHelperServiceMock);
     const service = magic.injection(MyService);
 
     beforeEach(magic.happens);

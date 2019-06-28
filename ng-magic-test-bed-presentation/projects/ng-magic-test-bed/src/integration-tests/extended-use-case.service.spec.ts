@@ -1,6 +1,15 @@
 import { Injectable } from '@angular/core';
 import { NgMagicTestBed } from '../test-bed/ng-magic-test-bed.class';
 
+@Injectable({
+    providedIn: 'root'
+})
+export class MySimpleHelperService {
+    constructor() {
+    }
+    public doSomething(param) {
+    }
+}
 
 @Injectable({
     providedIn: 'root'
@@ -32,11 +41,12 @@ export abstract class MyAbstractHelperService {
 })
 export class MyService {
     public counter = 0;
-    constructor(private myHelper: MyHelperService) {
+    constructor(private myHelper: MyHelperService, private mySimpleHelper: MySimpleHelperService) {
     }
 
     public doSomething(param) {
         this.myHelper.doSomething(param);
+        this.mySimpleHelper.doSomething(param);
         this.counter++;
     }
 }
@@ -60,6 +70,7 @@ export abstract class MyAbstractService {
     public abstract doSomething(value: any);
 }
 
+
 @Injectable({
     providedIn: 'root'
 })
@@ -74,13 +85,16 @@ export class MyTestHelperService {
 
 describe('Extended integration test for TestBed', () => {
     const magic = new NgMagicTestBed();
-    const myHelperServiceMock = magic.mock(MyHelperService, () => MyHelperServiceMock);
-    const myAbstractHelperServiceMock = magic.mock(MyAbstractHelperService, () => MyAbstractHelperServiceMock);
+    const myHelperServiceMock = magic.serviceMock(MyHelperService, () => MyHelperServiceMock);
+    const myAbstractHelperServiceMock = magic.serviceMock(MyAbstractHelperService, () => MyAbstractHelperServiceMock);
     const service = magic.injection(MyService);
     const myAbstractService = magic.injection(MyAbstractService);
     const myTestHelperService = magic.injection(MyTestHelperService);
-    const myUnregisteredMock = magic.mock(() => new MyUnregisteredHelperServiceMock());
-    const myNonTestBededService = magic.object(() => new MyService(myUnregisteredMock));
+    const myUnregisteredMock = magic.object(() => new MyUnregisteredHelperServiceMock());
+    const myUnregisteredSimpleHelperMock = magic.object(() => new MySimpleHelperService);
+    const myNonTestBededService = magic.object(() => new MyService(myUnregisteredMock, myUnregisteredSimpleHelperMock), true);
+    const mySimpleHelperMock = magic.serviceMock(MySimpleHelperService);
+
 
     beforeEach(magic.happens);
 
@@ -124,6 +138,11 @@ describe('Extended integration test for TestBed', () => {
         expect(myUnregisteredMock.doSomething).toHaveBeenCalledWith('hello');
         expect(myTestHelperService.getValue('x')).toEqual('x');
         expect(myNonTestBededService.counter).toEqual(1);
+    });
+
+    it('should work with simple generated mock', () => {
+        service.doSomething('hello');
+        expect(mySimpleHelperMock.doSomething).toHaveBeenCalledWith('hello');
     });
 });
 
