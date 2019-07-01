@@ -85,8 +85,8 @@ export class MyTestHelperService {
 
 describe('Extended integration test for TestBed', () => {
     const magic = new NgMagicTestBed();
-    const myHelperServiceMock = magic.serviceMock(MyHelperService, () => MyHelperServiceMock);
-    const myAbstractHelperServiceMock = magic.serviceMock(MyAbstractHelperService, () => MyAbstractHelperServiceMock);
+    const myHelperServiceMock = magic.serviceMock(MyHelperService, () => new MyHelperServiceMock());
+    const myAbstractHelperServiceMock = magic.serviceMock(MyAbstractHelperService, () => new MyAbstractHelperServiceMock());
     const service = magic.injection(MyService);
     const myAbstractService = magic.injection(MyAbstractService);
     const myTestHelperService = magic.injection(MyTestHelperService);
