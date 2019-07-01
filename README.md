@@ -29,6 +29,8 @@ https://www.npmjs.com/package/@peejay-solutions/ng-magic-test-bed
 Here a short example where we test the implementation of the following: We have MyServer that does something using MyHelperService to get data and do another thing. 
 ## MyHelperService
 
+```javascript 
+
 @Injectable({
     providedIn: 'root'
 })
@@ -47,6 +49,8 @@ export class MyHelperService {
         };
     }
 }
+
+```
 
 ## MyService
 
