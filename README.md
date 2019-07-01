@@ -29,7 +29,7 @@ https://www.npmjs.com/package/@peejay-solutions/ng-magic-test-bed
 Here a short example where we test the implementation of the following: We have MyServer that does something using MyHelperService to get data and do another thing. 
 ## MyHelperService
 
-```javascript 
+```typescript 
 
 @Injectable({
     providedIn: 'root'
@@ -54,6 +54,7 @@ export class MyHelperService {
 
 ## MyService
 
+```typescript 
 @Injectable({
     providedIn: 'root'
 })
@@ -66,9 +67,10 @@ export class MyService {
         this.myHelper.doSomething(data.value);
     }
 }
-
+```
 
 ## MyService spec with magic test bed
+```typescript 
 describe('Simple integration test for magic TestBed', () => {
     const magic = new NgMagicTestBed();
     const myHelperServiceMock = magic.serviceMock(MyHelperService, () => new MyHelperServiceMock());
@@ -90,10 +92,10 @@ class MyHelperServiceMock {
     public getData = () => this.data;
 }
 
-
+```
 ## MyService spec with no magic but standard test bed
 
-
+```typescript 
 describe('Simple integration test for no magic but standard TestBed', () => {
     let myHelperServiceMock;
     let service: MyService;
@@ -122,7 +124,8 @@ class MyHelperServiceMock2 {
     public doSomething = jasmine.createSpy('doSomething');
     public getData = jasmine.createSpy('getData').and.returnValue(this.data);
 }
-
+```
+#
 
 The running code can be found <a href="https://github.com/peejay-solutions/ng-magic-test-bed/blob/master/ng-magic-test-bed-presentation/projects/ng-magic-test-bed/src/integration-tests/standard-use-case.spec.ts">here</a>
 
