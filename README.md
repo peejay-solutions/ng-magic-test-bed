@@ -80,6 +80,7 @@ describe('Simple integration test for magic TestBed', () => {
     });
 });
 
+
 class MyHelperServiceMock {
     public data = { value: 100 };
     public getData = () => this.data;
