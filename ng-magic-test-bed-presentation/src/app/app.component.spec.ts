@@ -1,7 +1,9 @@
 import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { NgMagicTestBed } from 'ng-magic-test-bed/peejay-solutions-ng-magic-test-bed';
 
 describe('AppComponent', () => {
+  const magic = new NgMagicTestBed();
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [

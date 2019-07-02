@@ -2,6 +2,8 @@ import { TestBed, ComponentFixture, TestModuleMetadata, async } from '@angular/c
 import { make } from '../make/make.function';
 import { spyOnFunctionsOf } from '../spy-on-mock/spy-on-functions-of.function';
 import { Type, SchemaMetadata } from '@angular/core';
+import { observe, SpyObserver } from '../observe/observe.function';
+import { Observable } from 'rxjs';
 
 declare module jasmine {
     export type SpyObj<T> = { [key in keyof T]: Spy } & T;
@@ -201,6 +203,16 @@ export class NgMagicTestBed {
 
     public schema(schema: SchemaMetadata | any[]) {
         this.schemas([schema]);
+    }
+
+    public observer<T>(getObservable: () => Observable<T>, name?: string): SpyObserver<T> {
+        const returnedInstance: any = {};
+        this.postJobs.push(() => {
+            const observable = getObservable();
+            const observer = observe(observable, name);
+            make(returnedInstance, observer);
+        });
+        return returnedInstance;
     }
 
     public reset() {
