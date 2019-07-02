@@ -8,7 +8,7 @@ A magic test bed for angular. This Wrapper for the well known angular test bed (
 
 - All local variables to mocks, helper service and the testee itself can be defined as constants
 
-- Reconfiguration of the test bed in beforeEach is reduced to of 1 line
+- Reconfiguration of the entire test bed including fresh mocks and services before each test/it is reduced to 1 line: magic.happens()
 
 - Creation of jest or jasmine (karma) spies for all your mocks' functions is done on the fly
 
@@ -17,6 +17,8 @@ A magic test bed for angular. This Wrapper for the well known angular test bed (
 - Less code for each mock than the standard Test Bed approach.
 
 - No more spy manual spy creation with magic strings to overwrite strongly typed methods of TypeScript objects.
+
+- Write tests without beforeEach.
 
 
 # Installation 
@@ -75,8 +77,7 @@ describe('Simple integration test for magic TestBed', () => {
     const magic = new NgMagicTestBed();
     const myHelperServiceMock = magic.serviceMock(MyHelperService, () => new MyHelperServiceMock());
     const service = magic.injection(MyService);
-
-    beforeEach(magic.happens);
+    magic.happens();
 
     it('should work', () => {
         const param = 4;
@@ -85,7 +86,6 @@ describe('Simple integration test for magic TestBed', () => {
         expect(myHelperServiceMock.doSomething).toHaveBeenCalledWith(myHelperServiceMock.data.value);
     });
 });
-
 
 class MyHelperServiceMock {
     public data = { value: 100 };

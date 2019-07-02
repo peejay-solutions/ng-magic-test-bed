@@ -29,8 +29,12 @@ function getMethodKeysFromObject(obj: any) {
     while (currentPrototype && currentPrototype.constructor !== Object && currentPrototype.constructor !== Array) {
         const newKeys = Object.getOwnPropertyNames(currentPrototype);
         newKeys.forEach(key => {
-            if (key !== 'constructor' && keys.indexOf(key) < 0 && typeof obj[key] === 'function') {
-                keys.push(key);
+            try {
+                if (key !== 'constructor' && keys.indexOf(key) < 0 && typeof obj[key] === 'function') {
+                    keys.push(key);
+                }
+            } catch (e) {
+
             }
         });
         currentPrototype = Object.getPrototypeOf(currentPrototype);

@@ -1,11 +1,11 @@
-import { TestBed, ComponentFixture, TestModuleMetadata } from '@angular/core/testing';
+import { TestBed, ComponentFixture, TestModuleMetadata, async } from '@angular/core/testing';
 import { make } from '../make/make.function';
 import { spyOnFunctionsOf } from '../spy-on-mock/spy-on-functions-of.function';
-import { Type } from '@angular/core';
+import { Type, SchemaMetadata } from '@angular/core';
 
 declare module jasmine {
     export type Spy = any;
-    export type SpyObj<T> = {[key: string]: Spy} & T;
+    export type SpyObj<T> = { [key: string]: Spy } & T;
 }
 
 type AbstractType<T> = Function & { prototype: T };
@@ -15,7 +15,9 @@ export class NgMagicTestBed {
     protected preJobs: Array<(config: TestModuleMetadata) => void> = [];
     protected postJobs: Array<() => void> = [];
 
-    public happens = this.reset.bind(this);
+    public happens() {
+        beforeEach(async(() => this.reset()));
+    }
 
     public function<F extends Function>(getFunction: () => F): F {
         let innerFunction: any = () => { };
@@ -142,6 +144,26 @@ export class NgMagicTestBed {
             make(returnedInstance, TestBed.get(token));
         });
         return returnedInstance;
+    }
+
+    public declarations(declarations: Array<any>) {
+        this.preJobs.push(config => {
+            config.declarations.push(...declarations);
+        });
+    }
+
+    public declaration(declaration) {
+        this.declarations([declaration]);
+    }
+
+    public schemas(schemas: Array<SchemaMetadata | any[]>) {
+        this.preJobs.push(config => {
+            config.schemas.push(...schemas);
+        });
+    }
+
+    public schema(schema: SchemaMetadata | any[]) {
+        this.schemas([schema]);
     }
 
     public reset() {
