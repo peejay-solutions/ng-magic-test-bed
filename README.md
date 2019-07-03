@@ -3,7 +3,7 @@
 A magic test bed for angular. This Wrapper for the well known angular test bed (@angular/core/testing) allows you to remove a lot of bloat code form your spec files.
 
 # Benefits
-- Readability
+- Better readability
 
 - Less code
 
