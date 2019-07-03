@@ -3,20 +3,19 @@
 A magic test bed for angular. This Wrapper for the well known angular test bed (@angular/core/testing) allows you to remove a lot of bloat code form your spec files.
 
 # Benefits
+- Readability
 
-- Configuration of the test bed is done implicitly while assigning you local variables
+- Less code
 
-- All local variables to mocks, helper service and the testee itself can be defined as constants
+- All local variables referencing mocks, helper-services, observers, objects, arrays, functions, maps and the testee itself can be defined as constants
 
-- Reconfiguration of the entire test bed including fresh mocks and services before each test/it is reduced to 1 line: magic.happens()
+- Configuration of the test bed is done implicitly while assigning your local variables
 
-- Creation of jest or jasmine (karma) spies for all your mocks' functions is done on the fly
+- Reconfiguration of the entire test bed including fresh mocks and services before each test/it is done in background
 
-- A simple mock with spies for all methods of a service is generated. You can extend these auto generated mocks with custom behavior.   
+- Creation of jest or jasmine (karma) spies for all your mocks' functions is done implicitly. No more spy manual spy creation with magic strings to overwrite strongly typed methods of TypeScript objects.
 
-- Less code for each mock than the standard Test Bed approach.
-
-- No more spy manual spy creation with magic strings to overwrite strongly typed methods of TypeScript objects.
+- A simple mock with spies for all methods of a service is generated. You can extend these auto generated mocks with custom behavior.
 
 - Write tests without beforeEach.
 
@@ -77,7 +76,6 @@ describe('Simple integration test for magic TestBed', () => {
     const magic = new NgMagicTestBed();
     const myHelperServiceMock = magic.serviceMock(MyHelperService, () => new MyHelperServiceMock());
     const service = magic.injection(MyService);
-    magic.happens();
 
     it('should work', () => {
         const param = 4;

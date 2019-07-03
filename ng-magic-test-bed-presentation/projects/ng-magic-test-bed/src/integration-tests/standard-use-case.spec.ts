@@ -42,7 +42,6 @@ describe('Simple integration test for magic TestBed', () => {
     const magic = new NgMagicTestBed();
     const myHelperServiceMock = magic.serviceMock(MyHelperService, () => new MyHelperServiceMock());
     const service = magic.injection(MyService);
-    magic.happens();
 
     it('should work', () => {
         const param = 4;

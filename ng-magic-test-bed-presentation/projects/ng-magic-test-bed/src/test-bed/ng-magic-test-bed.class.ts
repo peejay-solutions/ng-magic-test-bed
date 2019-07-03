@@ -5,48 +5,6 @@ import { Type, SchemaMetadata } from '@angular/core';
 import { observe, SpyObserver } from '../observe/observe.function';
 import { Observable } from 'rxjs';
 
-declare module jasmine {
-    export type SpyObj<T> = { [key in keyof T]: Spy } & T;
-
-    export interface Spy {
-        (...params: any[]): any;
-
-        identity: string;
-        and: SpyAnd;
-        calls: Calls;
-        mostRecentCall: { args: any[]; };
-        argsForCall: any[];
-    }
-
-    export interface SpyAnd {
-        callThrough(): Spy;
-        returnValue(val: any): Spy;
-        returnValues(...values: any[]): Spy;
-        callFake(fn: Function): Spy;
-        throwError(msg: string): Spy;
-        stub(): Spy;
-    }
-
-    export interface Calls {
-        any(): boolean;
-        count(): number;
-        argsFor(index: number): any[];
-        allArgs(): any[];
-        all(): CallInfo[];
-        mostRecent(): CallInfo;
-        first(): CallInfo;
-        reset(): void;
-    }
-
-    export interface CallInfo {
-        object: any;
-        args: any[];
-        returnValue: any;
-    }
-}
-
-declare function beforeEach(callback: (done: any) => any);
-
 type AbstractType<T> = Function & { prototype: T };
 
 export class NgMagicTestBed {
@@ -54,7 +12,7 @@ export class NgMagicTestBed {
     protected preJobs: Array<(config: TestModuleMetadata) => void> = [];
     protected postJobs: Array<() => void> = [];
 
-    public happens() {
+    constructor() {
         beforeEach(async(() => this.reset()));
     }
 

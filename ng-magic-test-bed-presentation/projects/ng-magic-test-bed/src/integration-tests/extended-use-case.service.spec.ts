@@ -94,7 +94,6 @@ describe('Extended integration test for TestBed', () => {
     const myUnregisteredSimpleHelperMock = magic.object(() => new MySimpleHelperService);
     const myNonTestBededService = magic.object(() => new MyService(myUnregisteredMock, myUnregisteredSimpleHelperMock), true);
     const mySimpleHelperMock = magic.serviceMock(MySimpleHelperService);
-    magic.happens();
 
     it('should work', () => {
         service.doSomething('hello');
