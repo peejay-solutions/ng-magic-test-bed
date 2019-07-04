@@ -117,7 +117,9 @@ export class NgMagicTestBed {
     private mock<S, M extends Partial<S>>(token?: any, getMock?: () => M, dontSpy?: boolean, spySource?: AbstractType<S>):
         Partial<S> & M | jasmine.SpyObj<Partial<S> & M> | jasmine.SpyObj<Partial<S>> {
         const returnedInstance: any = {};
-        this.preJobs.push(config => {
+
+        const targetJobs = typeof token === 'undefined' && this.postJobs.length > 0 ? this.postJobs : this.preJobs;
+        targetJobs.push(config => {
             const mock = getMock ? getMock() : {};
             make(returnedInstance, mock);
             if (!dontSpy) {
@@ -167,13 +169,16 @@ export class NgMagicTestBed {
 
     public observer<T>(getObservable: () => Observable<T>, name?: string): SpyObserver<T> {
         const returnedInstance: any = {};
-        this.postJobs.push(() => {
+        const targetJobs = this.postJobs.length > 0 ? this.postJobs : this.preJobs;
+        targetJobs.push(() => {
             const observable = getObservable();
             const observer = observe(observable, name);
             make(returnedInstance, observer);
         });
         return returnedInstance;
     }
+
+    //TODO: configurable I dont knwo maybe outer method or annoation or paramater or dirferen function or magic.injection.configurable()
 
     public reset() {
         const config: TestModuleMetadata = {
