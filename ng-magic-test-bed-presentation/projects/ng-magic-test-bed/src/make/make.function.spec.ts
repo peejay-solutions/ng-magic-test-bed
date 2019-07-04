@@ -25,7 +25,7 @@ describe('make(a:anyObject, b:anyObject', () => {
         const b = () => 100;
         make(a, b);
         expect(() => {
-            expect(a).not.toEqual(100);
+            expect((a as any)()).not.toEqual(100);
         }).toThrow();
     });
 

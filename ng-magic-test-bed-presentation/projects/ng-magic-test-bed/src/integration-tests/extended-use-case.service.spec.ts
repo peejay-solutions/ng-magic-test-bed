@@ -113,14 +113,14 @@ describe('Extended integration test for TestBed', () => {
         myAbstractService.doSomething('hello');
         expect(myAbstractHelperServiceMock.doSomething).toHaveBeenCalledWith('hello');
         expect(myTestHelperService.getValue('x')).toEqual('x');
-        expect(myAbstractService.counter).toEqual(1);
+        expect(myAbstractService.counter).toEqual(2);
     });
 
     it('should work for abstract even for a second time', () => {
         myAbstractService.doSomething('hello');
         expect(myAbstractHelperServiceMock.doSomething).toHaveBeenCalledWith('hello');
         expect(myTestHelperService.getValue('x')).toEqual('x');
-        expect(myAbstractService.counter).toEqual(1);
+        expect(myAbstractService.counter).toEqual(2);
     });
 
     it('should work for simply unregistered', () => {

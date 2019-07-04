@@ -10,7 +10,9 @@ export class SpyObserver<T> {
     public readonly error: jasmine.Spy;
     public readonly complete: jasmine.Spy;
     public readonly values: Array<T> = [];
-    public latest: T;
+    public get latest(): T {
+        return this.values[this.values.length - 1];
+    }
 
     constructor(observable: Observable<T>, name?: string) {
         const prefix = name ? name + '.' : '';
@@ -19,7 +21,6 @@ export class SpyObserver<T> {
         this.complete = jasmine.createSpy(prefix + 'complete:');
         this.values = new Array<T>();
         observable.subscribe(next => {
-            this.latest = next;
             this.values.push(next);
             this.next(next);
         }, this.error, this.complete);
