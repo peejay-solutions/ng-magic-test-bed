@@ -16,17 +16,19 @@ export class NgMagicTestBed {
         beforeEach(async(() => this.reset()));
     }
 
-    public function<F extends Function>(getFunction: () => F): F {
-        let innerFunction: any = () => { };
-        const returnedInstance: any = (...args: any) => {
-            return innerFunction(...args);
-        };
-        const targetJobs = this.postJobs.length > 0 ? this.postJobs : this.preJobs;
-        targetJobs.push(config => {
-            innerFunction = getFunction();
-        });
-        return returnedInstance;
-    }
+    // public function<F extends Function>(getFunction: () => F, dontSpy = false): F | (F & jasmine.Spy) {
+    //     let innerFunction: any = () => { };
+    //     const returnedInstance: any = (...args: any) => {
+    //         return innerFunction(...args);
+    //     };
+    //     const targetJobs = this.postJobs.length > 0 ? this.postJobs : this.preJobs;
+    //     targetJobs.push(config => {
+    //         const spy = jasmine.createSpy();
+    //         make(returnedInstance, spy);
+    //         innerFunction = getFunction();
+    //     });
+    //     return returnedInstance;
+    // }
 
     public map<M extends Map<any, any>>(getMap: () => M): M {
         const returnedInstance: any = new Map();

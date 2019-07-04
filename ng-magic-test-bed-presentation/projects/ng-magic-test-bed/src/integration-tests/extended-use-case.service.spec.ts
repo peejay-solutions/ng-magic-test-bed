@@ -141,6 +141,12 @@ describe('Extended integration test for TestBed', () => {
         service.doSomething('hello');
         expect(mySimpleHelperMock.doSomething).toHaveBeenCalledWith('hello');
     });
+
+    // it('function should be spy', () => {
+    //     const value = callback(3);
+    //     expect(callback).toHaveBeenCalledWith(3);
+    //     expect(value).toEqual(300);
+    // });
 });
 
 

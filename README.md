@@ -7,7 +7,7 @@ A magic test bed for angular. This Wrapper for the well known angular test bed (
 
 - Less code
 
-- All local variables referencing mocks, helper-services, observers, objects, arrays, functions, maps and the testee itself can be defined as constants
+- All local variables referencing mocks, helper-services, observers, objects, arrays, maps and the testee itself can be defined as constants
 
 - Configuration of the test bed is done implicitly while assigning your local variables
 
