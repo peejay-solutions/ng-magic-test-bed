@@ -2,7 +2,8 @@ import { TestBed, ComponentFixture, TestModuleMetadata, async } from '@angular/c
 import { make } from '../make/make.function';
 import { spyOnFunctionsOf } from '../spy-on-mock/spy-on-functions-of.function';
 import { Type, SchemaMetadata } from '@angular/core';
-import { observe, SpyObserver } from '../observe/observe.function';
+import { observe } from '../observe/observe.function';
+import { SpyObserver } from '../observe/spy-observer.class';
 import { Observable } from 'rxjs';
 
 type AbstractType<T> = Function & { prototype: T };
@@ -11,24 +12,11 @@ export class NgMagicTestBed {
 
     protected preJobs: Array<(config: TestModuleMetadata) => void> = [];
     protected postJobs: Array<() => void> = [];
+    private originalByReturnedInstance = new Map<any, any>();
 
     constructor() {
         beforeEach(async(() => this.reset()));
     }
-
-    // public function<F extends Function>(getFunction: () => F, dontSpy = false): F | (F & jasmine.Spy) {
-    //     let innerFunction: any = () => { };
-    //     const returnedInstance: any = (...args: any) => {
-    //         return innerFunction(...args);
-    //     };
-    //     const targetJobs = this.postJobs.length > 0 ? this.postJobs : this.preJobs;
-    //     targetJobs.push(config => {
-    //         const spy = jasmine.createSpy();
-    //         make(returnedInstance, spy);
-    //         innerFunction = getFunction();
-    //     });
-    //     return returnedInstance;
-    // }
 
     public map<M extends Map<any, any>>(getMap: () => M): M {
         const returnedInstance: any = new Map();
@@ -40,6 +28,7 @@ export class NgMagicTestBed {
                 (<Map<any, any>>returnedInstance).set(key, element);
             });
             Object.setPrototypeOf(returnedInstance, Object.getPrototypeOf(newMap));
+            this.originalByReturnedInstance.set(returnedInstance, newMap);
         });
         return returnedInstance;
     }
@@ -52,6 +41,7 @@ export class NgMagicTestBed {
             const newValue = getArray();
             returnedInstance.push(...newValue);
             Object.setPrototypeOf(returnedInstance, Object.getPrototypeOf(newValue));
+            this.originalByReturnedInstance.set(returnedInstance, newValue);
         });
         return returnedInstance;
     }
@@ -60,10 +50,12 @@ export class NgMagicTestBed {
         const returnedInstance: any = {};
         const targetJobs = this.postJobs.length > 0 ? this.postJobs : this.preJobs;
         targetJobs.push(config => {
-            make(returnedInstance, getObject());
+            const newValue = getObject();
+            make(returnedInstance, newValue);
             if (!dontSpy) {
                 spyOnFunctionsOf(returnedInstance);
             }
+            this.originalByReturnedInstance.set(returnedInstance, newValue);
         });
         return returnedInstance;
     }
@@ -79,6 +71,7 @@ export class NgMagicTestBed {
             if (!dontCompileAfterWards) {
                 TestBed.compileComponents();
             }
+            this.originalByReturnedInstance.set(returnedInstance, newInstance);
         });
         return returnedInstance;
     }
@@ -131,6 +124,7 @@ export class NgMagicTestBed {
                     provide: token
                 });
             }
+            this.originalByReturnedInstance.set(returnedInstance, mock);
         });
         return returnedInstance;
     }
@@ -178,9 +172,27 @@ export class NgMagicTestBed {
         return returnedInstance;
     }
 
-    //TODO: configurable I dont knwo maybe outer method or annoation or paramater or dirferen function or magic.injection.configurable()
+    public original<T>(returnedInstance: T) {
+        if (!this.originalByReturnedInstance.has(returnedInstance)) {
+            const errorMessage = 'NgMagicTestBed.original(): there is no original for this instance (yet).' +
+                ' NgMagicTestBed.original() has to be called in it/test-block';
+            throw new Error(errorMessage);
+        }
+        return this.originalByReturnedInstance.get(returnedInstance);
+    }
+
+    public originals<T extends Object>(returnedInstanceDictionary: T) {
+        const keys = Object.keys(returnedInstanceDictionary);
+        const result = {};
+        keys.forEach(key => {
+            const returnedInstance = returnedInstanceDictionary[key];
+            result[key] = this.original(returnedInstance);
+        });
+        return result;
+    }
 
     public reset() {
+        this.originalByReturnedInstance.clear();
         const config: TestModuleMetadata = {
             providers: [],
             declarations: [],
