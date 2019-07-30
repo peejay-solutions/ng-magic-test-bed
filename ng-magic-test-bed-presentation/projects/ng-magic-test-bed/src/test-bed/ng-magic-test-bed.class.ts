@@ -14,7 +14,7 @@ export class NgMagicTestBed {
     protected postJobs: Array<() => void> = [];
     private originalByReturnedInstance = new Map<any, any>();
 
-    constructor() {
+    constructor(private initialConfig: TestModuleMetadata = {}) {
         beforeEach(async(() => this.reset()));
     }
 
@@ -161,6 +161,27 @@ export class NgMagicTestBed {
         this.schemas([schema]);
     }
 
+
+    public imports(imports: any[]) {
+        this.preJobs.push(config => {
+            config.imports.push(...imports);
+        });
+    }
+
+    public import(aImport: any) {
+        this.imports([aImport]);
+    }
+
+    public providers(providers: any[]) {
+        this.preJobs.push(config => {
+            config.providers.push(...providers);
+        });
+    }
+
+    public provider(provider: any) {
+        this.providers([provider]);
+    }
+
     public observer<T>(getObservable: () => Observable<T>, name?: string): SpyObserver<T> {
         const returnedInstance: any = {};
         const targetJobs = this.postJobs.length > 0 ? this.postJobs : this.preJobs;
@@ -194,10 +215,11 @@ export class NgMagicTestBed {
     public reset() {
         this.originalByReturnedInstance.clear();
         const config: TestModuleMetadata = {
-            providers: [],
-            declarations: [],
-            imports: [],
-            schemas: []
+            providers: this.initialConfig.providers ? this.initialConfig.providers.slice() : [],
+            declarations: this.initialConfig.declarations ? this.initialConfig.declarations.slice() : [],
+            imports: this.initialConfig.imports ? this.initialConfig.imports.slice() : [],
+            schemas: this.initialConfig.schemas ? this.initialConfig.schemas.slice() : [],
+            aotSummaries: this.initialConfig.aotSummaries
         };
         this.preJobs.forEach(preJob => preJob(config));
         TestBed.configureTestingModule(config);
