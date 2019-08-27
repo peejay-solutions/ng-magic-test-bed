@@ -1,63 +1,27 @@
-import { TestBed, ComponentFixture, TestModuleMetadata, async } from '@angular/core/testing';
-import { make } from '../make/make.function';
-import { spyOnFunctionsOf } from '../spy-on-mock/spy-on-functions-of.function';
-import { Type, SchemaMetadata } from '@angular/core';
-import { observe } from '../observe/observe.function';
-import { SpyObserver } from '../observe/spy-observer.class';
-import { Observable } from 'rxjs';
 import { TestBedBase } from './test-bed-base.class';
+import { TestBed, ComponentFixture } from '@angular/core/testing';
+import { Type, AbstractType } from '@angular/core';
+import { spyOnFunctionsOf } from '../spy-on-mock/spy-on-functions-of.function';
+import { observe } from '../observe/observe.function';
+import { Observable } from 'rxjs';
+import { SpyObserver } from '../observe/spy-observer.class';
 
-type AbstractType<T> = Function & { prototype: T };
-
-export class NgMagicTestBed extends TestBedBase {
-
+export class SetupTestBed extends TestBedBase {
     private originalByReturnedInstance = new Map<any, any>();
 
-    constructor(initialConfig: TestModuleMetadata = {}) {
-        super(initialConfig);
-        beforeEach(async(() => this.reset()));
+    constructor(callback: (originals: Map<any, any>) => void) {
+        super({});
+        callback(this.originalByReturnedInstance);
     }
 
-    public map<M extends Map<any, any>>(getMap: () => M): M {
-        const returnedInstance: any = new Map();
-        const targetJobs = this.postJobs.length > 0 ? this.postJobs : this.preJobs;
-        targetJobs.push(config => {
-            const newMap = getMap();
-            (<Map<any, any>>returnedInstance).clear();
-            newMap.forEach((element, key) => {
-                (<Map<any, any>>returnedInstance).set(key, element);
-            });
-            Object.setPrototypeOf(returnedInstance, Object.getPrototypeOf(newMap));
-            this.originalByReturnedInstance.set(returnedInstance, newMap);
-        });
-        return returnedInstance;
-    }
-
-    public array<A extends Array<any>>(getArray: () => A): A {
-        const returnedInstance: any = [];
-        const targetJobs = this.postJobs.length > 0 ? this.postJobs : this.preJobs;
-        targetJobs.push(config => {
-            returnedInstance.length = 0;
-            const newValue = getArray();
-            returnedInstance.push(...newValue);
-            Object.setPrototypeOf(returnedInstance, Object.getPrototypeOf(newValue));
-            this.originalByReturnedInstance.set(returnedInstance, newValue);
-        });
-        return returnedInstance;
-    }
-
-    public object<O extends Object>(getObject: () => O, dontSpy?: boolean): O {
+    public thing<T>(getter: () => T): T {
         const returnedInstance: any = {};
         const targetJobs = this.postJobs.length > 0 ? this.postJobs : this.preJobs;
         targetJobs.push(config => {
-            const newValue = getObject();
-            make(returnedInstance, newValue);
-            if (!dontSpy) {
-                spyOnFunctionsOf(returnedInstance);
-            }
-            this.originalByReturnedInstance.set(returnedInstance, newValue);
+            const newInstance = getter();
+            this.originalByReturnedInstance.set(returnedInstance, newInstance);
         });
-        return returnedInstance;
+        return <T>returnedInstance;
     }
 
     public fixture<C>(componentClass: Type<C>, dontCompileAfterWards: boolean = false): ComponentFixture<C> {
@@ -67,7 +31,6 @@ export class NgMagicTestBed extends TestBedBase {
         });
         this.postJobs.push(() => {
             const newInstance = TestBed.createComponent(componentClass);
-            make(returnedInstance, newInstance);
             if (!dontCompileAfterWards) {
                 TestBed.compileComponents();
             }
@@ -114,13 +77,12 @@ export class NgMagicTestBed extends TestBedBase {
         const targetJobs = typeof token === 'undefined' && this.postJobs.length > 0 ? this.postJobs : this.preJobs;
         targetJobs.push(config => {
             const mock = getMock ? getMock() : {};
-            make(returnedInstance, mock);
             if (!dontSpy) {
-                spyOnFunctionsOf(returnedInstance, spySource.prototype);
+                spyOnFunctionsOf(mock, spySource.prototype);
             }
             if (typeof token !== 'undefined') {
                 config.providers.push({
-                    useValue: returnedInstance,
+                    useValue: mock,
                     provide: token
                 });
             }
@@ -137,7 +99,6 @@ export class NgMagicTestBed extends TestBedBase {
         const returnedInstance: any = {};
         this.postJobs.push(() => {
             const original = TestBed.get(token);
-            make(returnedInstance, original);
             this.originalByReturnedInstance.set(returnedInstance, original);
         });
         return returnedInstance;
@@ -149,28 +110,11 @@ export class NgMagicTestBed extends TestBedBase {
         targetJobs.push(() => {
             const observable = getObservable();
             const observer = observe(observable, name);
-            make(returnedInstance, observer);
             this.originalByReturnedInstance.set(returnedInstance, observer);
         });
         return returnedInstance;
     }
 
-    public original<T>(returnedInstance: T): T {
-        if (!this.originalByReturnedInstance.has(returnedInstance)) {
-            const errorMessage = 'NgMagicTestBed.original(): there is no original for this instance (yet).' +
-                ' NgMagicTestBed.original() has to be called in it/test-block';
-            throw new Error(errorMessage);
-        }
-        return this.originalByReturnedInstance.get(returnedInstance);
-    }
 
-    public originals<T extends Object>(returnedInstanceDictionary: T): T {
-        const keys = Object.keys(returnedInstanceDictionary);
-        const result = {};
-        keys.forEach(key => {
-            const returnedInstance = returnedInstanceDictionary[key];
-            result[key] = this.original(returnedInstance);
-        });
-        return <T>result;
-    }
 }
+
