@@ -2,6 +2,7 @@ import { Injectable, InjectionToken } from '@angular/core';
 import { NgMagicTestBed } from '../test-bed/ng-magic-test-bed.class';
 import { TestBed } from '@angular/core/testing';
 import { createSetup } from '../test-bed/create-setup.function';
+import { NgMagicSetupTestBed } from '../test-bed/ng-magic-setup-test-bed.class';
 
 //################# Predefintions ##############################
 
@@ -43,13 +44,8 @@ describe('Simple integration test for magic TestBed', () => {
     const magic = new NgMagicTestBed();
     const myHelperServiceMock = magic.serviceMock(MyHelperService, () => new MyHelperServiceMock());
     const service = magic.injection(MyService);
-    // const setup = createNgMagicTestSetup({
-        //  myHelperServiceMock: serviceMock(MyHelperService, () => new MyHelperServiceMock()),
-        //  service: injection(MyService),
-    // });
 
     it('should work', () => {
-        // const {service, myHelperServiceMock} = setup();
         const param = 4;
         service.doSomething(param);
         expect(myHelperServiceMock.getData).toHaveBeenCalledWith(4);
@@ -68,11 +64,13 @@ describe('Simple integration test for no magic but standard TestBed', () => {
     let service: MyService;
 
     beforeEach(() => {
-        const data = { value: 100 };
         myHelperServiceMock = new MyHelperServiceMock2();
         TestBed.configureTestingModule({
             providers: [
-                { provide: MyHelperService, useValue: myHelperServiceMock },
+                {
+                    provide: MyHelperService,
+                    useValue: myHelperServiceMock
+                },
             ]
         });
         service = TestBed.get(MyService);
@@ -100,7 +98,7 @@ describe('Simple integration test for createSetup', () => {
     }));
 
     it('should work', () => {
-        const {service, myHelperServiceMock} = setup();
+        const { service, myHelperServiceMock } = setup();
         const param = 4;
         service.doSomething(param);
         expect(myHelperServiceMock.getData).toHaveBeenCalledWith(4);
@@ -108,3 +106,21 @@ describe('Simple integration test for createSetup', () => {
     });
 });
 
+describe('Simple integration test for ng magic setup test bed', () => {
+
+    function setup() {
+        const magic = new NgMagicSetupTestBed();
+        return {
+            myHelperServiceMock: magic.serviceMock(MyHelperService, new MyHelperServiceMock()),
+            service: magic.injection(MyService),
+        };
+    }
+
+    it('should work', () => {
+        const { service, myHelperServiceMock } = setup();
+        const param = 4;
+        service.doSomething(param);
+        expect(myHelperServiceMock.getData).toHaveBeenCalledWith(4);
+        expect(myHelperServiceMock.doSomething).toHaveBeenCalledWith(myHelperServiceMock.data.value);
+    });
+});
