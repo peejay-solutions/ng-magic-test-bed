@@ -78,7 +78,7 @@ export class SetupTestBed extends TestBedBase {
         targetJobs.push(config => {
             const mock = getMock ? getMock() : {};
             if (!dontSpy) {
-                spyOnFunctionsOf(mock, spySource.prototype);
+                spyOnFunctionsOf(mock, spySource ? spySource.prototype : undefined);
             }
             if (typeof token !== 'undefined') {
                 config.providers.push({
