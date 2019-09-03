@@ -10,7 +10,7 @@ export class NgMagicSetupTestBed {
     private config: TestModuleMetadata;
     private configured = false;
 
-    constructor(initialConfig: TestModuleMetadata =  {}) {
+    constructor(initialConfig: TestModuleMetadata = {}) {
         this.config = {
             providers: initialConfig.providers ? initialConfig.providers.slice() : [],
             declarations: initialConfig.declarations ? initialConfig.declarations.slice() : [],
@@ -91,11 +91,11 @@ export class NgMagicSetupTestBed {
 
     public factoryMock(factoryClass, instances: Array<any>) {
         let index = -1;
-        return this.mock(factoryClass,  {
-                create: (...args: any) => {
-                    index++;
-                    return args[index];
-                }
+        return this.mock(factoryClass, {
+            create: (...args: any) => {
+                index++;
+                return args[index];
+            }
         });
     }
 

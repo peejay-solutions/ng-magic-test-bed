@@ -3,6 +3,7 @@ import { NgMagicTestBed } from '../test-bed/ng-magic-test-bed.class';
 import { TestBed } from '@angular/core/testing';
 import { createSetup } from '../test-bed/create-setup.function';
 import { NgMagicSetupTestBed } from '../test-bed/ng-magic-setup-test-bed.class';
+import { describeBeforeEach, describeTest } from '../describe-before-each/describe-before-each.function';
 
 //################# Predefintions ##############################
 
@@ -118,6 +119,19 @@ describe('Simple integration test for ng magic setup test bed', () => {
 
     it('should work', () => {
         const { service, myHelperServiceMock } = setup();
+        const param = 4;
+        service.doSomething(param);
+        expect(myHelperServiceMock.getData).toHaveBeenCalledWith(4);
+        expect(myHelperServiceMock.doSomething).toHaveBeenCalledWith(myHelperServiceMock.data.value);
+    });
+});
+
+
+describeBeforeEach('Simple integration test using describeBeforeEah for ng magic setup test bed', () => {
+    const magic = new NgMagicSetupTestBed();
+    const myHelperServiceMock = magic.serviceMock(MyHelperService, new MyHelperServiceMock());
+    const service = magic.injection(MyService);
+    describeTest('should work', () => {
         const param = 4;
         service.doSomething(param);
         expect(myHelperServiceMock.getData).toHaveBeenCalledWith(4);
