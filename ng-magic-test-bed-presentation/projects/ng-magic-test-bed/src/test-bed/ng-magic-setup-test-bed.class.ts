@@ -21,6 +21,9 @@ export class NgMagicSetupTestBed {
     }
 
     private configureTestingModule() {
+        if (this.configured){
+            return;
+        }
         this.configured = true;
         TestBed.configureTestingModule(this.config);
     }
@@ -80,7 +83,7 @@ export class NgMagicSetupTestBed {
         return fixture;
     }
 
-    public objectMock<O, M extends Partial<O>>(objectClass: AbstractType<O>, mock: M, dontSpy = false):
+    public objectMock<O, M extends Partial<O>>(objectClass: AbstractType<O> | undefined, mock: M | any, dontSpy = false):
         Partial<O> & M | jasmine.SpyObj<Partial<O> & M> {
         return <Partial<O> & M | jasmine.SpyObj<Partial<O> & M>>this.mock(undefined, mock, dontSpy, objectClass);
     }
@@ -113,7 +116,7 @@ export class NgMagicSetupTestBed {
         Partial<S> & M | jasmine.SpyObj<Partial<S> & M> | jasmine.SpyObj<Partial<S>> {
         this.expectToBePreConfiguration();
         if (!dontSpy) {
-            spyOnFunctionsOf(mock, spySource.prototype);
+            spyOnFunctionsOf(mock, spySource ? spySource.prototype : undefined);
         }
         this.config.providers.push({
             useValue: mock,
