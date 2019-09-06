@@ -1,7 +1,7 @@
 import { TestBedBase } from './test-bed-base.class';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { Type, AbstractType } from '@angular/core';
-import { spyOnFunctionsOf } from '../spy-on-mock/spy-on-functions-of.function';
+import { spyOnFunctionsOf } from '../spy-on-functions/spy-on-functions-of.function';
 import { observe } from '../observe/observe.function';
 import { Observable } from 'rxjs';
 import { SpyObserver } from '../observe/spy-observer.class';

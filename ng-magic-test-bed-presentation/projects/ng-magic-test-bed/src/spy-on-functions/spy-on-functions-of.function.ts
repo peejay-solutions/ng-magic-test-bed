@@ -21,6 +21,7 @@ export function spyOnFunctionsOf(target: any, source?: any) {
         }
         spyOnFunctionOf(target, key);
     });
+    return target;
 }
 
 function getMethodKeysFromObject(obj: any) {

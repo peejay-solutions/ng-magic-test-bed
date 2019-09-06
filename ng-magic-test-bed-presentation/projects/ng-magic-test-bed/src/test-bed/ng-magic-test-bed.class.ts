@@ -1,6 +1,6 @@
 import { TestBed, ComponentFixture, TestModuleMetadata, async } from '@angular/core/testing';
 import { make } from '../make/make.function';
-import { spyOnFunctionsOf } from '../spy-on-mock/spy-on-functions-of.function';
+import { spyOnFunctionsOf } from '../spy-on-functions/spy-on-functions-of.function';
 import { Type, SchemaMetadata } from '@angular/core';
 import { observe } from '../observe/observe.function';
 import { SpyObserver } from '../observe/spy-observer.class';

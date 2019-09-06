@@ -72,12 +72,16 @@ export class MyService {
 
 ## MyService spec with magic test bed
 ```typescript 
-describe('Simple integration test for magic TestBed', () => {
-    const magic = new NgMagicTestBed();
-    const myHelperServiceMock = magic.serviceMock(MyHelperService, () => new MyHelperServiceMock());
-    const service = magic.injection(MyService);
+describe('Simple integration test for ng magic setup test bed', () => {
+    function setup() {
+        const magic = new NgMagicSetupTestBed();
+        const myHelperServiceMock = magic.serviceMock(MyHelperService, new MyHelperServiceMock());
+        const service = magic.injection(MyService);
+        return { myHelperServiceMock, service };
+    }
 
     it('should work', () => {
+        const { service, myHelperServiceMock } = setup();
         const param = 4;
         service.doSomething(param);
         expect(myHelperServiceMock.getData).toHaveBeenCalledWith(4);

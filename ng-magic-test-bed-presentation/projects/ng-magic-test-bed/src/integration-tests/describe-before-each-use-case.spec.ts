@@ -1,6 +1,20 @@
 import { describeBeforeEach, describeTest } from '../describe-before-each/describe-before-each.function';
+import { fakeAsync, tick, flushMicrotasks } from '@angular/core/testing';
+import { NgZone } from '@angular/core';
 
 //magicDescribe, magicTest :)
+
+function sleep(time) {
+    return new Promise(resolve => setTimeout(resolve, time));
+}
+
+// describe('Asdasd', () => {
+// //   Zone.run();
+//     fakeAsync(() => {
+//         sleep(4).then(() => console.error('HI'));
+//         tick(5);
+//     })();
+// });
 
 describeBeforeEach('DescribeBeforeEachTest', () => {
 
@@ -8,6 +22,10 @@ describeBeforeEach('DescribeBeforeEachTest', () => {
         count: 0
     };
     describeTest('test 1', () => {
+        // fakeAsync(() => {
+        //     sleep(4).then(() => console.error('HI'));
+        //     tick(5);
+        // })();
         x.count++;
         expect(x.count).toEqual(1);
     });
@@ -68,3 +86,4 @@ describeBeforeEach('DescribeBeforeEachTest 2', () => {
         });
     });
 });
+

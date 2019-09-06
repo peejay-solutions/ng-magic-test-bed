@@ -1,12 +1,12 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 export let describeBeforeEach = originalDescribeBeforeEach;
 export let describeTest = (text: string, callback: () => void) => void (0);
 
 
 function originalDescribeBeforeEach(describeText: string, describeCallback) {
-  describe(describeText, async () => {
-    const metas = getInnerMethodMetas(describeCallback);
+  const metas = getInnerMethodMetas(describeCallback);
+  describe(describeText, () => {
     metas.forEach(meta => {
       it(meta.text, () => {
         callInnerMethodAtPath(describeCallback, meta.path);
