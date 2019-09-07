@@ -131,15 +131,12 @@ class MyHelperServiceMock2 {
 
 The running code can be found <a href="https://github.com/peejay-solutions/ng-magic-test-bed/blob/master/ng-magic-test-bed-presentation/projects/ng-magic-test-bed/src/integration-tests/standard-use-case.spec.ts">here</a>
 
-# Concept
-
-Working with Reflection and pointers should not be considered as bad style to create a freshly initialized sterile test environment with mocks and spies for each test case. With this mindset and some static methods that can be found on <a href="https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a> I was able to create this library. 
-
 
 # Documentation
 
 ... Work in progress.
 
+https://github.blog/2016-08-22-publish-your-project-documentation-with-github-pages/
 
 
 
