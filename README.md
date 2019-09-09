@@ -136,8 +136,7 @@ The running code can be found <a href="https://github.com/peejay-solutions/ng-ma
 
 ... Work in progress.
 
-https://github.blog/2016-08-22-publish-your-project-documentation-with-github-pages/
-
+https://peejay-solutions.github.io/ng-magic-test-bed/classes/NgMagicSetupTestBed.html
 
 
 
