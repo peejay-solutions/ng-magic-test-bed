@@ -1,20 +1,28 @@
-// This file is required by karma.conf.js and loads recursively all the .spec and framework files
-
-import 'zone.js/dist/zone-testing';
-import { getTestBed } from '@angular/core/testing';
-import {
-  BrowserDynamicTestingModule,
-  platformBrowserDynamicTesting
-} from '@angular/platform-browser-dynamic/testing';
-
-declare const require: any;
-
-// First, initialize the Angular testing environment.
-getTestBed().initTestEnvironment(
-  BrowserDynamicTestingModule,
-  platformBrowserDynamicTesting()
-);
-// Then we find all the tests.
-const context = require.context('./', true, /\.spec\.ts$/);
-// And load the modules.
-context.keys().map(context);
+module.exports = {
+    globals: {
+      'ts-jest': {
+        tsConfig: '<rootDir>/tsconfig.spec.json',
+        stringifyContentPathRegex: '\\.html$',
+        astTransformers: [
+          require.resolve('./build/InlineFilesTransformer'),
+          require.resolve('./build/StripStylesTransformer')
+        ],
+      },
+    },
+    transform: {
+      '^.+\\.(ts|js|html)$': 'ts-jest',
+    },
+    testEnvironment: 'jest-environment-jsdom-thirteen',
+    moduleFileExtensions: ['ts', 'html', 'js', 'json'],
+    moduleNameMapper: {
+      '^src/(.*)$': '<rootDir>/src/$1',
+      '^app/(.*)$': '<rootDir>/src/app/$1',
+      '^assets/(.*)$': '<rootDir>/src/assets/$1',
+      '^environments/(.*)$': '<rootDir>/src/environments/$1',
+    },
+    transformIgnorePatterns: ['node_modules/(?!@ngrx)'],
+    snapshotSerializers: [
+      'jest-preset-angular/build/AngularSnapshotSerializer.js',
+      'jest-preset-angular/build/HTMLCommentSerializer.js',
+    ],
+  };

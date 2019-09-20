@@ -33,9 +33,7 @@ describe('make(a:anyObject, b:anyObject', () => {
         const a = {};
         const b = 'string';
         make(a, b);
-        expect(() => {
-            expect(a).not.toEqual(b);
-        }).toThrow();
+        expect(a).not.toEqual(b);
     });
 
     it('make(a, b) should support not Maps', () => {
