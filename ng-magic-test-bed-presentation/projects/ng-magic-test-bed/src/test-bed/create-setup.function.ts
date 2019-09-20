@@ -1,6 +1,8 @@
 import { SetupTestBed } from './setup-test-bed.class';
 
-
+/**
+ * @ignore
+ */
 export function createSetup<T extends Object>(setup: (magic: SetupTestBed) => T): () => T {
     let originalsMap: Map<any, any>;
     const magic = new SetupTestBed(originals => originalsMap = originals);

@@ -6,6 +6,9 @@ import { observe } from '../observe/observe.function';
 import { Observable } from 'rxjs';
 import { SpyObserver } from '../observe/spy-observer.class';
 
+/**
+ * @ignore
+ */
 export class SetupTestBed extends TestBedBase {
     private originalByReturnedInstance = new Map<any, any>();
 

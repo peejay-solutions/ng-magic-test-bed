@@ -9,6 +9,9 @@ import { TestBedBase } from './test-bed-base.class';
 
 type AbstractType<T> = Function & { prototype: T };
 
+/**
+ * @ignore
+ */
 export class NgMagicTestBed extends TestBedBase {
 
     private originalByReturnedInstance = new Map<any, any>();

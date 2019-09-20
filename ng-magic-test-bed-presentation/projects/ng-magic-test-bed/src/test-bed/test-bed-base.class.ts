@@ -3,6 +3,9 @@ import {  SchemaMetadata } from '@angular/core';
 
 type AbstractType<T> = Function & { prototype: T };
 
+/**
+ * @ignore
+ */
 export class TestBedBase {
 
     protected preJobs: Array<(config: TestModuleMetadata) => void> = [];

@@ -7,17 +7,10 @@ A magic test bed for angular. This Wrapper for the well known angular test bed (
 
 - Less code
 
-- All local variables referencing mocks, helper-services, observers, objects, arrays, maps and the testee itself can be defined as constants
-
-- Configuration of the test bed is done implicitly while assigning your local variables
-
-- Reconfiguration of the entire test bed including fresh mocks and services before each test/it is done in background
-
-- Creation of jest or jasmine (karma) spies for all your mocks' functions is done implicitly. No more spy manual spy creation with magic strings to overwrite strongly typed methods of TypeScript objects.
+- Creation of jest or jasmine (karma) spies for all your mocks' functions is done implicitly. No more manual spy creation with magic strings to overwrite strongly typed methods of TypeScript objects.
 
 - A simple mock with spies for all methods of a service is generated. You can extend these auto generated mocks with custom behavior.
 
-- Write tests without beforeEach.
 
 
 # Installation 
