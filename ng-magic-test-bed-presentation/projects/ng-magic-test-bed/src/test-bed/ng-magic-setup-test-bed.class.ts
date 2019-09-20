@@ -4,14 +4,14 @@ import { spyOnFunctionsOf } from '../spy-on-functions/spy-on-functions-of.functi
 import { Observable } from 'rxjs';
 import { observe } from '../observe/observe.function';
 import { SpyObserver } from '../observe/spy-observer.class';
- 
+
 export class NgMagicSetupTestBed {
 
     private config: TestModuleMetadata;
     private configured = false;
 
     /**
-    * @param {TestModuleMetadata} initialConfig  initial config which will be extended by the other method of the
+    * @param initialConfig  initial config which will be extended by the other method of the
     * constructed instance. The final config will be used to call TestBed.configureTestingModule implicitly by
     * calling e.g. .injection()
     */
@@ -41,7 +41,7 @@ export class NgMagicSetupTestBed {
     }
 
     /**
-    * @param { Array<any>} declarations  initial config which will be extended by the other method of the
+    * @param declarations  initial config which will be extended by the other method of the
     * constructed instance. The final config will be used to call TestBed.configureTestingModule implicitly by
     * calling e.g. .injection()
     */
