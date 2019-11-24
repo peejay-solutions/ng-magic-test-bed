@@ -1,13 +1,24 @@
-import { TestBed } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 
 export let describeBeforeEach = originalDescribeBeforeEach;
 export let describeTest = (text: string, callback: () => void) => void (0);
 
 
 function originalDescribeBeforeEach(describeText: string, describeCallback) {
-  const metas = getInnerMethodMetas(describeCallback);
+  //get it count
+  //warte beim ersten it auf die metas und gehe auf die erste meta. 
+  //{;}<leer>\n<tab>it(' //ist ja eigentlich kack egal. it( zählen und wenn nichts mehr kommt, dann führe ich nichts aus.
+
+  //GEHT alles nicht weil ich ja den Text aus dem it brauche!
+  
+
+  let metas;
+  const collectMetas = async(() => {
+    metas = getInnerMethodMetas(describeCallback);
+  });
   describe(describeText, () => {
     metas.forEach(meta => {
+
       it(meta.text, () => {
         callInnerMethodAtPath(describeCallback, meta.path);
       });
@@ -29,6 +40,8 @@ function getInnerMethodMetas(describeCallback): Array<IInnerMethodMeta> {
       TestBed[propName] = () => void (0);
     }
   });
+
+
 
   forEachInnerMethod(describeCallback, meta => {
     metas.push(meta);

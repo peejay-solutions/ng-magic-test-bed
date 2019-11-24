@@ -1,5 +1,5 @@
-import { TestBed, TestModuleMetadata, ComponentFixture } from '@angular/core/testing';
-import { SchemaMetadata, Type, AbstractType } from '@angular/core';
+import { TestBed, TestModuleMetadata, ComponentFixture, MetadataOverride } from '@angular/core/testing';
+import { SchemaMetadata, Type, AbstractType, Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { spyOnFunctionsOf } from '../spy-on-functions/spy-on-functions-of.function';
 import { Observable } from 'rxjs';
 import { observe } from '../observe/observe.function';
@@ -31,6 +31,7 @@ export class NgMagicSetupTestBed {
         }
         this.configured = true;
         TestBed.configureTestingModule(this.config);
+        //jobs  e.g. overrideComponent.
     }
 
     private expectToBePreConfiguration() {
@@ -41,7 +42,7 @@ export class NgMagicSetupTestBed {
     }
 
     /**
-    * @param declarations  initial config which will be extended by the other method of the
+    * @param declarations initial config which will be extended by the other method of the
     * constructed instance. The final config will be used to call TestBed.configureTestingModule implicitly by
     * calling e.g. .injection()
     */
@@ -81,15 +82,24 @@ export class NgMagicSetupTestBed {
         this.providers([provider]);
     }
 
-    public fixture<C>(componentClass: Type<C>, dontCompileAfterWards: boolean = false): ComponentFixture<C> {
-        this.configureTestingModule();
+    public fixture<C>(componentClass: Type<C>, override: MetadataOverride<Component>): ComponentFixture<C> {
+        //Theoretisch kann ich die auch flux noch adden, SOFERN noch nicht configured wurde. So ein Shot frei mäßig..
+        //Aber ich will ja declarations machen,..
+        //wichtig ist das mit den services.
         if (!this.config.declarations.includes(componentClass)) {
             throw new Error('Declaration of component needs to be done before you can create the fixture');
         }
-        const fixture = TestBed.createComponent(componentClass);
-        if (!dontCompileAfterWards) {
-            TestBed.compileComponents();
+        if (!this.config.schemas.includes(NO_ERRORS_SCHEMA)) {
+            this.config.schemas.push(NO_ERRORS_SCHEMA);
         }
+        this.configureTestingModule();
+        if (override) {
+            TestBed.overrideComponent(componentClass, override);
+        }
+        //TODO: check if already compiled.
+        TestBed.compileComponents();
+        const fixture = TestBed.createComponent(componentClass);
+        //fixture.detectChanges();
         return fixture;
     }
 

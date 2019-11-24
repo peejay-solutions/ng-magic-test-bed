@@ -4,7 +4,6 @@
 
 
 export * from './ng-magic-test-bed.module';
-export * from './test-bed/ng-magic-test-bed.class';
 export * from './spy-on-functions/spy-on-functions-of.function';
 export * from './observe/observe.function';
 export * from './observe/spy-observer.class';
