@@ -4,11 +4,16 @@ import { spyOnFunctionsOf } from '../spy-on-functions/spy-on-functions-of.functi
 import { Observable } from 'rxjs';
 import { observe } from '../observe/observe.function';
 import { SpyObserver } from '../observe/spy-observer.class';
+import { By } from '@angular/platform-browser';
 
 export class NgMagicSetupTestBed {
 
     private config: TestModuleMetadata;
     private configured = false;
+    private compiled = false;
+    private postConfigureJobs: Array<() => void> = [];
+    private fixtureJobs: Array<() => void> = [];
+    private fixtureInstance: ComponentFixture<any> = null;
 
     /**
     * @param initialConfig  initial config which will be extended by the other method of the
@@ -31,13 +36,13 @@ export class NgMagicSetupTestBed {
         }
         this.configured = true;
         TestBed.configureTestingModule(this.config);
-        //jobs  e.g. overrideComponent.
+        this.postConfigureJobs.forEach(job => job());
     }
 
     private expectToBePreConfiguration() {
         if (this.configured) {
             throw new Error('The TestBed has been implicitly configured by calling e.g.' +
-                '"injection" the method you called needs a not configured TestBed to be executed');
+                '"injection" or "fixture" the method you called needs a not configured TestBed to be executed');
         }
     }
 
@@ -82,25 +87,130 @@ export class NgMagicSetupTestBed {
         this.providers([provider]);
     }
 
-    public fixture<C>(componentClass: Type<C>, override: MetadataOverride<Component>): ComponentFixture<C> {
-        //Theoretisch kann ich die auch flux noch adden, SOFERN noch nicht configured wurde. So ein Shot frei mäßig..
-        //Aber ich will ja declarations machen,..
-        //wichtig ist das mit den services.
+    public pipeServiceMock<S, M extends Partial<S>>(pipeClass: Type<any>, serviceClass: AbstractType<S>, mock: M,
+        dontSpy: true): Partial<S> & M;
+    public pipeServiceMock<S, M extends Partial<S>>(pipeClass: Type<any>, serviceClass: AbstractType<S>, mock: M):
+        jasmine.SpyObj<Partial<S> & M>;
+    public pipeServiceMock<S, M extends Partial<S>>(pipeClass: Type<any>, serviceClass: AbstractType<S>):
+        jasmine.SpyObj<Partial<S>>;
+    public pipeServiceMock<S, M extends Partial<S>>(pipeClass: Type<any>, serviceClass: AbstractType<S>,
+        mock?: M, dontSpy?: boolean):
+        Partial<S> & M | jasmine.SpyObj<Partial<S> & M> | jasmine.SpyObj<Partial<S>> {
+        return this.componentProviderMock(pipeClass, serviceClass, mock, dontSpy, serviceClass);
+    }
+
+    public pipeProviderMock<M>(pipeClass: Type<any>, token: any, mock: M, dontSpy = false,
+        spySource?: AbstractType<any>): M {
+        return this.uiThingProviderMock('overridePipe', pipeClass, token, mock, dontSpy, spySource);
+    }
+
+    public directiveServiceMock<S, M extends Partial<S>>(directiveClass: Type<any>, serviceClass: AbstractType<S>, mock: M,
+        dontSpy: true): Partial<S> & M;
+    public directiveServiceMock<S, M extends Partial<S>>(directiveClass: Type<any>, serviceClass: AbstractType<S>, mock: M):
+        jasmine.SpyObj<Partial<S> & M>;
+    public directiveServiceMock<S, M extends Partial<S>>(directiveClass: Type<any>, serviceClass: AbstractType<S>):
+        jasmine.SpyObj<Partial<S>>;
+    public directiveServiceMock<S, M extends Partial<S>>(directiveClass: Type<any>, serviceClass: AbstractType<S>,
+        mock?: M, dontSpy?: boolean):
+        Partial<S> & M | jasmine.SpyObj<Partial<S> & M> | jasmine.SpyObj<Partial<S>> {
+        return this.componentProviderMock(directiveClass, serviceClass, mock, dontSpy, serviceClass);
+    }
+
+    public directiveProviderMock<M>(directiveClass: Type<any>, token: any, mock: M, dontSpy = false,
+        spySource?: AbstractType<any>): M {
+        return this.uiThingProviderMock('overrideDirective', directiveClass, token, mock, dontSpy, spySource);
+    }
+
+    public componentServiceMock<S, M extends Partial<S>>(componentClass: Type<any>, serviceClass: AbstractType<S>, mock: M,
+        dontSpy: true): Partial<S> & M;
+    public componentServiceMock<S, M extends Partial<S>>(componentClass: Type<any>, serviceClass: AbstractType<S>, mock: M):
+        jasmine.SpyObj<Partial<S> & M>;
+    public componentServiceMock<S, M extends Partial<S>>(componentClass: Type<any>, serviceClass: AbstractType<S>):
+        jasmine.SpyObj<Partial<S>>;
+    public componentServiceMock<S, M extends Partial<S>>(componentClass: Type<any>, serviceClass: AbstractType<S>,
+        mock?: M, dontSpy?: boolean):
+        Partial<S> & M | jasmine.SpyObj<Partial<S> & M> | jasmine.SpyObj<Partial<S>> {
+        return this.componentProviderMock(componentClass, serviceClass, mock, dontSpy, serviceClass);
+    }
+
+    public componentProviderMock<M>(componentClass: Type<any>, token: any, mock: M, dontSpy = false,
+        spySource?: AbstractType<any>): M {
+        return this.uiThingProviderMock('overrideComponent', componentClass, token, mock, dontSpy, spySource);
+    }
+
+    private uiThingProviderMock<M>(methodName: string, uiThingClass: Type<any>, token: any, mock: M, dontSpy = false,
+        spySource?: AbstractType<any>): M {
+        this.expectToBePreConfiguration();
+        if (!dontSpy) {
+            spyOnFunctionsOf(mock, spySource ? spySource.prototype : undefined);
+        }
+        if (!this.config.declarations.includes(uiThingClass)) {
+            this.config.declarations.push(uiThingClass);
+        }
+        this.postConfigureJobs.push(() => {
+            TestBed[methodName](uiThingClass, {
+                add: {
+                    providers: [
+                        { provide: token, useValue: mock }
+                    ]
+                }
+            });
+        });
+        return mock;
+    }
+
+    public directiveMocks<C>(directiveClass: Type<C>): Array<C> {
+        return this.componentMocks(directiveClass);
+    }
+
+    /**
+    * @param componentClass class of the component that should be used in the fixture for a specific selector you want to mock.
+    * @returns an arry of all component instance that were found statically inside the fixture. The array's members can only be
+    * used after calling .fixture(). Before that time the array is initialized with an error string as its only member.
+    */
+    public componentMocks<C>(componentClass: Type<C>): Array<C> {
+        const result: Array<any> = ['this array can only be used after fixture called'];
         if (!this.config.declarations.includes(componentClass)) {
+            this.config.declarations.push(componentClass);
+        }
+        this.fixtureJobs.push(() => {
+            result.length = 0;
+            const componentDebugElements = this.fixtureInstance.debugElement.queryAll(By.directive(componentClass));
+            componentDebugElements.forEach(componentDebugElement => result.push(componentDebugElement.componentInstance));
+        });
+        return result;
+    }
+
+    /**
+    * This method may only be called once per NgMagicTestBed instance.
+    * @param componentClass class of the root component you want to compile and create.
+    * @param disableNoErrorSchema by default the NgMagicTestBed uses the NO_ERROR_SCHEMA of angular to prevent the compiler from
+    * throwing exceptions e.g. for missing or unknown inputs.
+    * @returns a component fixture like standard TestBed.createComponent(componentClass) would have returned it.
+    */
+    public fixture<C>(componentClass: Type<C>, disableNoErrorSchema = false): ComponentFixture<C> {
+        if (this.fixtureInstance) {
+            throw new Error('.fixture can only be called once per NgMagicTestBed instance');
+        }
+        if (!this.config.declarations.includes(componentClass) && this.configured) {
             throw new Error('Declaration of component needs to be done before you can create the fixture');
         }
-        if (!this.config.schemas.includes(NO_ERRORS_SCHEMA)) {
+        if (!this.config.declarations.includes(componentClass) && !this.configured) {
+            this.config.declarations.push(componentClass);
+        }
+        if (!disableNoErrorSchema && !this.config.schemas.includes(NO_ERRORS_SCHEMA)) {
             this.config.schemas.push(NO_ERRORS_SCHEMA);
         }
-        this.configureTestingModule();
-        if (override) {
-            TestBed.overrideComponent(componentClass, override);
+        if (!this.configured) {
+            this.configureTestingModule();
         }
-        //TODO: check if already compiled.
-        TestBed.compileComponents();
-        const fixture = TestBed.createComponent(componentClass);
-        //fixture.detectChanges();
-        return fixture;
+        if (!this.compiled) {
+            this.compiled = true;
+            TestBed.compileComponents();
+        }
+        this.fixtureInstance = TestBed.createComponent(componentClass);
+        this.fixtureJobs.forEach(job => job());
+        return this.fixtureInstance;
     }
 
     public objectMock<O, M extends Partial<O>>(objectClass: AbstractType<O> | undefined, mock: M | any, dontSpy = false):

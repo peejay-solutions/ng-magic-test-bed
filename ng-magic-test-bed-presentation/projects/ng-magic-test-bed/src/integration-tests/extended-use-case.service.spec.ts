@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { NgMagicTestBed } from '../test-bed/ng-magic-test-bed.class';
+import { NgMagicSetupTestBed } from '../test-bed/ng-magic-setup-test-bed.class';
+import { spyOnFunctionsOf } from '../spy-on-functions/spy-on-functions-of.function';
 
 @Injectable({
     providedIn: 'root'
@@ -84,18 +85,25 @@ export class MyTestHelperService {
 }
 
 describe('Extended integration test for TestBed', () => {
-    const magic = new NgMagicTestBed();
-    const myHelperServiceMock = magic.serviceMock(MyHelperService, () => new MyHelperServiceMock());
-    const myAbstractHelperServiceMock = magic.serviceMock(MyAbstractHelperService, () => new MyAbstractHelperServiceMock());
-    const service = magic.injection(MyService);
-    const myAbstractService = magic.injection(MyAbstractService);
-    const myTestHelperService = magic.injection(MyTestHelperService);
-    const myUnregisteredMock = magic.object(() => new MyUnregisteredHelperServiceMock());
-    const myUnregisteredSimpleHelperMock = magic.object(() => new MySimpleHelperService);
-    const myNonTestBededService = magic.object(() => new MyService(myUnregisteredMock, myUnregisteredSimpleHelperMock), true);
-    const mySimpleHelperMock = magic.serviceMock(MySimpleHelperService);
+    function setup() {
+        const magic = new NgMagicSetupTestBed();
+        const myHelperServiceMock = magic.serviceMock(MyHelperService, new MyHelperServiceMock());
+        const myAbstractHelperServiceMock = magic.serviceMock(MyAbstractHelperService, new MyAbstractHelperServiceMock());
+        const mySimpleHelperMock = magic.serviceMock(MySimpleHelperService);
+        const service = magic.injection(MyService);
+        const myAbstractService = magic.injection(MyAbstractService);
+        const myTestHelperService = magic.injection(MyTestHelperService);
+        const myUnregisteredMock = spyOnFunctionsOf(new MyUnregisteredHelperServiceMock());
+        const myUnregisteredSimpleHelperMock = spyOnFunctionsOf(new MySimpleHelperService);
+        const myNonTestBededService = new MyService(myUnregisteredMock, myUnregisteredSimpleHelperMock);
+        return {
+            myHelperServiceMock, myNonTestBededService, mySimpleHelperMock, myAbstractHelperServiceMock, service,
+            myUnregisteredSimpleHelperMock, myUnregisteredMock, myAbstractService, myTestHelperService
+        };
+    }
 
     it('should work', () => {
+        const { myHelperServiceMock, service, myTestHelperService } = setup();
         service.doSomething('hello');
         expect(myHelperServiceMock.doSomething).toHaveBeenCalledWith('hello');
         expect(myTestHelperService.getValue('x')).toEqual('x');
@@ -103,6 +111,7 @@ describe('Extended integration test for TestBed', () => {
     });
 
     it('should work even for a second time', () => {
+        const { myHelperServiceMock, service, myTestHelperService } = setup();
         service.doSomething('hello');
         expect(myHelperServiceMock.doSomething).toHaveBeenCalledWith('hello');
         expect(myTestHelperService.getValue('x')).toEqual('x');
@@ -110,6 +119,7 @@ describe('Extended integration test for TestBed', () => {
     });
 
     it('should work for abstract', () => {
+        const { myAbstractService, myAbstractHelperServiceMock, myTestHelperService } = setup();
         myAbstractService.doSomething('hello');
         expect(myAbstractHelperServiceMock.doSomething).toHaveBeenCalledWith('hello');
         expect(myTestHelperService.getValue('x')).toEqual('x');
@@ -117,6 +127,7 @@ describe('Extended integration test for TestBed', () => {
     });
 
     it('should work for abstract even for a second time', () => {
+        const { myAbstractService, myAbstractHelperServiceMock, myTestHelperService } = setup();
         myAbstractService.doSomething('hello');
         expect(myAbstractHelperServiceMock.doSomething).toHaveBeenCalledWith('hello');
         expect(myTestHelperService.getValue('x')).toEqual('x');
@@ -124,6 +135,7 @@ describe('Extended integration test for TestBed', () => {
     });
 
     it('should work for simply unregistered', () => {
+        const { myNonTestBededService, myUnregisteredMock, myTestHelperService } = setup();
         myNonTestBededService.doSomething('hello');
         expect(myUnregisteredMock.doSomething).toHaveBeenCalledWith('hello');
         expect(myTestHelperService.getValue('x')).toEqual('x');
@@ -131,6 +143,7 @@ describe('Extended integration test for TestBed', () => {
     });
 
     it('should work for simply unregistered even for a second time', () => {
+        const { myNonTestBededService, myUnregisteredMock, myTestHelperService } = setup();
         myNonTestBededService.doSomething('hello');
         expect(myUnregisteredMock.doSomething).toHaveBeenCalledWith('hello');
         expect(myTestHelperService.getValue('x')).toEqual('x');
@@ -138,17 +151,11 @@ describe('Extended integration test for TestBed', () => {
     });
 
     it('should work with simple generated mock', () => {
+        const { service, mySimpleHelperMock } = setup();
         service.doSomething('hello');
         expect(mySimpleHelperMock.doSomething).toHaveBeenCalledWith('hello');
     });
-
-    // it('function should be spy', () => {
-    //     const value = callback(3);
-    //     expect(callback).toHaveBeenCalledWith(3);
-    //     expect(value).toEqual(300);
-    // });
 });
-
 
 class MyUnregisteredHelperServiceMock {
     public doSomething() {
