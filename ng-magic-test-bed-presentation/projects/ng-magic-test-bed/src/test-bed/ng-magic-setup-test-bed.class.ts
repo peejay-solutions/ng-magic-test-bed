@@ -188,7 +188,7 @@ export class NgMagicSetupTestBed {
     * throwing exceptions e.g. for missing or unknown inputs.
     * @returns a component fixture like standard TestBed.createComponent(componentClass) would have returned it.
     */
-    public fixture<C>(componentClass: Type<C>, disableNoErrorSchema = false): ComponentFixture<C> {
+    public fixture<C>(componentClass: Type<C>, initialInputs: Partial<C> = {}, disableNoErrorSchema = false): ComponentFixture<C> {
         if (this.fixtureInstance) {
             throw new Error('.fixture can only be called once per NgMagicTestBed instance');
         }
@@ -209,6 +209,8 @@ export class NgMagicSetupTestBed {
             TestBed.compileComponents();
         }
         this.fixtureInstance = TestBed.createComponent(componentClass);
+        Object.assign(this.fixtureInstance.componentInstance, initialInputs);
+        this.fixtureInstance.detectChanges();
         this.fixtureJobs.forEach(job => job());
         return this.fixtureInstance;
     }

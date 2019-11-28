@@ -29,10 +29,12 @@ export class MyButtonComponent {
 
 @Component({
     selector: 'lib-sample',
-    template: '<lib-button (click)="myService.doSomething()"></lib-button>',
+    template: '<lib-button *ngIf="param>99" (click)="myService.doSomething()"></lib-button>',
     providers: [MyComponentService]
 })
 export class SampleComponent {
+    @Input()
+    public param: number;
     public value: number;
     constructor(public myService: MyService, private myComponentService: MyComponentService) {
         this.value = this.myComponentService.returnSomething();
@@ -47,7 +49,7 @@ describe('component use case with NgMagicTestBed', () => {
         const foundButtonComponents = magic.componentMocks(MyButtonComponentMock);
         const myComponentServiceMock = magic.componentServiceMock(SampleComponent, MyComponentService, new MyComponentServiceMock());
         const myServiceMock = magic.serviceMock(MyService, new MyServiceMock());
-        const fixture = magic.fixture(SampleComponent);
+        const fixture = magic.fixture(SampleComponent, {param: 100});
         const buttonComponentMock = foundButtonComponents[0];
         return { fixture, myComponentServiceMock, buttonComponentMock, myServiceMock };
     }
@@ -55,6 +57,7 @@ describe('component use case with NgMagicTestBed', () => {
     it('should work', () => {
         const { fixture, buttonComponentMock, myComponentServiceMock, myServiceMock} = setup();
         expect(fixture).toBeTruthy();
+        expect(fixture.componentInstance.param).toEqual(100);
         expect(myComponentServiceMock.returnSomething).toHaveBeenCalled();
         expect(fixture.componentInstance.value).toEqual(3);
         buttonComponentMock.click.emit({isEvent: true});
@@ -99,11 +102,14 @@ describe('component use case with standard TestBed', () => {
         });
         TestBed.compileComponents();
         fixture = TestBed.createComponent(SampleComponent);
+        fixture.componentInstance.param = 100;
+        fixture.detectChanges();
         buttonComponentMock = fixture.debugElement.query(By.directive(MyButtonComponentMock2)).componentInstance;
     });
 
     it('should work', () => {
         expect(fixture).toBeTruthy();
+        expect(fixture.componentInstance.param).toEqual(100);
         expect(myComponentServiceMock.returnSomething).toHaveBeenCalled();
         expect(fixture.componentInstance.value).toEqual(3);
         buttonComponentMock.click.emit({isEvent: true});
