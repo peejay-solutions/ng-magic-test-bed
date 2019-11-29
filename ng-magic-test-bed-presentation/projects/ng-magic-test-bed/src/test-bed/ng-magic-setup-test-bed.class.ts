@@ -176,7 +176,7 @@ export class NgMagicSetupTestBed {
         this.fixtureJobs.push(() => {
             result.length = 0;
             const componentDebugElements = this.fixtureInstance.debugElement.queryAll(By.directive(componentClass));
-            componentDebugElements.forEach(componentDebugElement => result.push(componentDebugElement.componentInstance));
+            componentDebugElements.forEach(componentDebugElement => result.push(componentDebugElement.injector.get(componentClass)));
         });
         return result;
     }
