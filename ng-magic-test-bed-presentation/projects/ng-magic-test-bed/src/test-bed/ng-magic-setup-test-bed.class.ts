@@ -1,4 +1,4 @@
-import { TestBed, TestModuleMetadata, ComponentFixture, MetadataOverride } from '@angular/core/testing';
+import { TestBed, TestModuleMetadata, ComponentFixture, MetadataOverride, ComponentFixtureAutoDetect } from '@angular/core/testing';
 import { SchemaMetadata, Type, AbstractType, Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { spyOnFunctionsOf } from '../spy-on-functions/spy-on-functions-of.function';
 import { Observable } from 'rxjs';
@@ -37,6 +37,7 @@ export class NgMagicSetupTestBed {
         this.configured = true;
         TestBed.configureTestingModule(this.config);
         this.postConfigureJobs.forEach(job => job());
+        this.postConfigureJobs.length = 0;
     }
 
     private expectToBePreConfiguration() {
@@ -170,6 +171,7 @@ export class NgMagicSetupTestBed {
     */
     public componentMocks<C>(componentClass: Type<C>): Array<C> {
         const result: Array<any> = ['this array can only be used after fixture called'];
+        this.expectToBePreConfiguration();
         if (!this.config.declarations.includes(componentClass)) {
             this.config.declarations.push(componentClass);
         }
@@ -200,6 +202,9 @@ export class NgMagicSetupTestBed {
         }
         if (!disableNoErrorSchema && !this.config.schemas.includes(NO_ERRORS_SCHEMA)) {
             this.config.schemas.push(NO_ERRORS_SCHEMA);
+        }
+        if (!this.config.providers.find(entry => entry.provide === ComponentFixtureAutoDetect)) {
+            this.config.providers.push({ provide: ComponentFixtureAutoDetect, useValue: true });
         }
         if (!this.configured) {
             this.configureTestingModule();
