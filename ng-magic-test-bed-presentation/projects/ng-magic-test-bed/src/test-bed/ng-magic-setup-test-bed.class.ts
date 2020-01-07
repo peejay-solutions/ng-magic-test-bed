@@ -234,7 +234,7 @@ export class NgMagicSetupTestBed {
         return this.mock(factoryClass, {
             create: (...args: any) => {
                 index++;
-                return args[index];
+                return instances[index];
             }
         });
     }
