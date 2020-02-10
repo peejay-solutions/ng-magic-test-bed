@@ -6,6 +6,11 @@ import { observe } from '../observe/observe.function';
 import { SpyObserver } from '../observe/spy-observer.class';
 import { By } from '@angular/platform-browser';
 
+
+export type IFactory<F> = {
+    create(...args: Array<any>): any;
+} & Partial<F>;
+
 export class NgMagicSetupTestBed {
 
     private config: TestModuleMetadata;
@@ -229,14 +234,14 @@ export class NgMagicSetupTestBed {
         return this.mock(token, mock, dontSpy, spySource);
     }
 
-    public factoryMock(factoryClass, instances: Array<any>) {
+    public factoryMock<F>(factoryClass: Type<F>, instances: Array<any>): jasmine.SpyObj<Partial<F>> {
         let index = -1;
-        return this.mock(factoryClass, {
+        return <any>this.mock(factoryClass, {
             create: (...args: any) => {
                 index++;
                 return instances[index];
-            }
-        });
+            },
+        }, false, factoryClass);
     }
 
     public serviceMock<S, M extends Partial<S>>(serviceClass: AbstractType<S>, mock: M,

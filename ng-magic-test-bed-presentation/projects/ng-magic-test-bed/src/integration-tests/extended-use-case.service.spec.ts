@@ -2,6 +2,22 @@ import { Injectable } from '@angular/core';
 import { NgMagicSetupTestBed } from '../test-bed/ng-magic-setup-test-bed.class';
 import { spyOnFunctionsOf } from '../spy-on-functions/spy-on-functions-of.function';
 
+export class InstantiableHelper {
+    public helping = false;
+    public help() {
+        this.helping = true;
+    }
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class MyHelperFactory {
+    create() {
+        return new InstantiableHelper();
+    }
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -42,13 +58,18 @@ export abstract class MyAbstractHelperService {
 })
 export class MyService {
     public counter = 0;
-    constructor(private myHelper: MyHelperService, private mySimpleHelper: MySimpleHelperService) {
+    public myHelperInstance: InstantiableHelper;
+    constructor(private myHelper: MyHelperService,
+         private mySimpleHelper: MySimpleHelperService,
+         private myHelperFactory: MyHelperFactory) {
+             this.myHelperInstance = this.myHelperFactory.create();
     }
 
     public doSomething(param) {
         this.myHelper.doSomething(param);
         this.mySimpleHelper.doSomething(param);
         this.counter++;
+        this.myHelperInstance.help();
     }
 }
 
@@ -90,32 +111,38 @@ describe('Extended integration test for TestBed', () => {
         const myHelperServiceMock = magic.serviceMock(MyHelperService, new MyHelperServiceMock());
         const myAbstractHelperServiceMock = magic.serviceMock(MyAbstractHelperService, new MyAbstractHelperServiceMock());
         const mySimpleHelperMock = magic.serviceMock(MySimpleHelperService);
+        const helperMock = magic.objectMock(InstantiableHelper, {helping: true});
+        const myHelperFactoryMock = magic.factoryMock(MyHelperFactory, [helperMock]);
         const service = magic.injection(MyService);
         const myAbstractService = magic.injection(MyAbstractService);
         const myTestHelperService = magic.injection(MyTestHelperService);
         const myUnregisteredMock = spyOnFunctionsOf(new MyUnregisteredHelperServiceMock());
-        const myUnregisteredSimpleHelperMock = spyOnFunctionsOf(new MySimpleHelperService);
-        const myNonTestBededService = new MyService(myUnregisteredMock, myUnregisteredSimpleHelperMock);
+        const myUnregisteredSimpleHelperMock = spyOnFunctionsOf(new MySimpleHelperService());
+        const myUnregisteredFactoryMock = spyOnFunctionsOf(new MyHelperFactory());
+        const myNonTestBededService = new MyService(myUnregisteredMock, myUnregisteredSimpleHelperMock, myUnregisteredFactoryMock);
         return {
             myHelperServiceMock, myNonTestBededService, mySimpleHelperMock, myAbstractHelperServiceMock, service,
-            myUnregisteredSimpleHelperMock, myUnregisteredMock, myAbstractService, myTestHelperService
+            myUnregisteredSimpleHelperMock, myUnregisteredMock, myAbstractService, myTestHelperService, myHelperFactoryMock,
+            helperMock
         };
     }
 
     it('should work', () => {
-        const { myHelperServiceMock, service, myTestHelperService } = setup();
+        const { myHelperServiceMock, service, myTestHelperService , myHelperFactoryMock} = setup();
         service.doSomething('hello');
         expect(myHelperServiceMock.doSomething).toHaveBeenCalledWith('hello');
         expect(myTestHelperService.getValue('x')).toEqual('x');
         expect(service.counter).toEqual(1);
+        expect(myHelperFactoryMock.create).toHaveBeenCalled();
     });
 
     it('should work even for a second time', () => {
-        const { myHelperServiceMock, service, myTestHelperService } = setup();
+        const { myHelperServiceMock, service, myTestHelperService , myHelperFactoryMock} = setup();
         service.doSomething('hello');
         expect(myHelperServiceMock.doSomething).toHaveBeenCalledWith('hello');
         expect(myTestHelperService.getValue('x')).toEqual('x');
         expect(service.counter).toEqual(1);
+        expect(myHelperFactoryMock.create).toHaveBeenCalled();
     });
 
     it('should work for abstract', () => {
