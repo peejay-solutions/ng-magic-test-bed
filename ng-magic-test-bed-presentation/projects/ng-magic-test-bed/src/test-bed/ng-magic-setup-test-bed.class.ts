@@ -7,9 +7,9 @@ import { SpyObserver } from '../observe/spy-observer.class';
 import { By } from '@angular/platform-browser';
 
 
-export type IFactory<F> = {
-    create(...args: Array<any>): any;
-} & Partial<F>;
+export interface IFactory<I> {
+    create(...args: Array<any>): I;
+}
 
 export class NgMagicSetupTestBed {
 
@@ -208,9 +208,6 @@ export class NgMagicSetupTestBed {
         if (!disableNoErrorSchema && !this.config.schemas.includes(NO_ERRORS_SCHEMA)) {
             this.config.schemas.push(NO_ERRORS_SCHEMA);
         }
-        if (!this.config.providers.find(entry => entry.provide === ComponentFixtureAutoDetect)) {
-            this.config.providers.push({ provide: ComponentFixtureAutoDetect, useValue: true });
-        }
         if (!this.configured) {
             this.configureTestingModule();
         }
@@ -230,13 +227,13 @@ export class NgMagicSetupTestBed {
         return <Partial<O> & M | jasmine.SpyObj<Partial<O> & M>>this.mock(undefined, mock, dontSpy, objectClass);
     }
 
-    public providerMock<M>(token: any, mock: M, dontSpy: boolean, spySource?: AbstractType<any>) {
+    public providerMock<M>(token: any, mock: M, dontSpy: boolean = false, spySource?: AbstractType<any>) {
         return this.mock(token, mock, dontSpy, spySource);
     }
 
-    public factoryMock<F>(factoryClass: Type<F>, instances: Array<any>): jasmine.SpyObj<Partial<F>> {
+    public factoryMock<I, F extends IFactory<I>>(factoryClass: AbstractType<F>, instances: Array<I>): jasmine.SpyObj<Partial<F>> {
         let index = -1;
-        return <any>this.mock(factoryClass, {
+        return <any>this.mock(factoryClass, <any>{
             create: (...args: any) => {
                 index++;
                 return instances[index];
@@ -256,14 +253,16 @@ export class NgMagicSetupTestBed {
 
     private mock<S, M extends Partial<S>>(token?: any, mock: M = <any>{}, dontSpy?: boolean, spySource?: AbstractType<S>):
         Partial<S> & M | jasmine.SpyObj<Partial<S> & M> | jasmine.SpyObj<Partial<S>> {
-        this.expectToBePreConfiguration();
         if (!dontSpy) {
             spyOnFunctionsOf(mock, spySource ? spySource.prototype : undefined);
         }
-        this.config.providers.push({
-            useValue: mock,
-            provide: token
-        });
+        if (token) {
+            this.expectToBePreConfiguration();
+            this.config.providers.push({
+                useValue: mock,
+                provide: token
+            });
+        }
         return mock;
     }
 
