@@ -184,11 +184,34 @@ export interface IFactory&lt;I&gt; {
 
 export class NgMagicSetupTestBed {
 
+    /**
+    * @ignore
+    */
     private config: TestModuleMetadata;
+
+    /**
+    * @ignore
+    */
     private configured &#x3D; false;
+
+    /**
+    * @ignore
+    */
     private compiled &#x3D; false;
+
+    /**
+    * @ignore
+    */
     private postConfigureJobs: Array&lt;() &#x3D;&gt; void&gt; &#x3D; [];
+
+    /**
+    * @ignore
+    */
     private fixtureJobs: Array&lt;() &#x3D;&gt; void&gt; &#x3D; [];
+
+    /**
+    * @ignore
+    */
     private fixtureInstance: ComponentFixture&lt;any&gt; &#x3D; null;
 
     /**
@@ -206,6 +229,9 @@ export class NgMagicSetupTestBed {
         };
     }
 
+    /**
+    * @ignore
+    */
     private configureTestingModule() {
         if (this.configured) {
             return;
@@ -216,6 +242,9 @@ export class NgMagicSetupTestBed {
         this.postConfigureJobs.length &#x3D; 0;
     }
 
+    /**
+    * @ignore
+    */
     private expectToBePreConfiguration() {
         if (this.configured) {
             throw new Error(&#x27;The TestBed has been implicitly configured by calling e.g.&#x27; +
@@ -411,6 +440,9 @@ export class NgMagicSetupTestBed {
         return this.uiThingProviderMock(&#x27;overrideComponent&#x27;, componentClass, token, mock, dontSpy, spySource);
     }
 
+    /**
+    * @ignore
+    */
     private uiThingProviderMock&lt;M&gt;(methodName: string, uiThingClass: Type&lt;any&gt;, token: any, mock: M, dontSpy &#x3D; false,
         spySource?: AbstractType&lt;any&gt;): M {
         this.expectToBePreConfiguration();
@@ -556,6 +588,9 @@ export class NgMagicSetupTestBed {
         return this.mock(serviceClass, mock, dontSpy, serviceClass);
     }
 
+    /**
+    * @ignore
+    */
     private mock&lt;S, M extends Partial&lt;S&gt;&gt;(token?: any, mock: M &#x3D; &lt;any&gt;{}, dontSpy?: boolean, spySource?: AbstractType&lt;S&gt;):
         Partial&lt;S&gt; &amp; M | jasmine.SpyObj&lt;Partial&lt;S&gt; &amp; M&gt; | jasmine.SpyObj&lt;Partial&lt;S&gt;&gt; {
         if (!dontSpy) {
@@ -589,7 +624,7 @@ export class NgMagicSetupTestBed {
     }
 
     /**
-    * 
+    *
     * Subscribes to a given observable and spies on its states and emitted values.
     * @param observable
     * Observable you want to spy

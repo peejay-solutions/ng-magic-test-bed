@@ -13,11 +13,34 @@ export interface IFactory<I> {
 
 export class NgMagicSetupTestBed {
 
+    /**
+    * @ignore
+    */
     private config: TestModuleMetadata;
+
+    /**
+    * @ignore
+    */
     private configured = false;
+
+    /**
+    * @ignore
+    */
     private compiled = false;
+
+    /**
+    * @ignore
+    */
     private postConfigureJobs: Array<() => void> = [];
+
+    /**
+    * @ignore
+    */
     private fixtureJobs: Array<() => void> = [];
+
+    /**
+    * @ignore
+    */
     private fixtureInstance: ComponentFixture<any> = null;
 
     /**
@@ -35,6 +58,9 @@ export class NgMagicSetupTestBed {
         };
     }
 
+    /**
+    * @ignore
+    */
     private configureTestingModule() {
         if (this.configured) {
             return;
@@ -45,6 +71,9 @@ export class NgMagicSetupTestBed {
         this.postConfigureJobs.length = 0;
     }
 
+    /**
+    * @ignore
+    */
     private expectToBePreConfiguration() {
         if (this.configured) {
             throw new Error('The TestBed has been implicitly configured by calling e.g.' +
@@ -240,6 +269,9 @@ export class NgMagicSetupTestBed {
         return this.uiThingProviderMock('overrideComponent', componentClass, token, mock, dontSpy, spySource);
     }
 
+    /**
+    * @ignore
+    */
     private uiThingProviderMock<M>(methodName: string, uiThingClass: Type<any>, token: any, mock: M, dontSpy = false,
         spySource?: AbstractType<any>): M {
         this.expectToBePreConfiguration();
@@ -385,6 +417,9 @@ export class NgMagicSetupTestBed {
         return this.mock(serviceClass, mock, dontSpy, serviceClass);
     }
 
+    /**
+    * @ignore
+    */
     private mock<S, M extends Partial<S>>(token?: any, mock: M = <any>{}, dontSpy?: boolean, spySource?: AbstractType<S>):
         Partial<S> & M | jasmine.SpyObj<Partial<S> & M> | jasmine.SpyObj<Partial<S>> {
         if (!dontSpy) {
@@ -418,7 +453,7 @@ export class NgMagicSetupTestBed {
     }
 
     /**
-    * 
+    *
     * Subscribes to a given observable and spies on its states and emitted values.
     * @param observable
     * Observable you want to spy
