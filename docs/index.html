@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Application documentation</title>
+        <title>ng-magic-test-bed-presentation documentation</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -13,7 +13,7 @@
     <body>
 
         <div class="navbar navbar-default navbar-fixed-top visible-xs">
-            <a href="./" class="navbar-brand">Application documentation</a>
+            <a href="./" class="navbar-brand">ng-magic-test-bed-presentation documentation</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
 
@@ -30,119 +30,21 @@
                <div class="content getting-started">
                    <div class="content-data">
 
-<h1 id="ng-magic-test-bed">ng-magic-test-bed</h1>
-<p>A magic test bed for angular. This Wrapper for the well known angular test bed (@angular/core/testing) allows you to remove a lot of bloat code form your spec files.</p>
-<h1 id="benefits">Benefits</h1>
-<ul>
-<li><p>Better readability</p>
-</li>
-<li><p>Less code</p>
-</li>
-<li><p>All local variables referencing mocks, helper-services, observers, objects, arrays, maps and the testee itself can be defined as constants</p>
-</li>
-<li><p>Configuration of the test bed is done implicitly while assigning your local variables</p>
-</li>
-<li><p>Reconfiguration of the entire test bed including fresh mocks and services before each test/it is done in background</p>
-</li>
-<li><p>Creation of jest or jasmine (karma) spies for all your mocks&#39; functions is done implicitly. No more spy manual spy creation with magic strings to overwrite strongly typed methods of TypeScript objects.</p>
-</li>
-<li><p>A simple mock with spies for all methods of a service is generated. You can extend these auto generated mocks with custom behavior.</p>
-</li>
-<li><p>Write tests without beforeEach.</p>
-</li>
-</ul>
-<h1 id="installation">Installation</h1>
-<p>npm install @peejay-solutions/ng-magic-test-bed --save</p>
-<p><a href="https://www.npmjs.com/package/@peejay-solutions/ng-magic-test-bed">https://www.npmjs.com/package/@peejay-solutions/ng-magic-test-bed</a></p>
-<h1 id="sample">Sample</h1>
-<p>Here a short example where we test the implementation of the following: We have MyServer that does something using MyHelperService to get data and do another thing. </p>
-<h2 id="myhelperservice">MyHelperService</h2>
-<div><pre class="line-numbers"><code class="language-typescript">
-&#64;Injectable({
-    providedIn: &#39;root&#39;
-})
-export class MyHelperService {
-    private counter = 0;
-    constructor() {
-    }
-
-    public doSomething(param: number) {
-        this.counter = this.counter + param;
-    }
-
-    public getData(param: number) {
-        return {
-            value: param / 2
-        };
-    }
-}
-</code></pre></div><h2 id="myservice">MyService</h2>
-<div><pre class="line-numbers"><code class="language-typescript">&#64;Injectable({
-    providedIn: &#39;root&#39;
-})
-export class MyService {
-    constructor(private myHelper: MyHelperService) {
-    }
-
-    public doSomething(param) {
-        const data = this.myHelper.getData(param);
-        this.myHelper.doSomething(data.value);
-    }
-}</code></pre></div><h2 id="myservice-spec-with-magic-test-bed">MyService spec with magic test bed</h2>
-<div><pre class="line-numbers"><code class="language-typescript">describe(&#39;Simple integration test for ng magic setup test bed&#39;, () =&gt; {
-    function setup() {
-        const magic = new NgMagicSetupTestBed();
-        const myHelperServiceMock = magic.serviceMock(MyHelperService, new MyHelperServiceMock());
-        const service = magic.injection(MyService);
-        return { myHelperServiceMock, service };
-    }
-
-    it(&#39;should work&#39;, () =&gt; {
-        const { service, myHelperServiceMock } = setup();
-        const param = 4;
-        service.doSomething(param);
-        expect(myHelperServiceMock.getData).toHaveBeenCalledWith(4);
-        expect(myHelperServiceMock.doSomething).toHaveBeenCalledWith(myHelperServiceMock.data.value);
-    });
-});
-
-class MyHelperServiceMock {
-    public data = { value: 100 };
-    public getData = () =&gt; this.data;
-}
-</code></pre></div><h2 id="myservice-spec-with-no-magic-but-standard-test-bed">MyService spec with no magic but standard test bed</h2>
-<div><pre class="line-numbers"><code class="language-typescript">describe(&#39;Simple integration test for no magic but standard TestBed&#39;, () =&gt; {
-    let myHelperServiceMock;
-    let service: MyService;
-
-    beforeEach(() =&gt; {
-        const data = { value: 100 };
-        myHelperServiceMock = new MyHelperServiceMock2();
-        TestBed.configureTestingModule({
-            providers: [
-                { provide: MyHelperService, useValue: myHelperServiceMock },
-            ]
-        });
-        service = TestBed.get(MyService);
-    });
-
-    it(&#39;should work&#39;, () =&gt; {
-        const param = 4;
-        service.doSomething(param);
-        expect(myHelperServiceMock.getData).toHaveBeenCalledWith(4);
-        expect(myHelperServiceMock.doSomething).toHaveBeenCalledWith(myHelperServiceMock.data.value);
-    });
-});
-
-class MyHelperServiceMock2 {
-    public data = { value: 100 };
-    public doSomething = jasmine.createSpy(&#39;doSomething&#39;);
-    public getData = jasmine.createSpy(&#39;getData&#39;).and.returnValue(this.data);
-}</code></pre></div><p>#</p>
-<p>The running code can be found <a href="https://github.com/peejay-solutions/ng-magic-test-bed/blob/master/ng-magic-test-bed-presentation/projects/ng-magic-test-bed/src/integration-tests/standard-use-case.spec.ts">here</a></p>
-<h1 id="documentation">Documentation</h1>
-<p>... Work in progress.</p>
-<p><a href="https://github.blog/2016-08-22-publish-your-project-documentation-with-github-pages/">https://github.blog/2016-08-22-publish-your-project-documentation-with-github-pages/</a></p>
+<h1 id="ngmagictestbedpresentation">NgMagicTestBedPresentation</h1>
+<p>This project was generated with <a href="https://github.com/angular/angular-cli">Angular CLI</a> version 7.0.5.</p>
+<h2 id="development-server">Development server</h2>
+<p>Run <code>ng serve</code> for a dev server. Navigate to <code>http://localhost:4200/</code>. The app will automatically reload if you change any of the source files.</p>
+<h2 id="code-scaffolding">Code scaffolding</h2>
+<p>Run <code>ng generate component component-name</code> to generate a new component. You can also use <code>ng generate directive|pipe|service|class|guard|interface|enum|module</code>.</p>
+<h2 id="build">Build</h2>
+<p>Run <code>ng build</code> to build the project. The build artifacts will be stored in the <code>dist/</code> directory. Use the <code>--prod</code> flag for a production build.</p>
+<h2 id="running-unit-tests">Running unit tests</h2>
+<p>Run <code>ng test</code> to execute the unit tests via <a href="https://karma-runner.github.io">Karma</a>.</p>
+<h2 id="running-end-to-end-tests">Running end-to-end tests</h2>
+<p>Run <code>ng e2e</code> to execute the end-to-end tests via <a href="http://www.protractortest.org/">Protractor</a>.</p>
+<h2 id="further-help">Further help</h2>
+<p>To get more help on the Angular CLI use <code>ng help</code> or go check out the <a href="https://github.com/angular/angular-cli/blob/master/README.md">Angular CLI README</a>.</p>
+<p>npm run test:lib</p>
 
 
 

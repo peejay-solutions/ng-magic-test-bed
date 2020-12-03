@@ -14,7 +14,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "test:lib": "jest --config ./jest.lib.config.js",
-    "test:app": "jest --config ./jest.app.config.js"
+    "test:app": "jest --config ./jest.app.config.js",
+    "compodoc": "npx compodoc -p ./src/tsconfig.app.json src"
   },
   "private": true,
   "dependencies": {
