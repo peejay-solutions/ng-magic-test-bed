@@ -1,0 +1,668 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>ng-magic-test-bed-presentation documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">ng-magic-test-bed-presentation documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content interface">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li>Interfaces</li>
+  <li>IFactory</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>projects/ng-magic-test-bed/src/test-bed/ng-magic-setup-test-bed.class.ts</code>
+        </p>
+
+
+
+        <section>
+            <h3 id="index">Index</h3>
+            <table class="table table-sm table-bordered index-table">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Methods</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#create">create</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+            <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="create"></a>
+                    <span class="name">
+                        <b>
+                            create
+                        </b>
+                        <a href="#create"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>create(...args: Array<any>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="11"
+                            class="link-to-prism">projects/ng-magic-test-bed/src/test-bed/ng-magic-setup-test-bed.class.ts:11</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>args</td>
+                                    <td>
+                                            <code>Array&lt;any&gt;</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>I</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { TestBed, TestModuleMetadata, ComponentFixture, MetadataOverride, ComponentFixtureAutoDetect } from &#x27;@angular/core/testing&#x27;;
+import { SchemaMetadata, Type, AbstractType, Component, NO_ERRORS_SCHEMA } from &#x27;@angular/core&#x27;;
+import { spyOnFunctionsOf } from &#x27;../spy-on-functions/spy-on-functions-of.function&#x27;;
+import { Observable } from &#x27;rxjs&#x27;;
+import { observe } from &#x27;../observe/observe.function&#x27;;
+import { SpyObserver } from &#x27;../observe/spy-observer.class&#x27;;
+import { By } from &#x27;@angular/platform-browser&#x27;;
+
+
+export interface IFactory&lt;I&gt; {
+    create(...args: Array&lt;any&gt;): I;
+}
+
+export class NgMagicSetupTestBed {
+
+    private config: TestModuleMetadata;
+    private configured &#x3D; false;
+    private compiled &#x3D; false;
+    private postConfigureJobs: Array&lt;() &#x3D;&gt; void&gt; &#x3D; [];
+    private fixtureJobs: Array&lt;() &#x3D;&gt; void&gt; &#x3D; [];
+    private fixtureInstance: ComponentFixture&lt;any&gt; &#x3D; null;
+
+    /**
+    * @param initialConfig  initial config which will be extended by the other method of the
+    * constructed instance. The final config will be used to call TestBed.configureTestingModule implicitly by
+    * calling e.g. .injection()
+    */
+    constructor(initialConfig: TestModuleMetadata &#x3D; {}) {
+        this.config &#x3D; {
+            providers: initialConfig.providers ? initialConfig.providers.slice() : [],
+            declarations: initialConfig.declarations ? initialConfig.declarations.slice() : [],
+            imports: initialConfig.imports ? initialConfig.imports.slice() : [],
+            schemas: initialConfig.schemas ? initialConfig.schemas.slice() : [],
+            aotSummaries: initialConfig.aotSummaries
+        };
+    }
+
+    private configureTestingModule() {
+        if (this.configured) {
+            return;
+        }
+        this.configured &#x3D; true;
+        TestBed.configureTestingModule(this.config);
+        this.postConfigureJobs.forEach(job &#x3D;&gt; job());
+        this.postConfigureJobs.length &#x3D; 0;
+    }
+
+    private expectToBePreConfiguration() {
+        if (this.configured) {
+            throw new Error(&#x27;The TestBed has been implicitly configured by calling e.g.&#x27; +
+                &#x27;&quot;injection&quot; or &quot;fixture&quot; the method you called needs a not configured TestBed to be executed&#x27;);
+        }
+    }
+
+    /**
+    * @param declarations declarations will be pushed to the declarations of the testing module config.
+    * check out angular docs for more information
+    * https://angular.io/guide/testing-services#angular-testbed
+    * https://angular.io/api/core/testing/TestBed#configuretestingmodule
+    * https://angular.io/api/core/testing/TestModuleMetadata
+    */
+    public declarations(declarations: Array&lt;any&gt;) {
+        this.expectToBePreConfiguration();
+        this.config.declarations.push(...declarations);
+    }
+
+    /**
+    * @param declaration declaration will be pushed to the declarations of the testing module config.
+    * check out angular docs for more information
+    * https://angular.io/guide/testing-services#angular-testbed
+    * https://angular.io/api/core/testing/TestBed#configuretestingmodule
+    * https://angular.io/api/core/testing/TestModuleMetadata
+    */
+    public declaration(declaration) {
+        this.declarations([declaration]);
+    }
+
+    /**
+    * @param schemas schemas will be pushed to the schemas of the testing module config. Note that the NO_ERRORS_SCHEMA
+    * is pushed by default. This can be disabled when calling .fixture().
+    * check out angular docs for more information
+    * https://angular.io/guide/testing-services#angular-testbed
+    * https://angular.io/api/core/testing/TestBed#configuretestingmodule
+    * https://angular.io/api/core/testing/TestModuleMetadata
+    */
+    public schemas(schemas: Array&lt;SchemaMetadata | any[]&gt;) {
+        this.expectToBePreConfiguration();
+        this.config.schemas.push(...schemas);
+    }
+
+    /**
+    * @param schema schema will be pushed to the schemas of the testing module config. Note that the NO_ERRORS_SCHEMA
+    * is pushed by default. This can be disabled when calling .fixture().
+    * check out angular docs for more information
+    * https://angular.io/guide/testing-services#angular-testbed
+    * https://angular.io/api/core/testing/TestBed#configuretestingmodule
+    * https://angular.io/api/core/testing/TestModuleMetadata
+    */
+    public schema(schema: SchemaMetadata | any[]) {
+        this.schemas([schema]);
+    }
+
+    /**
+    * @param imports imports will be pushed to the imports of the testing module config.
+    * check out angular docs for more information
+    * https://angular.io/guide/testing-services#angular-testbed
+    * https://angular.io/api/core/testing/TestBed#configuretestingmodule
+    * https://angular.io/api/core/testing/TestModuleMetadata
+    */
+    public imports(imports: any[]) {
+        this.expectToBePreConfiguration();
+        this.config.imports.push(...imports);
+    }
+
+    /**
+    * @param imports import will be pushed to the imports of the testing module config.
+    * check out angular docs for more information
+    * https://angular.io/guide/testing-services#angular-testbed
+    * https://angular.io/api/core/testing/TestBed#configuretestingmodule
+    * https://angular.io/api/core/testing/TestModuleMetadata
+    */
+    public import(aImport: any) {
+        this.imports([aImport]);
+    }
+
+    /**
+    * @param providers providers will be pushed to the providers of the testing module config.
+    * check out angular docs for more information
+    * https://angular.io/guide/testing-services#angular-testbed
+    * https://angular.io/api/core/testing/TestBed#configuretestingmodule
+    * https://angular.io/api/core/testing/TestModuleMetadata
+    */
+    public providers(providers: any[]) {
+        this.expectToBePreConfiguration();
+        this.config.providers.push(...providers);
+    }
+
+    /**
+    * @param provider import will be pushed to the providers of the testing module config.
+    * check out angular docs for more information
+    * https://angular.io/guide/testing-services#angular-testbed
+    * https://angular.io/api/core/testing/TestBed#configuretestingmodule
+    * https://angular.io/api/core/testing/TestModuleMetadata
+    */
+    public provider(provider: any) {
+        this.providers([provider]);
+    }
+
+    public pipeServiceMock&lt;S, M extends Partial&lt;S&gt;&gt;(pipeClass: Type&lt;any&gt;, serviceClass: AbstractType&lt;S&gt;, mock: M,
+        dontSpy: true): Partial&lt;S&gt; &amp; M;
+    public pipeServiceMock&lt;S, M extends Partial&lt;S&gt;&gt;(pipeClass: Type&lt;any&gt;, serviceClass: AbstractType&lt;S&gt;, mock: M):
+        jasmine.SpyObj&lt;Partial&lt;S&gt; &amp; M&gt;;
+    public pipeServiceMock&lt;S, M extends Partial&lt;S&gt;&gt;(pipeClass: Type&lt;any&gt;, serviceClass: AbstractType&lt;S&gt;):
+        jasmine.SpyObj&lt;Partial&lt;S&gt;&gt;;
+    /**
+    *  If you have pipe that provides a service you can mock it using this method.
+    * @param pipeClass the pipeClass is the reference of the class of your angular pipe.
+    * @param serviceClass the serviceClass is the reference to the class of the service that you want to mock
+    * @param mock the mock mocks the service and should implement a partial of the service class
+    * @param dontSpy optional parameter to prevent the default spy creation on the mock using the prototype of the serviceClass
+    */
+    public pipeServiceMock&lt;S, M extends Partial&lt;S&gt;&gt;(pipeClass: Type&lt;any&gt;, serviceClass: AbstractType&lt;S&gt;,
+        mock?: M, dontSpy?: boolean):
+        Partial&lt;S&gt; &amp; M | jasmine.SpyObj&lt;Partial&lt;S&gt; &amp; M&gt; | jasmine.SpyObj&lt;Partial&lt;S&gt;&gt; {
+        return this.componentProviderMock(pipeClass, serviceClass, mock, dontSpy, serviceClass);
+    }
+
+   /**
+    *  If you have pipe that provides a provider you can mock it using this method.
+    * @param pipeClass the pipeClass is the reference of the class of your angular pipe.
+    * @param token the provider token that you want to mock
+    * @param mock the mock
+    * @param dontSpy optional parameter to prevent the default spy creation on the mock
+    */
+    public pipeProviderMock&lt;M&gt;(pipeClass: Type&lt;any&gt;, token: any, mock: M, dontSpy &#x3D; false,
+        spySource?: AbstractType&lt;any&gt;): M {
+        return this.uiThingProviderMock(&#x27;overridePipe&#x27;, pipeClass, token, mock, dontSpy, spySource);
+    }
+
+    /**
+    * If you have directive that provides a service you can mock it using this method.
+    * @param directiveClass the directiveClass is the reference of the class of your angular directive.
+    * @param serviceClass the serviceClass is the reference to the class of the service that you want to mock
+    * @param mock the mock mocks the service and should implement a partial of the service class
+    * @param dontSpy optional parameter to prevent the default spy creation on the mock using the prototype of the serviceClass
+    */
+    public directiveServiceMock&lt;S, M extends Partial&lt;S&gt;&gt;(directiveClass: Type&lt;any&gt;, serviceClass: AbstractType&lt;S&gt;, mock: M,
+        dontSpy: true): Partial&lt;S&gt; &amp; M;
+    public directiveServiceMock&lt;S, M extends Partial&lt;S&gt;&gt;(directiveClass: Type&lt;any&gt;, serviceClass: AbstractType&lt;S&gt;, mock: M):
+        jasmine.SpyObj&lt;Partial&lt;S&gt; &amp; M&gt;;
+    public directiveServiceMock&lt;S, M extends Partial&lt;S&gt;&gt;(directiveClass: Type&lt;any&gt;, serviceClass: AbstractType&lt;S&gt;):
+        jasmine.SpyObj&lt;Partial&lt;S&gt;&gt;;
+    public directiveServiceMock&lt;S, M extends Partial&lt;S&gt;&gt;(directiveClass: Type&lt;any&gt;, serviceClass: AbstractType&lt;S&gt;,
+        mock?: M, dontSpy?: boolean):
+        Partial&lt;S&gt; &amp; M | jasmine.SpyObj&lt;Partial&lt;S&gt; &amp; M&gt; | jasmine.SpyObj&lt;Partial&lt;S&gt;&gt; {
+        return this.componentProviderMock(directiveClass, serviceClass, mock, dontSpy, serviceClass);
+    }
+
+    /**
+    *  If you have directive that provides a provider you can mock it using this method.
+    * @param directiveClass the directiveClass is the reference of the class of your angular directive.
+    * @param token the provider token that you want to mock
+    * @param mock the mock
+    * @param dontSpy optional parameter to prevent the default spy creation on the mock
+    */
+    public directiveProviderMock&lt;M&gt;(directiveClass: Type&lt;any&gt;, token: any, mock: M, dontSpy &#x3D; false,
+        spySource?: AbstractType&lt;any&gt;): M {
+        return this.uiThingProviderMock(&#x27;overrideDirective&#x27;, directiveClass, token, mock, dontSpy, spySource);
+    }
+
+
+    public componentServiceMock&lt;S, M extends Partial&lt;S&gt;&gt;(componentClass: Type&lt;any&gt;, serviceClass: AbstractType&lt;S&gt;, mock: M,
+        dontSpy: true): Partial&lt;S&gt; &amp; M;
+    public componentServiceMock&lt;S, M extends Partial&lt;S&gt;&gt;(componentClass: Type&lt;any&gt;, serviceClass: AbstractType&lt;S&gt;, mock: M):
+        jasmine.SpyObj&lt;Partial&lt;S&gt; &amp; M&gt;;
+    public componentServiceMock&lt;S, M extends Partial&lt;S&gt;&gt;(componentClass: Type&lt;any&gt;, serviceClass: AbstractType&lt;S&gt;):
+        jasmine.SpyObj&lt;Partial&lt;S&gt;&gt;;
+    /**
+    *  If you have component that provides a service you can mock it using this method.
+    * @param componentClass the componentClass is the reference of the class of your angular component.
+    * @param serviceClass the serviceClass is the reference to the class of the service that you want to mock
+    * @param mock the mock mocks the service and should implement a partial of the service class
+    * @param dontSpy optional parameter to prevent the default spy creation on the mock using the prototype of the serviceClass
+    */
+    public componentServiceMock&lt;S, M extends Partial&lt;S&gt;&gt;(componentClass: Type&lt;any&gt;, serviceClass: AbstractType&lt;S&gt;,
+        mock?: M, dontSpy?: boolean):
+        Partial&lt;S&gt; &amp; M | jasmine.SpyObj&lt;Partial&lt;S&gt; &amp; M&gt; | jasmine.SpyObj&lt;Partial&lt;S&gt;&gt; {
+        return this.componentProviderMock(componentClass, serviceClass, mock, dontSpy, serviceClass);
+    }
+
+    /**
+    *  If you have component provides a provider you can mock it using this method.
+    * @param componentClass the componentClass is the reference of the class of your angular component.
+    * @param token the provider token that you want to mock
+    * @param mock the mock
+    * @param dontSpy optional parameter to prevent the default spy creation on the mock
+    */
+    public componentProviderMock&lt;M&gt;(componentClass: Type&lt;any&gt;, token: any, mock: M, dontSpy &#x3D; false,
+        spySource?: AbstractType&lt;any&gt;): M {
+        return this.uiThingProviderMock(&#x27;overrideComponent&#x27;, componentClass, token, mock, dontSpy, spySource);
+    }
+
+    private uiThingProviderMock&lt;M&gt;(methodName: string, uiThingClass: Type&lt;any&gt;, token: any, mock: M, dontSpy &#x3D; false,
+        spySource?: AbstractType&lt;any&gt;): M {
+        this.expectToBePreConfiguration();
+        if (!dontSpy) {
+            spyOnFunctionsOf(mock, spySource ? spySource.prototype : undefined);
+        }
+        if (!this.config.declarations.includes(uiThingClass)) {
+            this.config.declarations.push(uiThingClass);
+        }
+        this.postConfigureJobs.push(() &#x3D;&gt; {
+            TestBed[methodName](uiThingClass, {
+                add: {
+                    providers: [
+                        { provide: token, useValue: mock }
+                    ]
+                }
+            });
+        });
+        return mock;
+    }
+
+    public directiveMocks&lt;C&gt;(directiveClass: Type&lt;C&gt;): Array&lt;C&gt; {
+        return this.componentMocks(directiveClass);
+    }
+
+    /**
+    *  declare that you want to mock for a selector and retrieve all created component mock instances after fixture
+    * creation.
+    * @param componentClass class of the component that should be used in the fixture for a specific selector you want to mock.
+    * @returns an arry of all component instances that were found statically inside the fixture. The array&#x27;s members can only be
+    * used after calling .fixture(). Before that time the array is initialized like this:
+    * [&#x27;this array can only be used after fixture called&#x27;].
+    */
+    public componentMocks&lt;C&gt;(componentClass: Type&lt;C&gt;): Array&lt;C&gt; {
+        const result: Array&lt;any&gt; &#x3D; [&#x27;this array can only be used after fixture called&#x27;];
+        this.expectToBePreConfiguration();
+        if (!this.config.declarations.includes(componentClass)) {
+            this.config.declarations.push(componentClass);
+        }
+        this.fixtureJobs.push(() &#x3D;&gt; {
+            result.length &#x3D; 0;
+            const componentDebugElements &#x3D; this.fixtureInstance.debugElement.queryAll(By.directive(componentClass));
+            componentDebugElements.forEach(componentDebugElement &#x3D;&gt; result.push(componentDebugElement.injector.get(componentClass)));
+        });
+        return result;
+    }
+
+    /**
+    *  Use this method to create a component fixture. This method may only be called once per NgMagicTestBed instance.
+    * @param componentClass class of the root component you want to compile and create.
+    * @param disableNoErrorSchema by default the NgMagicTestBed uses the NO_ERROR_SCHEMA of angular to prevent the compiler from
+    * throwing exceptions e.g. for missing or unknown inputs.
+    * @returns a component fixture like standard TestBed.createComponent(componentClass) would have returned it.
+    */
+    public fixture&lt;C&gt;(componentClass: Type&lt;C&gt;, initialInputs: Partial&lt;C&gt; &#x3D; {}, disableNoErrorSchema &#x3D; false): ComponentFixture&lt;C&gt; {
+        if (this.fixtureInstance) {
+            throw new Error(&#x27;.fixture can only be called once per NgMagicTestBed instance&#x27;);
+        }
+        if (!this.config.declarations.includes(componentClass) &amp;&amp; this.configured) {
+            throw new Error(&#x27;Declaration of component needs to be done before you can create the fixture&#x27;);
+        }
+        if (!this.config.declarations.includes(componentClass) &amp;&amp; !this.configured) {
+            this.config.declarations.push(componentClass);
+        }
+        if (!disableNoErrorSchema &amp;&amp; !this.config.schemas.includes(NO_ERRORS_SCHEMA)) {
+            this.config.schemas.push(NO_ERRORS_SCHEMA);
+        }
+        if (!this.configured) {
+            this.configureTestingModule();
+        }
+        if (!this.compiled) {
+            this.compiled &#x3D; true;
+            TestBed.compileComponents();
+        }
+        this.fixtureInstance &#x3D; TestBed.createComponent(componentClass);
+        Object.assign(this.fixtureInstance.componentInstance, initialInputs);
+        this.fixtureInstance.detectChanges();
+        this.fixtureJobs.forEach(job &#x3D;&gt; job());
+        return this.fixtureInstance;
+    }
+
+    /**
+     *  Creates a mock where all spies are created automatically.
+     * This method does not register anything at the TestBed or its configuration.
+     * @param objectClass This class&#x27; prototype will be used to create simple jasmine spies on all methods this class has
+     * @param mock An object that should implement partial of objectClass and contain all methods that you want to return something.
+     * @param dontSpy optional parameter to prevent the default spy creation on the mock.
+     * @returns Your mocks methods will be overwritten with spies that call through to the mocks methods like jasmine&#x27;s spyOn method.
+     * In addition to that a spy will be added for each additional method that was found on the objectClass&#x27; prototype.
+     */
+    public objectMock&lt;O, M extends Partial&lt;O&gt;&gt;(objectClass: AbstractType&lt;O&gt; | undefined, mock: M | any, dontSpy &#x3D; false):
+        Partial&lt;O&gt; &amp; M | jasmine.SpyObj&lt;Partial&lt;O&gt; &amp; M&gt; {
+        return &lt;Partial&lt;O&gt; &amp; M | jasmine.SpyObj&lt;Partial&lt;O&gt; &amp; M&gt;&gt;this.mock(undefined, mock, dontSpy, objectClass);
+    }
+
+    /**
+     *  mocks a provider for a given token with a given mock. If wanted your mock can be extended by spies
+     * from a given spySource class.
+     * @param token token for provider provision
+     * @param mock mock that will be registered for the token
+     * @param dontSpy optional parameter to prevent the default spy creation on the mock.
+     * @param spySource for each method in spySources prototype an additional jasmine spy will be created on the mock
+     * @returns Your mocks methods will be overwritten with spies that call through to the mocks methods like jasmine&#x27;s spyOn method.
+     * In addition to that a spy will be added for each additional method that was found on the objectClass&#x27; prototype.
+     */
+    public providerMock&lt;M&gt;(token: any, mock: M, dontSpy: boolean &#x3D; false, spySource?: AbstractType&lt;any&gt;) {
+        return this.mock(token, mock, dontSpy, spySource);
+    }
+
+      /**
+     *  mocks a service that has a &quot;create&quot; method.
+     * @param factoryClass service that has a &quot;create&quot; method that you want to mock.
+     * @param instances will be returned by the mock this method return when &quot;create&quot; is called.
+     * The first call of mock.create() will return the first item in the instances-array and so on.
+     * @returns a mock for the factory. mock.create will return the one of the given instances every time it is called
+     */
+    public factoryMock&lt;I, F extends IFactory&lt;I&gt;&gt;(factoryClass: AbstractType&lt;F&gt;, instances: Array&lt;I&gt;): jasmine.SpyObj&lt;Partial&lt;F&gt;&gt; {
+        let index &#x3D; -1;
+        return &lt;any&gt;this.mock(factoryClass, &lt;any&gt;{
+            create: (...args: any) &#x3D;&gt; {
+                index++;
+                return instances[index];
+            },
+        }, false, factoryClass);
+    }
+
+    public serviceMock&lt;S, M extends Partial&lt;S&gt;&gt;(serviceClass: AbstractType&lt;S&gt;, mock: M,
+        dontSpy: true): Partial&lt;S&gt; &amp; M;
+    public serviceMock&lt;S, M extends Partial&lt;S&gt;&gt;(serviceClass: AbstractType&lt;S&gt;, mock: M):
+        jasmine.SpyObj&lt;Partial&lt;S&gt; &amp; M&gt;;
+    public serviceMock&lt;S, M extends Partial&lt;S&gt;&gt;(serviceClass: AbstractType&lt;S&gt;): jasmine.SpyObj&lt;Partial&lt;S&gt;&gt;;
+
+    /**
+     *  mocks a service with the given mock
+     * @param serviceClass service that you want to mock
+     * @param mock that should mock the service. All methods on the mock will become spies. For each method on serviceClass&#x27;
+     * prototype another spy will be added to the mock.
+     * @param dontSpy optional parameter to prevent the default spy creation on the mock.
+     * @returns the mock after creating some spies on it (if not disabled)
+     */
+    public serviceMock&lt;S, M extends Partial&lt;S&gt;&gt;(serviceClass: AbstractType&lt;S&gt;, mock?: M, dontSpy?: boolean):
+        Partial&lt;S&gt; &amp; M | jasmine.SpyObj&lt;Partial&lt;S&gt; &amp; M&gt; | jasmine.SpyObj&lt;Partial&lt;S&gt;&gt; {
+        return this.mock(serviceClass, mock, dontSpy, serviceClass);
+    }
+
+    private mock&lt;S, M extends Partial&lt;S&gt;&gt;(token?: any, mock: M &#x3D; &lt;any&gt;{}, dontSpy?: boolean, spySource?: AbstractType&lt;S&gt;):
+        Partial&lt;S&gt; &amp; M | jasmine.SpyObj&lt;Partial&lt;S&gt; &amp; M&gt; | jasmine.SpyObj&lt;Partial&lt;S&gt;&gt; {
+        if (!dontSpy) {
+            spyOnFunctionsOf(mock, spySource ? spySource.prototype : undefined);
+        }
+        if (token) {
+            this.expectToBePreConfiguration();
+            this.config.providers.push({
+                useValue: mock,
+                provide: token
+            });
+        }
+        return mock;
+    }
+
+    public injection&lt;S&gt;(service: AbstractType&lt;S&gt;): S;
+    /* tslint:disable */
+    public injection&lt;S&gt;(token: any): S;
+    /* tslint:enable */
+    /**
+     *  return you the service or provider for a given token from the angular dependency injection.
+     * This will trigger the TestBed configureTestingModule step. After this step you can not create any more mocks.
+     * Make sure you create all your mocks before calling this mehtod.
+     * @param serviceClass service that you want to inject
+     * @param token of the prider that you want to inject
+     * @return whatever angular dependency injection finds for your token
+     */
+    public injection&lt;S&gt;(token: AbstractType&lt;S&gt; | any): S {
+        this.configureTestingModule();
+        return TestBed.get(token);
+    }
+
+    /**
+    * 
+    * Subscribes to a given observable and spies on its states and emitted values.
+    * @param observable
+    * Observable you want to spy
+    * @param name
+    * Optional name that prefixes all jasmine spies that are created by the observer. This makes it easier to read the
+    * test output if anything fails.
+    * @returns
+    * observer that can be used to make assertions in your test cases e.g.:
+    * expect(observer.next).toHaveBeenCalledWith(expectedValue);
+    * For more information check SpyObserver documentation
+    */
+    public observer&lt;T&gt;(observable: Observable&lt;T&gt;, name?: string): SpyObserver&lt;T&gt; {
+        return observe(observable, name);
+    }
+
+
+}
+</code></pre>
+    </div>
+</div>
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
+            var COMPODOC_CURRENT_PAGE_URL = 'IFactory.html';
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

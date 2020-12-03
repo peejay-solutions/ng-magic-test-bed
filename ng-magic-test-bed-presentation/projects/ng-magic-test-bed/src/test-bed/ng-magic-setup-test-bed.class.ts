@@ -153,7 +153,7 @@ export class NgMagicSetupTestBed {
     public pipeServiceMock<S, M extends Partial<S>>(pipeClass: Type<any>, serviceClass: AbstractType<S>):
         jasmine.SpyObj<Partial<S>>;
     /**
-    * @description If you have pipe that provides a service you can mock it using this method.
+    *  If you have pipe that provides a service you can mock it using this method.
     * @param pipeClass the pipeClass is the reference of the class of your angular pipe.
     * @param serviceClass the serviceClass is the reference to the class of the service that you want to mock
     * @param mock the mock mocks the service and should implement a partial of the service class
@@ -166,7 +166,7 @@ export class NgMagicSetupTestBed {
     }
 
    /**
-    * @description If you have pipe that provides a provider you can mock it using this method.
+    *  If you have pipe that provides a provider you can mock it using this method.
     * @param pipeClass the pipeClass is the reference of the class of your angular pipe.
     * @param token the provider token that you want to mock
     * @param mock the mock
@@ -178,7 +178,7 @@ export class NgMagicSetupTestBed {
     }
 
     /**
-    * @description If you have directive that provides a service you can mock it using this method.
+    * If you have directive that provides a service you can mock it using this method.
     * @param directiveClass the directiveClass is the reference of the class of your angular directive.
     * @param serviceClass the serviceClass is the reference to the class of the service that you want to mock
     * @param mock the mock mocks the service and should implement a partial of the service class
@@ -197,7 +197,7 @@ export class NgMagicSetupTestBed {
     }
 
     /**
-    * @description If you have directive that provides a provider you can mock it using this method.
+    *  If you have directive that provides a provider you can mock it using this method.
     * @param directiveClass the directiveClass is the reference of the class of your angular directive.
     * @param token the provider token that you want to mock
     * @param mock the mock
@@ -216,7 +216,7 @@ export class NgMagicSetupTestBed {
     public componentServiceMock<S, M extends Partial<S>>(componentClass: Type<any>, serviceClass: AbstractType<S>):
         jasmine.SpyObj<Partial<S>>;
     /**
-    * @description If you have component that provides a service you can mock it using this method.
+    *  If you have component that provides a service you can mock it using this method.
     * @param componentClass the componentClass is the reference of the class of your angular component.
     * @param serviceClass the serviceClass is the reference to the class of the service that you want to mock
     * @param mock the mock mocks the service and should implement a partial of the service class
@@ -229,7 +229,7 @@ export class NgMagicSetupTestBed {
     }
 
     /**
-    * @description If you have component provides a provider you can mock it using this method.
+    *  If you have component provides a provider you can mock it using this method.
     * @param componentClass the componentClass is the reference of the class of your angular component.
     * @param token the provider token that you want to mock
     * @param mock the mock
@@ -266,7 +266,7 @@ export class NgMagicSetupTestBed {
     }
 
     /**
-    * @description declare that you want to mock for a selector and retrieve all created component mock instances after fixture
+    *  declare that you want to mock for a selector and retrieve all created component mock instances after fixture
     * creation.
     * @param componentClass class of the component that should be used in the fixture for a specific selector you want to mock.
     * @returns an arry of all component instances that were found statically inside the fixture. The array's members can only be
@@ -288,7 +288,7 @@ export class NgMagicSetupTestBed {
     }
 
     /**
-    * @description Use this method to create a component fixture. This method may only be called once per NgMagicTestBed instance.
+    *  Use this method to create a component fixture. This method may only be called once per NgMagicTestBed instance.
     * @param componentClass class of the root component you want to compile and create.
     * @param disableNoErrorSchema by default the NgMagicTestBed uses the NO_ERROR_SCHEMA of angular to prevent the compiler from
     * throwing exceptions e.g. for missing or unknown inputs.
@@ -322,7 +322,7 @@ export class NgMagicSetupTestBed {
     }
 
     /**
-     * @description Creates a mock where all spies are created automatically.
+     *  Creates a mock where all spies are created automatically.
      * This method does not register anything at the TestBed or its configuration.
      * @param objectClass This class' prototype will be used to create simple jasmine spies on all methods this class has
      * @param mock An object that should implement partial of objectClass and contain all methods that you want to return something.
@@ -336,7 +336,7 @@ export class NgMagicSetupTestBed {
     }
 
     /**
-     * @description mocks a provider for a given token with a given mock. If wanted your mock can be extended by spies
+     *  mocks a provider for a given token with a given mock. If wanted your mock can be extended by spies
      * from a given spySource class.
      * @param token token for provider provision
      * @param mock mock that will be registered for the token
@@ -350,7 +350,7 @@ export class NgMagicSetupTestBed {
     }
 
       /**
-     * @description mocks a service that has a "create" method.
+     *  mocks a service that has a "create" method.
      * @param factoryClass service that has a "create" method that you want to mock.
      * @param instances will be returned by the mock this method return when "create" is called.
      * The first call of mock.create() will return the first item in the instances-array and so on.
@@ -373,7 +373,7 @@ export class NgMagicSetupTestBed {
     public serviceMock<S, M extends Partial<S>>(serviceClass: AbstractType<S>): jasmine.SpyObj<Partial<S>>;
 
     /**
-     * @description mocks a service with the given mock
+     *  mocks a service with the given mock
      * @param serviceClass service that you want to mock
      * @param mock that should mock the service. All methods on the mock will become spies. For each method on serviceClass'
      * prototype another spy will be added to the mock.
@@ -405,7 +405,7 @@ export class NgMagicSetupTestBed {
     public injection<S>(token: any): S;
     /* tslint:enable */
     /**
-     * @description return you the service or provider for a given token from the angular dependency injection.
+     *  return you the service or provider for a given token from the angular dependency injection.
      * This will trigger the TestBed configureTestingModule step. After this step you can not create any more mocks.
      * Make sure you create all your mocks before calling this mehtod.
      * @param serviceClass service that you want to inject
@@ -418,7 +418,7 @@ export class NgMagicSetupTestBed {
     }
 
     /**
-    * @description
+    * 
     * Subscribes to a given observable and spies on its states and emitted values.
     * @param observable
     * Observable you want to spy
