@@ -13,6 +13,7 @@
     "test": "jest",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "buildTestBed": "ng build ng-magic-test-bed --prod",
     "test:lib": "jest --config ./jest.lib.config.js",
     "test:app": "jest --config ./jest.app.config.js",
     "compodoc": "npx compodoc -p ./tsconfig.json projects -d ../docs"

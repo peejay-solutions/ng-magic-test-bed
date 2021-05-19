@@ -44,8 +44,8 @@ export class NgMagicSetupTestBed {
     private fixtureInstance: ComponentFixture<any> = null;
 
     /**
-    * @param initialConfig  initial config which will be extended by the other method of the
-    * constructed instance. The final config will be used to call TestBed.configureTestingModule implicitly by
+    * @param initialConfig  initial config which will be extended by the other methods of this NgMagicSetupTestBed instance.
+    *  The final config will be used to call TestBed.configureTestingModule implicitly by
     * calling e.g. .injection()
     */
     constructor(initialConfig: TestModuleMetadata = {}) {
@@ -176,11 +176,11 @@ export class NgMagicSetupTestBed {
     }
 
     public pipeServiceMock<S, M extends Partial<S>>(pipeClass: Type<any>, serviceClass: AbstractType<S>, mock: M,
-        dontSpy: true): Partial<S> & M;
+        dontSpy: true): S & M;
     public pipeServiceMock<S, M extends Partial<S>>(pipeClass: Type<any>, serviceClass: AbstractType<S>, mock: M):
-        jasmine.SpyObj<Partial<S> & M>;
+        jasmine.SpyObj<S> & M;
     public pipeServiceMock<S, M extends Partial<S>>(pipeClass: Type<any>, serviceClass: AbstractType<S>):
-        jasmine.SpyObj<Partial<S>>;
+        jasmine.SpyObj<S>;
     /**
     *  If you have pipe that provides a service you can mock it using this method.
     * @param pipeClass the pipeClass is the reference of the class of your angular pipe.
@@ -190,17 +190,17 @@ export class NgMagicSetupTestBed {
     */
     public pipeServiceMock<S, M extends Partial<S>>(pipeClass: Type<any>, serviceClass: AbstractType<S>,
         mock?: M, dontSpy?: boolean):
-        Partial<S> & M | jasmine.SpyObj<Partial<S> & M> | jasmine.SpyObj<Partial<S>> {
-        return this.componentProviderMock(pipeClass, serviceClass, mock, dontSpy, serviceClass);
+        jasmine.SpyObj<S> & M | S & M | jasmine.SpyObj<S> | S  {
+        return <any> this.componentProviderMock(pipeClass, serviceClass, mock, dontSpy, serviceClass);
     }
 
-   /**
-    *  If you have pipe that provides a provider you can mock it using this method.
-    * @param pipeClass the pipeClass is the reference of the class of your angular pipe.
-    * @param token the provider token that you want to mock
-    * @param mock the mock
-    * @param dontSpy optional parameter to prevent the default spy creation on the mock
-    */
+    /**
+     *  If you have pipe that provides a provider you can mock it using this method.
+     * @param pipeClass the pipeClass is the reference of the class of your angular pipe.
+     * @param token the provider token that you want to mock
+     * @param mock the mock
+     * @param dontSpy optional parameter to prevent the default spy creation on the mock
+     */
     public pipeProviderMock<M>(pipeClass: Type<any>, token: any, mock: M, dontSpy = false,
         spySource?: AbstractType<any>): M {
         return this.uiThingProviderMock('overridePipe', pipeClass, token, mock, dontSpy, spySource);
@@ -214,15 +214,15 @@ export class NgMagicSetupTestBed {
     * @param dontSpy optional parameter to prevent the default spy creation on the mock using the prototype of the serviceClass
     */
     public directiveServiceMock<S, M extends Partial<S>>(directiveClass: Type<any>, serviceClass: AbstractType<S>, mock: M,
-        dontSpy: true): Partial<S> & M;
+        dontSpy: true): S & M;
     public directiveServiceMock<S, M extends Partial<S>>(directiveClass: Type<any>, serviceClass: AbstractType<S>, mock: M):
-        jasmine.SpyObj<Partial<S> & M>;
+        jasmine.SpyObj<S> & M;
     public directiveServiceMock<S, M extends Partial<S>>(directiveClass: Type<any>, serviceClass: AbstractType<S>):
-        jasmine.SpyObj<Partial<S>>;
+        jasmine.SpyObj<S>;
     public directiveServiceMock<S, M extends Partial<S>>(directiveClass: Type<any>, serviceClass: AbstractType<S>,
         mock?: M, dontSpy?: boolean):
-        Partial<S> & M | jasmine.SpyObj<Partial<S> & M> | jasmine.SpyObj<Partial<S>> {
-        return this.componentProviderMock(directiveClass, serviceClass, mock, dontSpy, serviceClass);
+        S & M | jasmine.SpyObj<S> & M | jasmine.SpyObj<S> {
+        return <any> this.componentProviderMock(directiveClass, serviceClass, mock, dontSpy, serviceClass);
     }
 
     /**
@@ -239,11 +239,11 @@ export class NgMagicSetupTestBed {
 
 
     public componentServiceMock<S, M extends Partial<S>>(componentClass: Type<any>, serviceClass: AbstractType<S>, mock: M,
-        dontSpy: true): Partial<S> & M;
+        dontSpy: true): S & M;
     public componentServiceMock<S, M extends Partial<S>>(componentClass: Type<any>, serviceClass: AbstractType<S>, mock: M):
-        jasmine.SpyObj<Partial<S> & M>;
+        jasmine.SpyObj<S> & M;
     public componentServiceMock<S, M extends Partial<S>>(componentClass: Type<any>, serviceClass: AbstractType<S>):
-        jasmine.SpyObj<Partial<S>>;
+        jasmine.SpyObj<S>;
     /**
     *  If you have component that provides a service you can mock it using this method.
     * @param componentClass the componentClass is the reference of the class of your angular component.
@@ -253,8 +253,8 @@ export class NgMagicSetupTestBed {
     */
     public componentServiceMock<S, M extends Partial<S>>(componentClass: Type<any>, serviceClass: AbstractType<S>,
         mock?: M, dontSpy?: boolean):
-        Partial<S> & M | jasmine.SpyObj<Partial<S> & M> | jasmine.SpyObj<Partial<S>> {
-        return this.componentProviderMock(componentClass, serviceClass, mock, dontSpy, serviceClass);
+        S & M | jasmine.SpyObj<S> & M | jasmine.SpyObj<S> {
+        return <any>this.componentProviderMock(componentClass, serviceClass, mock, dontSpy, serviceClass);
     }
 
     /**
@@ -298,7 +298,7 @@ export class NgMagicSetupTestBed {
     }
 
     /**
-    *  declare that you want to mock for a selector and retrieve all created component mock instances after fixture
+    *  declare that you want to mock a component for a selector and retrieve all created component mock instances after fixture
     * creation.
     * @param componentClass class of the component that should be used in the fixture for a specific selector you want to mock.
     * @returns an arry of all component instances that were found statically inside the fixture. The array's members can only be
@@ -354,17 +354,22 @@ export class NgMagicSetupTestBed {
     }
 
     /**
-     *  Creates a mock where all spies are created automatically.
-     * This method does not register anything at the TestBed or its configuration.
-     * @param objectClass This class' prototype will be used to create simple jasmine spies on all methods this class has
+     * Can be used to create a mock for an object that should not be registered at angular TestBed.
+     * @param objectClass This class' prototype will be used to extend the result mock by a spy for each method on the prototype.
      * @param mock An object that should implement partial of objectClass and contain all methods that you want to return something.
      * @param dontSpy optional parameter to prevent the default spy creation on the mock.
      * @returns Your mocks methods will be overwritten with spies that call through to the mocks methods like jasmine's spyOn method.
      * In addition to that a spy will be added for each additional method that was found on the objectClass' prototype.
      */
+    public objectMock<O, M extends Partial<O>>(objectClass: AbstractType<O>, mock: M,
+        dontSpy: true): O & M;
+    public objectMock<O, M extends Partial<O>>(objectClass: AbstractType<O>, mock: M):
+        jasmine.SpyObj<O> & M & O;
+    public objectMock<O, M extends Partial<O>>(objectClass: undefined, mock: M): jasmine.SpyObj<M>;
+
     public objectMock<O, M extends Partial<O>>(objectClass: AbstractType<O> | undefined, mock: M | any, dontSpy = false):
-        Partial<O> & M | jasmine.SpyObj<Partial<O> & M> {
-        return <Partial<O> & M | jasmine.SpyObj<Partial<O> & M>>this.mock(undefined, mock, dontSpy, objectClass);
+        O & M | jasmine.SpyObj<O> & M {
+        return <O & M | jasmine.SpyObj<O> & M>this.mock(undefined, mock, dontSpy, objectClass);
     }
 
     /**
@@ -381,14 +386,14 @@ export class NgMagicSetupTestBed {
         return this.mock(token, mock, dontSpy, spySource);
     }
 
-      /**
-     *  mocks a service that has a "create" method.
-     * @param factoryClass service that has a "create" method that you want to mock.
-     * @param instances will be returned by the mock this method return when "create" is called.
-     * The first call of mock.create() will return the first item in the instances-array and so on.
-     * @returns a mock for the factory. mock.create will return the one of the given instances every time it is called
-     */
-    public factoryMock<I, F extends IFactory<I>>(factoryClass: AbstractType<F>, instances: Array<I>): jasmine.SpyObj<Partial<F>> {
+    /**
+   *  mocks a service that has a "create" method.
+   * @param factoryClass service that has a "create" method that you want to mock.
+   * @param instances will be returned by the mock this method return when "create" is called.
+   * The first call of mock.create() will return the first item in the instances-array and so on.
+   * @returns a mock for the factory. mock.create will return the one of the given instances every time it is called
+   */
+    public factoryMock<I, F extends IFactory<I>, M>(factoryClass: AbstractType<F>, instances: Array<M & I>): jasmine.SpyObj<Partial<F>> {
         let index = -1;
         return <any>this.mock(factoryClass, <any>{
             create: (...args: any) => {
@@ -399,10 +404,10 @@ export class NgMagicSetupTestBed {
     }
 
     public serviceMock<S, M extends Partial<S>>(serviceClass: AbstractType<S>, mock: M,
-        dontSpy: true): Partial<S> & M;
+        dontSpy: true): S & M;
     public serviceMock<S, M extends Partial<S>>(serviceClass: AbstractType<S>, mock: M):
-        jasmine.SpyObj<Partial<S> & M>;
-    public serviceMock<S, M extends Partial<S>>(serviceClass: AbstractType<S>): jasmine.SpyObj<Partial<S>>;
+        jasmine.SpyObj<S> & M;
+    public serviceMock<S, M extends Partial<S>>(serviceClass: AbstractType<S>): jasmine.SpyObj<S>;
 
     /**
      *  mocks a service with the given mock
@@ -413,7 +418,7 @@ export class NgMagicSetupTestBed {
      * @returns the mock after creating some spies on it (if not disabled)
      */
     public serviceMock<S, M extends Partial<S>>(serviceClass: AbstractType<S>, mock?: M, dontSpy?: boolean):
-        Partial<S> & M | jasmine.SpyObj<Partial<S> & M> | jasmine.SpyObj<Partial<S>> {
+        S & M | jasmine.SpyObj<S> & M | jasmine.SpyObj<S> {
         return this.mock(serviceClass, mock, dontSpy, serviceClass);
     }
 
@@ -421,7 +426,7 @@ export class NgMagicSetupTestBed {
     * @ignore
     */
     private mock<S, M extends Partial<S>>(token?: any, mock: M = <any>{}, dontSpy?: boolean, spySource?: AbstractType<S>):
-        Partial<S> & M | jasmine.SpyObj<Partial<S> & M> | jasmine.SpyObj<Partial<S>> {
+        S & M | jasmine.SpyObj<S> & M | jasmine.SpyObj<S> {
         if (!dontSpy) {
             spyOnFunctionsOf(mock, spySource ? spySource.prototype : undefined);
         }
@@ -432,7 +437,7 @@ export class NgMagicSetupTestBed {
                 provide: token
             });
         }
-        return mock;
+        return <any> mock;
     }
 
     public injection<S>(service: AbstractType<S>): S;
