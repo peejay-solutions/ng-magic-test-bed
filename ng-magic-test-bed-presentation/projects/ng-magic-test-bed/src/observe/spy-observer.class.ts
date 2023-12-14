@@ -1,5 +1,6 @@
 import { Observable } from 'rxjs';
 
+
 /**
  * @description
  * Subscribes to a given observable and tracks all observations.
@@ -44,14 +45,15 @@ export class SpyObserver<T> {
      */
     constructor(observable: Observable<T>, name?: string) {
         const prefix = name ? name + '.' : '';
-        this.next = jasmine.createSpy(prefix + 'next');
-        this.error = jasmine.createSpy(prefix + 'error');
-        this.complete = jasmine.createSpy(prefix + 'complete:');
+        const inner = { [prefix + 'next']: ()=>{}, [prefix + 'complete']: ()=>{}, [prefix + 'error']: ()=>{}};
+
+        this.next = spyOn(inner, prefix + 'next');
+        this.complete = spyOn(inner, prefix + 'complete');
+        this.error = spyOn(inner, prefix + 'error');
         this.observations = new Array<T>();
         observable.subscribe(next => {
             this.observations.push(next);
             this.next(next);
         }, this.error, this.complete);
     }
-
 }

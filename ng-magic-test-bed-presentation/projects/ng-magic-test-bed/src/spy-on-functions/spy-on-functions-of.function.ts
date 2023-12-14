@@ -1,6 +1,6 @@
 import { spyOnFunctionOf } from './spy-on-function-of.function';
 
-/** @description converts methods of target into jasmine or jest spies.
+/** @description converts methods of target into jasmine spies.
  * @param target target's methods will be overwritten with spies. Inherited methods will be overwritten at target object and not
  * on the prototype. This avoids unpleasant side effects.
  * @param source this optional paramter can be used to create additional spies at the target object. For each method on 
@@ -31,7 +31,7 @@ export function spyOnFunctionsOf(target: any, source?: any) {
 }
 
 function getMethodKeysFromObject(obj: any) {
-    const keys = [];
+    const keys: Array<string> = [];
     let currentPrototype = obj;
     while (currentPrototype && currentPrototype.constructor !== Object && currentPrototype.constructor !== Array) {
         const newKeys = Object.getOwnPropertyNames(currentPrototype);

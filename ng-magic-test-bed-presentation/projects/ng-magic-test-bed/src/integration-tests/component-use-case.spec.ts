@@ -23,7 +23,7 @@ export class MyComponentService {
     template: ''
 })
 export class MyButtonComponent {
-    @Input() public text: string;
+    @Input() public text?: string;
     @Output() public click = new EventEmitter();
 }
 
@@ -35,7 +35,7 @@ export class MyButtonComponent {
 export class SampleComponent implements OnInit {
 
     @Input()
-    public param: number = null;
+    public param?: number;
     public value: number;
     constructor(public myService: MyService, private myComponentService: MyComponentService) {
         this.value = this.myComponentService.returnSomething();

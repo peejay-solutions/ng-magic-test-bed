@@ -6,6 +6,18 @@ import { observe } from '../observe/observe.function';
 import { SpyObserver } from '../observe/spy-observer.class';
 import { By } from '@angular/platform-browser';
 
+export interface FullTestModuleMetadata extends TestModuleMetadata{
+    providers: any[];
+    declarations: any[];
+    imports: any[];
+    schemas: Array<SchemaMetadata | any[]>;
+    teardown: {
+        destroyAfterEach: boolean;
+        rethrowErrors: boolean;
+    };
+    errorOnUnknownElements: boolean;
+    errorOnUnknownProperties: boolean;
+}
 
 export interface IFactory<I> {
     create(...args: Array<any>): I;
@@ -16,7 +28,7 @@ export class NgMagicSetupTestBed {
     /**
     * @ignore
     */
-    private config: TestModuleMetadata;
+    private config: FullTestModuleMetadata;
 
     /**
     * @ignore
@@ -41,7 +53,7 @@ export class NgMagicSetupTestBed {
     /**
     * @ignore
     */
-    private fixtureInstance: ComponentFixture<any> = null;
+    private fixtureInstance?: ComponentFixture<any> = undefined;
 
     /**
     * @param initialConfig  initial config which will be extended by the other methods of this NgMagicSetupTestBed instance.
@@ -54,7 +66,12 @@ export class NgMagicSetupTestBed {
             declarations: initialConfig.declarations ? initialConfig.declarations.slice() : [],
             imports: initialConfig.imports ? initialConfig.imports.slice() : [],
             schemas: initialConfig.schemas ? initialConfig.schemas.slice() : [],
-            aotSummaries: initialConfig.aotSummaries
+            errorOnUnknownElements: initialConfig.errorOnUnknownElements ?? false,
+            errorOnUnknownProperties: initialConfig.errorOnUnknownProperties ?? false,
+            teardown: {
+                destroyAfterEach: initialConfig.teardown?.destroyAfterEach ?? true,
+                rethrowErrors: initialConfig.teardown?.rethrowErrors ?? false
+            }
         };
     }
 
@@ -100,7 +117,7 @@ export class NgMagicSetupTestBed {
     * https://angular.io/api/core/testing/TestBed#configuretestingmodule
     * https://angular.io/api/core/testing/TestModuleMetadata
     */
-    public declaration(declaration) {
+    public declaration(declaration: any) {
         this.declarations([declaration]);
     }
 
@@ -282,7 +299,7 @@ export class NgMagicSetupTestBed {
             this.config.declarations.push(uiThingClass);
         }
         this.postConfigureJobs.push(() => {
-            TestBed[methodName](uiThingClass, {
+            (TestBed as any)[methodName](uiThingClass, {
                 add: {
                     providers: [
                         { provide: token, useValue: mock }
@@ -313,8 +330,8 @@ export class NgMagicSetupTestBed {
         }
         this.fixtureJobs.push(() => {
             result.length = 0;
-            const componentDebugElements = this.fixtureInstance.debugElement.queryAll(By.directive(componentClass));
-            componentDebugElements.forEach(componentDebugElement => result.push(componentDebugElement.injector.get(componentClass)));
+            const componentDebugElements = this.fixtureInstance?.debugElement.queryAll(By.directive(componentClass));
+            componentDebugElements?.forEach(componentDebugElement => result.push(componentDebugElement.injector.get(componentClass)));
         });
         return result;
     }
@@ -382,7 +399,7 @@ export class NgMagicSetupTestBed {
      * @returns Your mocks methods will be overwritten with spies that call through to the mocks methods like jasmine's spyOn method.
      * In addition to that a spy will be added for each additional method that was found on the objectClass' prototype.
      */
-    public providerMock<M>(token: any, mock: M, dontSpy: boolean = false, spySource?: AbstractType<any>) {
+    public providerMock<M>(token: any, mock: Partial<M>, dontSpy: boolean = false, spySource?: AbstractType<any>) {
         return this.mock(token, mock, dontSpy, spySource);
     }
 

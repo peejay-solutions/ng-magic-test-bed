@@ -24,7 +24,7 @@ export class MyHelperFactory {
 export class MySimpleHelperService {
     constructor() {
     }
-    public doSomething(param) {
+    public doSomething(param: any) {
     }
 }
 
@@ -35,7 +35,7 @@ export class MyHelperService {
     constructor() {
     }
 
-    public doSomething(param) {
+    public doSomething(param: any) {
     }
 }
 
@@ -50,7 +50,7 @@ export class MyHelperService {
     }
 })
 export abstract class MyAbstractHelperService {
-    public abstract doSomething(param: any);
+    public abstract doSomething(param: any): void;
 }
 
 @Injectable({
@@ -65,7 +65,7 @@ export class MyService {
              this.myHelperInstance = this.myHelperFactory.create();
     }
 
-    public doSomething(param) {
+    public doSomething(param: any) {
         this.myHelper.doSomething(param);
         this.mySimpleHelper.doSomething(param);
         this.counter++;
@@ -89,7 +89,7 @@ export class MyService {
 })
 export abstract class MyAbstractService {
     public abstract counter: number;
-    public abstract doSomething(value: any);
+    public abstract doSomething(value: any): void;
 }
 
 

@@ -42,7 +42,7 @@ export class MyService {
 //################## Standard Test Bed 
 
 describe('Simple integration test for no magic but standard TestBed', () => {
-    let myHelperServiceMock;
+    let myHelperServiceMock: MyHelperServiceMock2;
     let service: MyService;
 
     beforeEach(() => {
