@@ -7,11 +7,13 @@ A magic test bed for angular. This Wrapper for the well known angular test bed (
 
 - Less code
 
-- Creation of jest or jasmine (karma) spies for all your mocks' functions is done implicitly. No more manual spy creation with magic strings to overwrite strongly typed methods of TypeScript objects.
+- Creation of jasmine (karma) spies for all your mocks' functions is done implicitly. No more manual spy creation with magic strings to overwrite strongly typed methods of TypeScript objects.
 
 - A simple mock with spies for all methods of a service is generated. You can extend these auto generated mocks with custom behavior.
 
+# Trailer
 
+![](https://github.com/peejay-solutions/ng-magic-test-bed/blob/master/github-readme-assets/trailer.gif)
 
 # Installation 
 
@@ -127,7 +129,6 @@ The running code can be found <a href="https://github.com/peejay-solutions/ng-ma
 
 # Documentation
 
-... Work in progress.
 
 https://peejay-solutions.github.io/ng-magic-test-bed/classes/NgMagicSetupTestBed.html
 

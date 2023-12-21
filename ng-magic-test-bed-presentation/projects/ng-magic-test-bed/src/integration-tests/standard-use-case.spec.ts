@@ -96,3 +96,24 @@ class MyHelperServiceMock {
     public data = { value: 100 };
     public getData = () => this.data;
 }
+
+//################## Magic Test Bed even shorter 
+describe('Simple integration test for ng magic setup test bed with full generic mock', () => {
+    function setup() {
+        const magic = new NgMagicSetupTestBed();
+        return {
+            myHelperServiceMock: magic.serviceMock(MyHelperService),
+            service: magic.injection(MyService),
+        };
+    }
+
+    it('should work', () => {
+        const { service, myHelperServiceMock } = setup();
+        const param = 4;
+        const data = {value: 100};
+        myHelperServiceMock.getData.and.returnValue(data);
+        service.doSomething(param);
+        expect(myHelperServiceMock.getData).toHaveBeenCalledWith(4);
+        expect(myHelperServiceMock.doSomething).toHaveBeenCalledWith(data.value);
+    });
+});

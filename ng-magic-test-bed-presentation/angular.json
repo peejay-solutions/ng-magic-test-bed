@@ -118,6 +118,7 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
+            "codeCoverage": true,
             "tsConfig": "projects/ng-magic-test-bed/tsconfig.spec.json",
             "polyfills": [
               "zone.js",
