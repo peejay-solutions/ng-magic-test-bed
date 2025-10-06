@@ -471,7 +471,7 @@ export class NgMagicSetupTestBed {
      */
     public injection<S>(token: AbstractType<S> | any): S {
         this.configureTestingModule();
-        return TestBed.get(token);
+        return TestBed.inject(token);
     }
 
     /**

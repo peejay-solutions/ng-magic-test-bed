@@ -55,7 +55,7 @@ describe('Simple integration test for no magic but standard TestBed', () => {
                 },
             ]
         });
-        service = TestBed.get(MyService);
+        service = TestBed.inject(MyService);
     });
 
     it('should work', () => {
