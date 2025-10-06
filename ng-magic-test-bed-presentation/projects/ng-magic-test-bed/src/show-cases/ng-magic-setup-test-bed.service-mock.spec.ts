@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { NgMagicSetupTestBed } from "ng-magic-test-bed";
+import { NgMagicSetupTestBed } from '../test-bed/ng-magic-setup-test-bed.class';
 
 @Injectable({providedIn: 'root'})
 class MyService{
@@ -65,7 +65,7 @@ describe('NgMagicSetupTestBed.serviceMock()', ()=>{
       
         function setup(){
             const magic = new NgMagicSetupTestBed();
-            const myHelperServiceMock = magic.serviceMock(MyHelperService, { getSomeOtherThing: param => param, id: 1 });
+            const myHelperServiceMock = magic.serviceMock(MyHelperService, { getSomeOtherThing: (param: any) => param, id: 1 });
             const myServiceTestee = magic.injection(MyService);
     
             return {
