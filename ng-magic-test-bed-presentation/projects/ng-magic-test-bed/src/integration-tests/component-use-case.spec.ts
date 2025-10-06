@@ -20,7 +20,8 @@ export class MyComponentService {
 
 @Component({
     selector: 'lib-button',
-    template: ''
+    template: '',
+    standalone: false
 })
 export class MyButtonComponent {
     @Input() public text?: string;
@@ -30,7 +31,8 @@ export class MyButtonComponent {
 @Component({
     selector: 'lib-sample',
     template: '<lib-button *ngIf="param>99" (click)="myService.doSomething()"></lib-button>',
-    providers: [MyComponentService]
+    providers: [MyComponentService],
+    standalone: false
 })
 export class SampleComponent implements OnInit {
 
@@ -74,7 +76,8 @@ describe('component use case with NgMagicTestBed', () => {
 
 @Component({
     selector: 'lib-button',
-    template: ''
+    template: '',
+    standalone: false
 })
 export class MyButtonComponentMock implements Partial<MyButtonComponent> {
     @Output() public click = new EventEmitter();
@@ -134,7 +137,8 @@ class MyServiceMock2 implements Partial<MyService> {
 
 @Component({
     selector: 'lib-button',
-    template: ''
+    template: '',
+    standalone: false
 })
 export class MyButtonComponentMock2 implements Partial<MyButtonComponent> {
     @Output() public click = new EventEmitter();
