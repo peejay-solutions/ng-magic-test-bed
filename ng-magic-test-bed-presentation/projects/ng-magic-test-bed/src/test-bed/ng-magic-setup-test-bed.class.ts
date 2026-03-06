@@ -464,9 +464,9 @@ export class NgMagicSetupTestBed {
     /**
      *  return you the service or provider for a given token from the angular dependency injection.
      * This will trigger the TestBed configureTestingModule step. After this step you can not create any more mocks.
-     * Make sure you create all your mocks before calling this mehtod.
+     * Make sure you create all your mocks before calling this method.
      * @param serviceClass service that you want to inject
-     * @param token of the prider that you want to inject
+     * @param token of the provider that you want to inject
      * @return whatever angular dependency injection finds for your token
      */
     public injection<S>(token: AbstractType<S> | any): S {
@@ -491,5 +491,24 @@ export class NgMagicSetupTestBed {
         return observe(observable, name);
     }
 
+  
+    /**
+     *  
+     * Can be used to run a callback in injection context. Like TestBed.runInInjectionContext().
+     * Additionally this will trigger the TestBed configureTestingModule step. After this step you can not create any more mocks.
+     * Make sure you create all your mocks before calling this method.
+     * This method can be used to configure the testing module when used without 
+     * @param callbackToBeRunInInjectionContext will be executed in injection context and its return value will be returned by run-method.
+     * @returns what @param callbackToBeRunInInjectionContext would return
+     */
+    public run():void;
+    public run<T>(callbackToBeRunInInjectionContext: ()=> T): T;
+    public run<T = void>(callbackToBeRunInInjectionContext?: ()=> T): T {
+        this.configureTestingModule();
+        if(callbackToBeRunInInjectionContext){
+            return TestBed.runInInjectionContext(()=> callbackToBeRunInInjectionContext());
+        }
+        return void(0) as T;
+    }
 
 }
