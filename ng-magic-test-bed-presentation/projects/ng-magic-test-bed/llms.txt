@@ -1,0 +1,195 @@
+
+ 
+# ng-magic-test-bed
+> Streamlined Angular unit test setup utility. Replaces verbose `TestBed.configureTestingModule` boilerplate with a fluent, type-safe API. Uses Jasmine spies automatically. Automatically extends all mocks with all methods of the class to be mocked.
+Docs: https://peejay-solutions.github.io/ng-magic-test-bed/
+## Installation
+```bash
+npm install @peejay-solutions/ng-magic-test-bed --save-dev
+```
+## Core Usage Pattern
+```typescript
+import { NgMagicSetupTestBed } from '@peejay-solutions/ng-magic-test-bed';
+describe('MyService', () => {
+  function setup() {
+    const magic = new NgMagicSetupTestBed();
+    const depMock = magic.serviceMock(DependencyService);
+    const service = magic.injection(MyService);
+    return { service, depMock };
+  }
+  it('should do X when Y', () => {
+    const { service, depMock } = setup();
+    depMock.someMethod.and.returnValue('value');
+    expect(service.doSomething()).toBe('expected');
+  });
+});
+```
+`magic.injection()` triggers TestBed configuration — call it after all mocks are set up.
+---
+## NgMagicSetupTestBed API
+### Module Setup (call before injection)
+| Method | Description |
+|---|---|
+| `declaration(c)` / `declarations(cs)` | Add component/directive/pipe to declarations |
+| `import(m)` / `imports(ms)` | Add module to imports |
+| `provider(p)` / `providers(ps)` | Add provider |
+| `schema(s)` / `schemas(ss)` | Add schema (`NO_ERRORS_SCHEMA` included by default) |
+### Mocking
+**`serviceMock<S>(serviceClass, mock?, dontSpy?)`**
+Creates and registers a mock for a service. All methods from serviceClass will be added to mock. All methods are auto-spied.
+```typescript
+// Auto-generated spy mock (no custom mock needed)
+const myServiceMock = magic.serviceMock(MyService);
+myServiceMock.getData.and.returnValue(of([]));
+// Custom partial mock (methods are still wrapped in spies)
+const myServiceMock = magic.serviceMock(MyService, new MyServiceMock());
+```
+**`providerMock<M>(token, mock, dontSpy?, spySource?)`**
+Mocks an injection token.
+**`objectMock<O>(objectClass, mock, dontSpy?)`**
+Creates a mock object without TestBed registration (for manual use).
+**`factoryMock<I, F>(factoryClass, instances)`**
+Mocks a factory service whose `create()` method returns sequential instances from the provided array.
+```typescript
+const instance1 = { value: 'a' };
+const instance2 = { value: 'b' };
+magic.factoryMock(MyFactory, [instance1, instance2]);
+// first call to factory.create() returns instance1, second returns instance2
+```
+**`componentServiceMock<S>(componentClass, serviceClass, mock?, dontSpy?)`**
+Mocks a service provided at the component level (not root).
+**`directiveServiceMock<S>(directiveClass, serviceClass, mock?, dontSpy?)`**
+Mocks a service provided at the directive level.
+**`pipeServiceMock<S>(pipeClass, serviceClass, mock?, dontSpy?)`**
+Mocks a service provided at the pipe level.
+**`componentProviderMock<M>(componentClass, token, mock, dontSpy?)`**
+Mocks an injection token provided by a specific component.
+**`directiveProviderMock<M>(directiveClass, token, mock, dontSpy?)`**
+Mocks an injection token provided by a specific directive.
+**`pipeProviderMock<M>(pipeClass, token, mock, dontSpy?)`**
+Mocks an injection token provided by a specific pipe.
+### Injection & Fixtures
+**`injection<S>(token)`**
+Resolves a service/class from DI. Triggers TestBed compilation — call after all mocks are registered.
+```typescript
+const service = magic.injection(MyService);
+```
+**`fixture<C>(componentClass, initialInputs?, disableNoErrorSchema?)`**
+Creates a `ComponentFixture<C>`. **May only be called once per `NgMagicSetupTestBed` instance.**
+- `initialInputs` — a `Partial<C>` object whose properties are applied to `componentInstance` **before** the first `detectChanges()`. This is the correct way to set `@Input()` values that are required in `ngOnInit`.
+- `disableNoErrorSchema` — by default `NO_ERRORS_SCHEMA` is added so unknown child elements/inputs are silently ignored. Pass `true` to disable this and get strict template checking.
+- Returns a standard Angular `ComponentFixture<C>` (same as `TestBed.createComponent()`).
+- Call after all mocks and `componentMocks`/`directiveMocks` are registered.
+```typescript
+// Basic fixture with initial inputs
+const fixture = magic.fixture(MyComponent, { label: 'test', count: 42 });
+expect(fixture.componentInstance.label).toBe('test');
+// Full component test pattern
+function setup() {
+  const magic = new NgMagicSetupTestBed();
+  const childMocks = magic.componentMocks(MyChildComponentMock);
+  const serviceMock = magic.componentServiceMock(MyComponent, MyService, new MyServiceMock());
+  const fixture = magic.fixture(MyComponent, { param: 100 });
+  return { fixture, childMocks, serviceMock };
+}
+it('should render with input', () => {
+  const { fixture, serviceMock } = setup();
+  expect(fixture.componentInstance.param).toBe(100);
+  expect(serviceMock.load).toHaveBeenCalled();
+});
+```
+**`componentMocks<C>(componentClass)`**
+Declares `componentClass` as a mock component for a selector and returns an array that will be populated with all rendered mock instances **after** `fixture()` is called. Must be called before `fixture()`.
+```typescript
+// Define a mock component matching the selector you want to stub
+@Component({ selector: 'lib-button', template: '' })
+class MyButtonMock implements Partial<MyButtonComponent> {
+  @Output() click = new EventEmitter();
+}
+function setup() {
+  const magic = new NgMagicSetupTestBed();
+  const buttons = magic.componentMocks(MyButtonMock);  // call before fixture
+  const fixture = magic.fixture(ParentComponent, { param: 100 });
+  const firstButton = buttons[0];                      // usable after fixture
+  return { fixture, firstButton };
+}
+it('should react to child click', () => {
+  const { firstButton, fixture } = setup();
+  firstButton.click.emit();
+  fixture.detectChanges();
+  // assert parent reaction
+});
+```
+**`directiveMocks<C>(directiveClass)`**
+Returns all rendered directive instances after fixture creation. Same call-before-fixture pattern as `componentMocks`.
+**`run<T>(fn)`**
+Executes a factory function within Angular's injection context. Use this to instantiate classes that call `inject()` in their constructor or field initializers.
+```typescript
+class MyObject {
+  private service = inject(MyService);  // requires injection context
+  getValue() { return this.service.getValue(); }
+}
+it('should support inject()-based classes', () => {
+  const magic = new NgMagicSetupTestBed();
+  const serviceMock = magic.serviceMock(MyService);
+  serviceMock.getValue.and.returnValue(42);
+  const obj = magic.run(() => new MyObject());
+  expect(obj.getValue()).toBe(42);
+});
+```
+### Observables
+**`observer<T>(observable$, name?)`**
+Subscribes to an observable and returns a `SpyObserver<T>` for asserting emissions.
+```typescript
+const events$ = magic.observer(service.events$);
+// trigger something
+expect(events$.next).toHaveBeenCalledWith({ type: 'update' });
+expect(events$.observations).toEqual([{ type: 'update' }]);
+expect(events$.latest).toEqual({ type: 'update' });
+```
+---
+## SpyObserver\<T\>
+Returned by `magic.observer()`. Wraps an observable with Jasmine spies.
+| Member | Type | Description |
+|---|---|---|
+| `next` | `jasmine.Spy` | Called on each emission |
+| `error` | `jasmine.Spy` | Called on error |
+| `complete` | `jasmine.Spy` | Called on completion |
+| `observations` | `T[]` | Array of all emitted values |
+| `latest` | `T` | Most recently emitted value |
+---
+## Standalone Functions
+**`observe<T>(observable$, name?)`**
+Standalone alternative to `magic.observer()`. Use when you don't have (or need) an `NgMagicSetupTestBed` instance.
+```typescript
+import { observe } from '@peejay-solutions/ng-magic-test-bed';
+const spy = observe(myService.events$, 'events');
+expect(spy.next).toHaveBeenCalledWith(expectedValue);
+```
+**`mock<S>(spySource?, mock?, dontSpy?)`**
+Standalone alternative to `magic.objectMock()`. Creates a mock object from a class prototype without TestBed registration.
+```typescript
+import { mock } from '@peejay-solutions/ng-magic-test-bed';
+const myMock = mock(MyService, { getData: () => [] });
+// myMock has spies for all MyService methods; getData calls through to the provided fn
+```
+**`spyOnFunctionsOf(target, source?)`**
+Converts all methods of `target` into Jasmine spies in place. Inherited methods are overwritten on the object itself (not on the prototype) to avoid side effects. An optional `source` can add extra spies from another class's prototype.
+```typescript
+import { spyOnFunctionsOf } from '@peejay-solutions/ng-magic-test-bed';
+const instance = spyOnFunctionsOf(new MyService());
+instance.doSomething('x');
+expect(instance.doSomething).toHaveBeenCalledWith('x');
+// Use when creating non-TestBed instances that still need spy tracking
+const factoryMock = spyOnFunctionsOf(new MyFactory());
+const serviceMock = spyOnFunctionsOf(new MyHelperService());
+const sut = new MyService(factoryMock, serviceMock);
+```
+---
+## IFactory Interface
+Used by `factoryMock`. Any service with a `create(...args): I` method qualifies.
+```typescript
+interface IFactory<I> {
+  create(...args: any[]): I;
+}
+```

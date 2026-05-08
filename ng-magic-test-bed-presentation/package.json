@@ -13,7 +13,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "testLib": "ng run ng-magic-test-bed:test",
-    "buildLib": "ng run ng-magic-test-bed:build:production",
+    "copyLlms": "xcopy /s /y \".\\projects\\ng-magic-test-bed\\llms.txt\" \".\\dist\\ng-magic-test-bed\\\"",
+    "buildLib": "ng run ng-magic-test-bed:build:production && npm run copyLlms",
     "compodoc": "npx compodoc -p ./tsconfig.doc.json projects -d ../docs/"
   },
   "private": true,

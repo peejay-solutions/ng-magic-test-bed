@@ -11,12 +11,14 @@
   },
   "private": false,
   "license": "MIT",
-  "version": "1.2.7",
+  "version": "1.2.8",
   "peerDependencies": {
     "@angular/common": ">=7",
     "@angular/core": ">=7",
     "rxjs": ">=6"
   },
+  "files": ["dist", "./llms.txt"],
+  "llms": "./llms.txt",
   "dependencies": {
     "tslib": "^2.3.0"
   },
