@@ -7,7 +7,7 @@ import { SpyObserver } from './spy-observer.class';
  * @param observable
  * Observable you want to spy
  * @param name
- * Optional name that prefixes all jasmine spies that are created by the observer. This makes it easier to read the
+ * Optional name that prefixes all spies that are created by the observer. This makes it easier to read the
  * test output if anything fails.
  * @returns
  * observer that can be used to make assertions in your test cases e.g.:

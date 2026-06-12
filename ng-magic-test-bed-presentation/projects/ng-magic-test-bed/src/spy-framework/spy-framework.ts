@@ -1,5 +1,9 @@
 
-export function spyOnFunctionOf(target: any, key: string) {
+export type Spy = jasmine.Spy;
+export type SpyObj<T> = jasmine.SpyObj<T>;
+
+
+export function spyFunctionOf(target: any, key: string) {
     if (jasmine.isSpy(target[key])){
         return;
     }
@@ -8,3 +12,5 @@ export function spyOnFunctionOf(target: any, key: string) {
     }
     spyOn(target, key).and.callThrough();
 }
+
+

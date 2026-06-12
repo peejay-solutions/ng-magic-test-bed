@@ -1,4 +1,5 @@
 import { Observable } from 'rxjs';
+import { Spy } from '../spy-framework/spy-framework';
 
 
 /**
@@ -8,22 +9,22 @@ import { Observable } from 'rxjs';
 export class SpyObserver<T> {
     /**
      * @description
-     * jasmine spy that will be called when the observable emits a value.
+     * your test framework's spy that will be called when the observable emits a value.
      * Can be uses like this: expect(observer.next).toHaveBeenCalledWith(expectedValue);
      */
-    public readonly next: jasmine.Spy;
+    public readonly next: Spy;
      /**
      * @description
-     * jasmine spy that will be called when the observable throws an error
+     * your test framework's spy that will be called when the observable throws an error
      * Can be uses like this: expect(observer.next).toHaveBeenCalledWith(expectedError);
      */
-    public readonly error: jasmine.Spy;
+    public readonly error: Spy;
     /**
      * @description
-     * jasmine spy that will be called when the observable completes
+     * your test framework's spy that will be called when the observable completes
      * Can be uses like this: expect(observer.complete).toHaveBeenCalled();
      */
-    public readonly complete: jasmine.Spy;
+    public readonly complete: Spy;
     /**
      * @description
      * When the observable emits a value, it will be pushed onto this array.
@@ -40,7 +41,7 @@ export class SpyObserver<T> {
      * @param observable
      * The observable that you want to spy with this observer instance.
      * @param name
-     * Optional name that prefixes all jasmine spies that are created by the observer. This makes it easier to read the
+     * Optional name that prefixes all spies that are created by the observer. This makes it easier to read the
      * test output if anything fails.
      */
     constructor(observable: Observable<T>, name?: string) {
