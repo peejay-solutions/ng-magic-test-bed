@@ -1,4 +1,4 @@
-import { Component, Injectable, Output, Input, EventEmitter, OnInit } from '@angular/core';
+import { Component, Injectable, Output, Input, EventEmitter, OnInit, CUSTOM_ELEMENTS_SCHEMA, Directive, NO_ERRORS_SCHEMA, reflectComponentType } from '@angular/core';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { NgMagicSetupTestBed } from '../test-bed/ng-magic-setup-test-bed.class';
 import { By } from '@angular/platform-browser';
@@ -21,18 +21,31 @@ export class MyComponentService {
 @Component({
     selector: 'lib-button',
     template: '',
-    standalone: false
+    standalone: true
 })
 export class MyButtonComponent {
     @Input() public text?: string;
     @Output() public click = new EventEmitter();
 }
 
+export interface IHandler{
+    handle(): void;
+}
+
+@Directive({
+    selector: '[handler]',
+    standalone: true
+})
+export class MyHandlerDirective{
+    @Input() public handler?:  IHandler
+} 
+
 @Component({
     selector: 'lib-sample',
-    template: '@if (param>99) {<lib-button (click)="myService.doSomething()"></lib-button>}',
+    template: '@if (param>99) {<lib-button [handler]="handler" (click)="myService.doSomething()"></lib-button>}',
     providers: [MyComponentService],
-    standalone: false
+    imports: [MyButtonComponent, MyHandlerDirective],
+    standalone: true
 })
 export class SampleComponent implements OnInit {
 
@@ -41,6 +54,10 @@ export class SampleComponent implements OnInit {
     public value: number;
     constructor(public myService: MyService, private myComponentService: MyComponentService) {
         this.value = this.myComponentService.returnSomething();
+    }
+
+    public handler = {
+        handle: ()=> console.log('handle')
     }
 
     ngOnInit(): void {
@@ -52,7 +69,7 @@ export class SampleComponent implements OnInit {
 
 //################# Ng Magic Test Bed Test ####################################################################
 
-describe('component use case with NgMagicTestBed', () => {
+describe('standalone component use case with NgMagicTestBed', () => {
     function setup() {
         const magic = new NgMagicSetupTestBed();
         const foundButtonComponents = magic.componentMocks(MyButtonComponentMock);
@@ -72,12 +89,19 @@ describe('component use case with NgMagicTestBed', () => {
         buttonComponentMock.click.emit({ isEvent: true });
         expect(myServiceMock.doSomething).toHaveBeenCalled();
     });
+
+    it('directive test', ()=>{
+        const { fixture, buttonComponentMock, myComponentServiceMock, myServiceMock } = setup();
+        expect(reflectComponentType(MyHandlerDirective)?.isStandalone).toBe(undefined);
+        // expect(MyHandlerDirective)
+
+    })
 });
 
 @Component({
     selector: 'lib-button',
     template: '',
-    standalone: false
+    standalone: true
 })
 export class MyButtonComponentMock implements Partial<MyButtonComponent> {
     @Output() public click = new EventEmitter();
@@ -92,7 +116,7 @@ class MyServiceMock implements Partial<MyService> {
 
 //##### Standard Test Bed ##########################################################################################
 
-describe('component use case with standard TestBed', () => {
+describe('standalone component use case with standard TestBed', () => {
     let fixture: ComponentFixture<SampleComponent>;
     let myComponentServiceMock: MyComponentServiceMock2;
     let myServiceMock: MyServiceMock2;
@@ -100,16 +124,44 @@ describe('component use case with standard TestBed', () => {
 
     beforeEach(() => {
         myServiceMock = new MyServiceMock2();
+        TestBed.ngModule
         TestBed.configureTestingModule({
-            declarations: [SampleComponent, MyButtonComponentMock2],
-            providers: [{ provide: MyService, useValue: myServiceMock }]
+            imports: [SampleComponent, MyButtonComponentMock2],
+            schemas: [NO_ERRORS_SCHEMA],
+            providers: [{ provide: MyService, useValue: myServiceMock }],
+            errorOnUnknownProperties: false,
+            errorOnUnknownElements: false,
+            // declarations: [MyHandlerDirective]
         });
         myComponentServiceMock = new MyComponentServiceMock2();
+        // TestBed.overrideComponent(SampleComponent, {
+        //     add: {
+        //         providers: [{ provide: MyComponentService, useValue: myComponentServiceMock }],
+        //         imports: [MyButtonComponentMock2]
+        //     },
+        //     remove: {
+        //         imports: [MyButtonComponent]
+        //     }
+        // });
         TestBed.overrideComponent(SampleComponent, {
             add: {
-                providers: [{ provide: MyComponentService, useValue: myComponentServiceMock }]
+                providers: [{ provide: MyComponentService, useValue: myComponentServiceMock }],
             }
         });
+        TestBed.overrideComponent(SampleComponent, {
+            remove: {
+                imports: [MyButtonComponent]
+            },
+             add: {
+                imports: [MyButtonComponentMock2]
+            } 
+        });
+        //      TestBed.overrideComponent(SampleComponent, {
+        //      set: {
+        //           providers: [{ provide: MyComponentService, useValue: myComponentServiceMock }],
+        //         imports: [MyButtonComponentMock2]
+        //     } 
+        // });
         TestBed.compileComponents();
         fixture = TestBed.createComponent(SampleComponent);
         fixture.componentInstance.param = 100;
@@ -138,7 +190,7 @@ class MyServiceMock2 implements Partial<MyService> {
 @Component({
     selector: 'lib-button',
     template: '',
-    standalone: false
+    standalone: true
 })
 export class MyButtonComponentMock2 implements Partial<MyButtonComponent> {
     @Output() public click = new EventEmitter();

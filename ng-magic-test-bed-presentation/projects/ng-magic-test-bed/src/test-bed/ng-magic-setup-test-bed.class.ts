@@ -1,5 +1,5 @@
-import { TestBed, TestModuleMetadata, ComponentFixture, MetadataOverride, ComponentFixtureAutoDetect } from '@angular/core/testing';
-import { SchemaMetadata, Type, AbstractType, Component, NO_ERRORS_SCHEMA } from '@angular/core';
+import { TestBed, TestModuleMetadata, ComponentFixture } from '@angular/core/testing';
+import { SchemaMetadata, Type, AbstractType, NO_ERRORS_SCHEMA, isStandalone } from '@angular/core';
 import { spyOnFunctionsOf } from '../spy-on-functions/spy-on-functions-of.function';
 import { SpyObj } from '../spy-framework/spy-framework';
 import { Observable } from 'rxjs';
@@ -56,6 +56,11 @@ export class NgMagicTestBed {
     * @ignore
     */
     private fixtureInstance?: ComponentFixture<any> = undefined;
+    
+    /**
+    * @ignore
+    */
+    private fixtureImports: Array<Type<any>> = [];
 
     /**
     * @param initialConfig  initial config which will be extended by the other methods of this NgMagicSetupTestBed instance.
@@ -297,8 +302,11 @@ export class NgMagicTestBed {
         if (!dontSpy) {
             spyOnFunctionsOf(mock, spySource ? spySource.prototype : undefined);
         }
-        if (!this.config.declarations.includes(uiThingClass)) {
+        if (!this.config.declarations.includes(uiThingClass) && !isStandalone(uiThingClass)) {
             this.config.declarations.push(uiThingClass);
+        }
+        if(isStandalone(uiThingClass) && !this.config.imports.includes(uiThingClass)){
+            this.config.imports.push(uiThingClass);
         }
         this.postConfigureJobs.push(() => {
             (TestBed as any)[methodName](uiThingClass, {
@@ -311,25 +319,79 @@ export class NgMagicTestBed {
         });
         return mock;
     }
+    
 
+    /**
+    *  declare that you want to mock a directive for a selector and retrieve all created component mock instances after fixture
+    * creation.
+    * @param directiveClass class of the directive that should be used in the fixture for a specific selector you want to mock.
+    * @returns an array of all component instances that were found statically inside the fixture. The array's members can only be
+    * used after calling .fixture(). Before that time the array is initialized like this:
+    * ['this array can only be used after fixture() was called'].
+    */
     public directiveMocks<C>(directiveClass: Type<C>): Array<C> {
         return this.componentMocks(directiveClass);
+    }
+
+    /**
+     * declare that you want to mock a pipe for a selector.
+     * @param pipeClass class of the pipe that should be used in the fixture for a specific pipe selector that you want to mock.
+     */
+    public pipeMock<C>(pipeClass: Type<C>){
+        if (isStandalone(pipeClass)){
+            this.fixtureImports.push(pipeClass)
+            this.config.imports.push(pipeClass);
+        }else{
+            this.config.declarations.push(pipeClass);
+        }
+    }
+
+    /**
+     * declare that you want to keep a pipe for a selector.
+     * @param pipeClass class of the pipe that you want to keep to use it in your fixture.
+     */
+    public keptPipe<C>(pipeClass: Type<C>){
+        this.pipeMock(pipeClass);
+    }
+
+ //TODO Documentation
+    public keptDirectives<C>(directiveClass: Type<C>): Array<C> {
+        return this.directiveMocks(directiveClass);
+    }
+
+ //TODO Documentation
+    public keptComponents<C>(componentClass: Type<C>): Array<C> {
+        const instances =  this.componentMocks(componentClass);
+        this.postConfigureJobs.push(()=> {
+            TestBed.overrideComponent(componentClass, {
+                set: {
+                    imports: this.fixtureImports
+                }
+            });
+        });
+        return instances;
     }
 
     /**
     *  declare that you want to mock a component for a selector and retrieve all created component mock instances after fixture
     * creation.
     * @param componentClass class of the component that should be used in the fixture for a specific selector you want to mock.
-    * @returns an arry of all component instances that were found statically inside the fixture. The array's members can only be
+    * @returns an array of all component instances that were found statically inside the fixture. The array's members can only be
     * used after calling .fixture(). Before that time the array is initialized like this:
-    * ['this array can only be used after fixture called'].
+    * ['this array can only be used after fixture() was called'].
     */
     public componentMocks<C>(componentClass: Type<C>): Array<C> {
-        const result: Array<any> = ['this array can only be used after fixture called'];
+        const result: Array<any> = ['this array can only be used after fixture() was called'];
         this.expectToBePreConfiguration();
-        if (!this.config.declarations.includes(componentClass)) {
+        if (!isStandalone(componentClass) && !this.config.declarations.includes(componentClass) ) {
             this.config.declarations.push(componentClass);
         }
+
+        if (isStandalone(componentClass) && !this.config.imports.includes(componentClass)){
+            this.config.imports.push(componentClass);
+            this.fixtureImports.push(componentClass);
+        }
+
         this.fixtureJobs.push(() => {
             result.length = 0;
             const componentDebugElements = this.fixtureInstance?.debugElement.queryAll(By.directive(componentClass));
@@ -352,17 +414,30 @@ export class NgMagicTestBed {
         if (!this.config.declarations.includes(componentClass) && this.configured) {
             throw new Error('Declaration of component needs to be done before you can create the fixture');
         }
-        if (!this.config.declarations.includes(componentClass) && !this.configured) {
+        
+        if (isStandalone(componentClass) && !this.configured){
+            this.config.imports.push(componentClass);
+        }
+        if (!isStandalone(componentClass) && !this.config.declarations.includes(componentClass) && !this.configured) {
             this.config.declarations.push(componentClass);
         }
+        
         if (!disableNoErrorSchema && !this.config.schemas.includes(NO_ERRORS_SCHEMA)) {
             this.config.schemas.push(NO_ERRORS_SCHEMA);
         }
         if (!this.configured) {
             this.configureTestingModule();
         }
+        if (isStandalone(componentClass)){
+           TestBed.overrideComponent(componentClass, {
+                set: {
+                    imports: this.fixtureImports
+                }
+           })
+        }
         if (!this.compiled) {
             this.compiled = true;
+            //TODO: This seems to be declared as async but it in reality it does not seems to be.
             TestBed.compileComponents();
         }
         this.fixtureInstance = TestBed.createComponent(componentClass);
