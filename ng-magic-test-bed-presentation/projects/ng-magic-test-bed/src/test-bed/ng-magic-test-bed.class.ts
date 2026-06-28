@@ -1,11 +1,12 @@
 import { TestBed, TestModuleMetadata, ComponentFixture } from '@angular/core/testing';
-import { SchemaMetadata, Type, AbstractType } from '@angular/core';
+import { SchemaMetadata, Type, AbstractType, reflectComponentType } from '@angular/core';
 import { SpyObj } from '../spy-framework/spy-framework';
 import { Observable } from 'rxjs';
 import { observe } from '../observe/observe.function';
 import { SpyObserver } from '../observe/spy-observer.class';
 import { TestBedConfigurator } from './test-bed-configurator.class';
 import { IFactory } from './i-factory.interface';
+import { mockComponent } from '../public-api';
 
 export class NgMagicTestBed {
 
@@ -217,7 +218,7 @@ export class NgMagicTestBed {
     * ['this array can only be used after fixture() was called'].
     */
     public directiveMocks<C>(directiveClass: Type<C>): Array<C> {
-        return this.configurator.componentMocks(directiveClass);
+        return this.configurator.useInFixtureAndQueryInstances(directiveClass);
     }
 
     /**
@@ -225,8 +226,9 @@ export class NgMagicTestBed {
      * @param pipeClass class of the pipe that should be used in the fixture for a specific pipe selector that you want to mock.
      */
     public pipeMock<C>(pipeClass: Type<C>){
-        //TODO: maybe there is some more we can do to pipes to make it easier to mock or spy them
+        //TODO: maybe there is some more we can do to pipes to make it easier to mock or spy them.
         this.configurator.addToImportsOrDeclarations(pipeClass);
+        reflectComponentType(pipeClass)?.inputs
     }
 
     /**
@@ -247,6 +249,7 @@ export class NgMagicTestBed {
         return this.configurator.keptComponents(componentClass);
     }
 
+    //TODO: Update docs to indicate that this method now creates mocks from originals
     /**
     *  declare that you want to mock a component for a selector and retrieve all created component mock instances after fixture
     * creation.
@@ -256,7 +259,8 @@ export class NgMagicTestBed {
     * ['this array can only be used after fixture() was called'].
     */
     public componentMocks<C>(componentClass: Type<C>): Array<C> {
-        return this.configurator.componentMocks(componentClass);
+        const componentMock = mockComponent(componentClass);
+        return this.configurator.useInFixtureAndQueryInstances(componentMock);
     }
 
     /**

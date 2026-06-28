@@ -87,24 +87,24 @@ export class TestBedConfigurator {
                 '"injection" or "fixture" the method you called needs a not configured TestBed to be executed');
         }
     }
-        public declarations(declarations: Array<any>) {
+    public declarations(declarations: Array<any>) {
         this.expectToBePreConfiguration();
         this.config.declarations.push(...declarations);
     }
 
 
-        public schemas(schemas: Array<SchemaMetadata | any[]>) {
+    public schemas(schemas: Array<SchemaMetadata | any[]>) {
         this.expectToBePreConfiguration();
         this.config.schemas.push(...schemas);
     }
 
 
-        public imports(imports: any[]) {
+    public imports(imports: any[]) {
         this.expectToBePreConfiguration();
         this.config.imports.push(...imports);
     }
 
-        public providers(providers: any[]) {
+    public providers(providers: any[]) {
         this.expectToBePreConfiguration();
         this.config.providers.push(...providers);
     }
@@ -153,34 +153,34 @@ export class TestBedConfigurator {
     }
 
     public keptComponents<C>(componentClass: Type<C>): Array<C> {
-        const instances = this.componentMocks(componentClass);
-         this.overrideImportsIfStandalone(componentClass);
+        const instances = this.useInFixtureAndQueryInstances(componentClass);
+        this.overrideImportsIfStandalone(componentClass);
         return instances;
     }
 
-    public overrideImportsIfStandalone(componentClass: Type<any>){
+    public overrideImportsIfStandalone(componentClass: Type<any>) {
         if (!isStandalone(componentClass)) {
             return;
         }
         if (!this.configured) {
-         this.postConfigureJobs.push(() => {
+            this.postConfigureJobs.push(() => {
+                TestBed.overrideComponent(componentClass, {
+                    set: {
+                        imports: this.fixtureImports
+                    }
+                });
+            });
+        } else {
             TestBed.overrideComponent(componentClass, {
                 set: {
                     imports: this.fixtureImports
                 }
             });
-        });
-        }else{
-              TestBed.overrideComponent(componentClass, {
-                set: {
-                    imports: this.fixtureImports
-                }
-            });
         }
-       
+
     }
 
-    public componentMocks<C>(componentClass: Type<C>): Array<C> {
+    public useInFixtureAndQueryInstances<C>(componentClass: Type<C>): Array<C> {
         const result: Array<any> = ['this array can only be used after fixture() was called'];
         this.expectToBePreConfiguration();
 
