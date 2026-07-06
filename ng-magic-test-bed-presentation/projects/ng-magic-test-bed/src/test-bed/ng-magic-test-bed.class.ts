@@ -1,6 +1,6 @@
 import { TestBed, TestModuleMetadata, ComponentFixture } from '@angular/core/testing';
-import { SchemaMetadata, Type, AbstractType, reflectComponentType } from '@angular/core';
-import { SpyObj } from '../spy-framework/spy-framework';
+import { SchemaMetadata, Type, AbstractType, reflectComponentType, Pipe } from '@angular/core';
+import { createSpy, Spy, SpyObj } from '../spy-framework/spy-framework';
 import { Observable } from 'rxjs';
 import { observe } from '../observe/observe.function';
 import { SpyObserver } from '../observe/spy-observer.class';
@@ -212,6 +212,8 @@ export class NgMagicTestBed {
     /**
     *  declare that you want to mock a directive for a selector and retrieve all created component mock instances after fixture
     * creation.
+    * Note that this method behaves different to directiveMocks. This is because Angular is missing a public reflectDirectiveType method. 
+    * This method will be made smarter as soon as such a method is available.
     * @param directiveClass class of the directive that should be used in the fixture for a specific selector you want to mock.
     * @returns an array of all component instances that were found statically inside the fixture. The array's members can only be
     * used after calling .fixture(). Before that time the array is initialized like this:
@@ -223,37 +225,54 @@ export class NgMagicTestBed {
 
     /**
      * declare that you want to mock a pipe for a selector.
-     * @param pipeClass class of the pipe that should be used in the fixture for a specific pipe selector that you want to mock.
+     * @param pipeClass class of the pipe that should be used in the fixture and all other kept components for a specific pipe selector that you want to mock.
      */
-    public pipeMock<C>(pipeClass: Type<C>){
-        //TODO: maybe there is some more we can do to pipes to make it easier to mock or spy them.
-        this.configurator.addToImportsOrDeclarations(pipeClass);
-        reflectComponentType(pipeClass)?.inputs
+    public pipeMock<C>(pipeName: string, transform?: (value: any)=> any): Spy{
+        if (!pipeName){
+            throw new Error('pipeName has to be defined');
+        }
+        const defaultTransform = (transformValue: any) => transformValue;
+        const spy = createSpy('transform', transform ?? defaultTransform);
+        const PipeMock = class { transform(value: any){
+            return spy();
+        }}
+        Pipe({name: pipeName, standalone: true})(PipeMock) 
+        this.configurator.addToImportsOrDeclarations(PipeMock);
+        return spy;
     }
 
     /**
      * declare that you want to keep a pipe for a selector.
-     * @param pipeClass class of the pipe that you want to keep to use it in your fixture.
+     * @param pipeClass class of the pipe that you want to keep to use it in your fixture and all kept components.
      */
     public keptPipe<C>(pipeClass: Type<C>){
-        this.pipeMock(pipeClass);
+        this.configurator.addToImportsOrDeclarations(pipeClass);
     }
 
- //TODO Documentation
+    /**
+     * Declare that you want to keep a certain directive. This kept directive will be added to the imports of your fixture component and all kept components.
+     * @param directiveClass 
+     * @returns 
+     */
     public keptDirectives<C>(directiveClass: Type<C>): Array<C> {
         return this.directiveMocks(directiveClass);
     }
 
- //TODO Documentation
+    /**
+     * Declare that you want to keep a certain component. This kept component will be added to the imports of your fixture component and all other kept components.
+     * @param componentClass 
+     * @returns an array of all component instances that were found statically inside the fixture. The array's members can only be
+    * used after calling .fixture(). Before that time the array is initialized like this:
+    * ['this array can only be used after fixture() was called'].
+     */
     public keptComponents<C>(componentClass: Type<C>): Array<C> {
         return this.configurator.keptComponents(componentClass);
     }
 
-    //TODO: Update docs to indicate that this method now creates mocks from originals
     /**
-    *  declare that you want to mock a component for a selector and retrieve all created component mock instances after fixture
+    * declare that you want to generically mock all inputs and outputs of a component and retrieve all created component mock instances after fixture
     * creation.
-    * @param componentClass class of the component that should be used in the fixture for a specific selector you want to mock.
+    * @param componentClass class of the component that should be mocked in the fixture.
     * @returns an array of all component instances that were found statically inside the fixture. The array's members can only be
     * used after calling .fixture(). Before that time the array is initialized like this:
     * ['this array can only be used after fixture() was called'].

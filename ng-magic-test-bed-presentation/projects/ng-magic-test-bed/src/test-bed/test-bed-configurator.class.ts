@@ -2,9 +2,6 @@ import { TestBed, TestModuleMetadata, ComponentFixture } from '@angular/core/tes
 import { SchemaMetadata, Type, AbstractType, NO_ERRORS_SCHEMA, isStandalone } from '@angular/core';
 import { spyOnFunctionsOf } from '../spy-on-functions/spy-on-functions-of.function';
 import { SpyObj } from '../spy-framework/spy-framework';
-import { Observable } from 'rxjs';
-import { observe } from '../observe/observe.function';
-import { SpyObserver } from '../observe/spy-observer.class';
 import { By } from '@angular/platform-browser';
 import { FullTestModuleMetadata } from './full-test-module-meta-data.interface';
 

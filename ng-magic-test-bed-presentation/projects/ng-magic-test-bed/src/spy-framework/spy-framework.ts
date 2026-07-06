@@ -13,4 +13,12 @@ export function spyFunctionOf(target: any, key: string) {
     spyOn(target, key).and.callThrough();
 }
 
+export function createSpy(name: string, callback?:(...ary: Array<any)=> any): Spy{
+    const spy = jasmine.createSpy(name);
+    if (callback){
+        spy.and.callFake(callback);
+    }
+    return spy;
+}
+
 
