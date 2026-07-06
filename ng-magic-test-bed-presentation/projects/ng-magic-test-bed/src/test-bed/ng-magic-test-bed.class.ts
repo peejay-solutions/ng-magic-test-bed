@@ -234,7 +234,7 @@ export class NgMagicTestBed {
         const defaultTransform = (transformValue: any) => transformValue;
         const spy = createSpy('transform', transform ?? defaultTransform);
         const PipeMock = class { transform(value: any){
-            return spy();
+            return spy(value);
         }}
         Pipe({name: pipeName, standalone: true})(PipeMock) 
         this.configurator.addToImportsOrDeclarations(PipeMock);

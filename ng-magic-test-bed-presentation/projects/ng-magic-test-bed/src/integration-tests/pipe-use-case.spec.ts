@@ -34,22 +34,60 @@ class ParentComponent {
 
 
 
-describe('Pipe use case', () => {
+describe('Pipe use case with custom spy', () => {
 
     function setup() {
         const magic = new NgMagicTestBed();
         const childComponents = magic.componentMocks(ChildComponent);
-        magic.pipeMock(DoubleUpPipe);
+        const pipeSpy =  magic.pipeMock('doubleUp', ()=> 42);
+        const fixture = magic.fixture(ParentComponent);
+        const childComponent = childComponents[0];
+        return { fixture , childComponent, pipeSpy};
+    }
+
+    it('should use custom spy and return 42', () => {
+        const { childComponent, pipeSpy } = setup();
+
+        expect(pipeSpy).toHaveBeenCalledWith(200)
+        expect(childComponent.value).toEqual(42);
+
+    });
+});
+
+
+describe('Pipe use case with default spy', () => {
+
+    function setup() {
+        const magic = new NgMagicTestBed();
+        const childComponents = magic.componentMocks(ChildComponent);
+        const pipeSpy =  magic.pipeMock('doubleUp');
+        const fixture = magic.fixture(ParentComponent);
+        const childComponent = childComponents[0];
+        return { fixture , childComponent, pipeSpy};
+    }
+
+    it('should use default spy and return the same value that was put in', () => {
+        const { childComponent, pipeSpy } = setup();
+        expect(pipeSpy).toHaveBeenCalledWith(200)
+        expect(childComponent.value).toEqual(200);
+    });
+});
+
+
+
+describe('Pipe use case with kept pipe as it is', () => {
+
+    function setup() {
+        const magic = new NgMagicTestBed();
+        const childComponents = magic.componentMocks(ChildComponent);
+        magic.keptPipe(DoubleUpPipe);
         const fixture = magic.fixture(ParentComponent);
         const childComponent = childComponents[0];
         return { fixture , childComponent};
     }
 
-    it('asdas', () => {
-        const { fixture, childComponent } = setup();
-
-
-        expect(childComponent.value).toEqual(400)
-
+    it('should use the kept pipe and therefore return doubled value', () => {
+        const { childComponent } = setup();
+        expect(childComponent.value).toEqual(400);
     });
 });
