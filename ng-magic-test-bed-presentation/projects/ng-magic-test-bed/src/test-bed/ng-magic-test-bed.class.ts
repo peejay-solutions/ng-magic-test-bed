@@ -1,6 +1,6 @@
 import { TestBed, TestModuleMetadata, ComponentFixture } from '@angular/core/testing';
-import { SchemaMetadata, Type, AbstractType, reflectComponentType, Pipe } from '@angular/core';
-import { createSpy, Spy, SpyObj } from '../spy-framework/spy-framework';
+import { SchemaMetadata, Type, AbstractType, Pipe } from '@angular/core';
+import { createSpy, Func, Spy, SpyObj } from '../spy-framework/spy-framework';
 import { Observable } from 'rxjs';
 import { observe } from '../observe/observe.function';
 import { SpyObserver } from '../observe/spy-observer.class';
@@ -8,7 +8,8 @@ import { TestBedConfigurator } from './test-bed-configurator.class';
 import { IFactory } from './i-factory.interface';
 import { mockComponent } from '../public-api';
 
-export class NgMagicTestBed {
+
+export class NgMagicTestBed  {
 
     /**
     * @ignore
@@ -313,7 +314,7 @@ export class NgMagicTestBed {
     }
 
     /**
-     *  mocks a provider for a given token with a given mock. If wanted your mock can be extended by spies
+     * mocks a provider for a given token with a given mock. If wanted your mock can be extended by spies
      * from a given spySource class.
      * @param token token for provider provision
      * @param mock mock that will be registered for the token
@@ -324,6 +325,18 @@ export class NgMagicTestBed {
      */
     public providerMock<M>(token: any, mock: Partial<M>, dontSpy: boolean = false, spySource?: AbstractType<any>) {
         return this.configurator.mock(token, mock, dontSpy, spySource);
+    }
+
+
+    /**
+     * replaces a function that is provided with an angular provider token with a spy
+     * @param token token that is used to provide a function
+     * @param callback optional parameter to define default behavior for the mocked provider function
+     * @returns spy on the mocked provider function
+     */
+    public providerFunctionMock<F extends Func = ()=>{}>(token: any, callback?: (...args: Array<any>)=> any): Spy<F> {
+        const spy = createSpy(token.name, callback);
+        return this.providerMock(token, spy, true);
     }
 
     /**

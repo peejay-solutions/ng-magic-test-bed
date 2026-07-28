@@ -1,7 +1,7 @@
 
-export type Spy = jasmine.Spy;
+export type Func = (...args: any[]) => any;
+export type Spy<F  extends Func = Func> = jasmine.Spy<F>;
 export type SpyObj<T> = jasmine.SpyObj<T>;
-
 
 export function spyFunctionOf(target: any, key: string) {
     if (jasmine.isSpy(target[key])){
