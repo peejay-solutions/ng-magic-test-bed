@@ -1,5 +1,3 @@
-
- 
 # ng-magic-test-bed
 > Streamlined Angular unit test setup utility. Replaces verbose `TestBed.configureTestingModule` boilerplate with a fluent, type-safe API. Uses Jasmine spies automatically. Automatically extends all mocks with all methods of the class to be mocked.
 Docs: https://peejay-solutions.github.io/ng-magic-test-bed/
@@ -13,18 +11,30 @@ import { NgMagicSetupTestBed } from '@peejay-solutions/ng-magic-test-bed';
 describe('MyService', () => {
   function setup() {
     const magic = new NgMagicSetupTestBed();
-    const depMock = magic.serviceMock(DependencyService);
+    const dependencyServiceMock = magic.serviceMock(DependencyService);
     const service = magic.injection(MyService);
-    return { service, depMock };
+    return { service, dependencyServiceMock };
   }
   it('should do X when Y', () => {
-    const { service, depMock } = setup();
-    depMock.someMethod.and.returnValue('value');
+    const { service, dependencyServiceMock } = setup();
+    dependencyServiceMock.someMethod.and.returnValue('value');
     expect(service.doSomething()).toBe('expected');
   });
 });
 ```
 `magic.injection()` triggers TestBed configuration — call it after all mocks are set up.
+---
+## Choosing the Right Method
+Before reading the full API, use this decision tree to pick the correct mock method:
+| Situation | Method | Why |
+|---|---|---|
+| Class is `@Injectable` and registered in DI | `serviceMock(Class, mock?)` | Registers mock in TestBed as provider |
+| Class is created by a factory via `new` (not in DI) | `objectMock(Class, mock)` | Creates mock without TestBed registration; auto-spies from prototype |
+| Factory class with `create()` method | `factoryMock(FactoryClass, [instances])` | Registers factory in DI; `create()` returns instances sequentially |
+| Provider registered via injection token | `providerMock(token, mock)` | Registers mock for a non-class token |
+| Service provided at component level | `componentServiceMock(CompClass, SvcClass, mock?)` | Overrides component-level provider |
+| Need to assert observable emissions | `observer(observable$)` | Subscribes and tracks all emissions with spies |
+| Need the real service instance from DI | `injection(Class)` | Resolves from TestBed; triggers configuration |
 ---
 ## NgMagicSetupTestBed API
 ### Module Setup (call before injection)
@@ -36,7 +46,7 @@ describe('MyService', () => {
 | `schema(s)` / `schemas(ss)` | Add schema (`NO_ERRORS_SCHEMA` included by default) |
 ### Mocking
 **`serviceMock<S>(serviceClass, mock?, dontSpy?)`**
-Creates and registers a mock for a service. All methods from serviceClass will be added to mock. All methods are auto-spied.
+Creates and registers a mock for a service. All methods from serviceClass prototype are auto-spied on the mock. Returns `jasmine.SpyObj<S> & M` — a spy object with all prototype methods as spies, plus your mock properties.
 ```typescript
 // Auto-generated spy mock (no custom mock needed)
 const myServiceMock = magic.serviceMock(MyService);
@@ -46,15 +56,34 @@ const myServiceMock = magic.serviceMock(MyService, new MyServiceMock());
 ```
 **`providerMock<M>(token, mock, dontSpy?, spySource?)`**
 Mocks an injection token.
+**`providerFunctionMock<F>(token, callback?)`**
+Replaces a function provided with an Angular provider token with a spy. An optional `callback` parameter defines default behavior for the mocked provider function. Returns `Spy<F>` on the mocked provider function.
+```typescript
+const myFunctionMock = magic.providerFunctionMock(MY_FUNCTION_TOKEN, () => {}); 
+expect(myFunctionMock).toHaveBeenCalled();
+```
 **`objectMock<O>(objectClass, mock, dontSpy?)`**
-Creates a mock object without TestBed registration (for manual use).
+Creates a mock object **without** TestBed registration. Use this for instances that are not in the DI container — typically objects created by factories. All methods from objectClass prototype are auto-spied. Returns `jasmine.SpyObj<O> & M`.
+```typescript
+const widgetMock = magic.objectMock(Widget, {
+    id: 'mock-id',
+    dataSource: { itemCreated: null } as any
+});
+// widgetMock has spies for ALL Widget prototype methods
+// plus the properties you provided
+```
 **`factoryMock<I, F>(factoryClass, instances)`**
-Mocks a factory service whose `create()` method returns sequential instances from the provided array.
+Mocks a factory service in TestBed. The `create()` method returns sequential instances from the provided array. Returns `jasmine.SpyObj<Partial<F>>` — **use this return value directly**, do not fetch the factory via `injection()`.
 ```typescript
 const instance1 = { value: 'a' };
 const instance2 = { value: 'b' };
 magic.factoryMock(MyFactory, [instance1, instance2]);
 // first call to factory.create() returns instance1, second returns instance2
+// For instance mocks:
+const instanceMock = magic.objectMock(MyApp, { id: 'test' });
+const factoryMock = magic.factoryMock(MyAppFactory, [instanceMock]);
+// factoryMock.create is a jasmine.Spy — use .calls to inspect:
+const callArgs = factoryMock.create.calls.mostRecent().args[0];
 ```
 **`componentServiceMock<S>(componentClass, serviceClass, mock?, dontSpy?)`**
 Mocks a service provided at the component level (not root).
@@ -70,7 +99,8 @@ Mocks an injection token provided by a specific directive.
 Mocks an injection token provided by a specific pipe.
 ### Injection & Fixtures
 **`injection<S>(token)`**
-Resolves a service/class from DI. Triggers TestBed compilation — call after all mocks are registered.
+Resolves a service/class from DI. Triggers TestBed compilation — call after all mocks are registered. Returns the real service type `S`.
+Note: For factories mocked via `factoryMock()`, use the `factoryMock` return value (which is already a `SpyObj`) instead of calling `injection()`.
 ```typescript
 const service = magic.injection(MyService);
 ```
@@ -99,7 +129,7 @@ it('should render with input', () => {
 });
 ```
 **`componentMocks<C>(componentClass)`**
-Declares `componentClass` as a mock component for a selector and returns an array that will be populated with all rendered mock instances **after** `fixture()` is called. Must be called before `fixture()`.
+Reads inputs and outputs of `componentClass` and registeres a mock component in imports or declarations and returns an array that will be populated with all rendered mock instances **after** `fixture()` is called. Must be called before `fixture()`.
 ```typescript
 // Define a mock component matching the selector you want to stub
 @Component({ selector: 'lib-button', template: '' })
@@ -157,6 +187,20 @@ Returned by `magic.observer()`. Wraps an observable with Jasmine spies.
 | `complete` | `jasmine.Spy` | Called on completion |
 | `observations` | `T[]` | Array of all emitted values |
 | `latest` | `T` | Most recently emitted value |
+---
+## Common Anti-Patterns
+### Do not use `injection()` for your mocks because then you need to cast back to SpyObj<T> or to the Mock class
+### Do not create manual spies
+`objectMock` and `serviceMock` auto-spy all prototype methods. Manual `jasmine.createSpy()` is unnecessary.
+```typescript
+// Bad
+const mock = { doWork: jasmine.createSpy('doWork') };
+// Good
+const mock = magic.objectMock(MyClass, {});
+mock.doWork.and.returnValue('result');
+```
+### Do not mock methods the test doesn't use
+Only provide a property in the mock when you need a specific return value. Auto-spied methods return `undefined` by default, which is sufficient for unused code paths.
 ---
 ## Standalone Functions
 **`observe<T>(observable$, name?)`**
