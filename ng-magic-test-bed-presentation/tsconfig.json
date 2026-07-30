@@ -15,6 +15,9 @@
     "paths": {
       "ng-magic-test-bed": [
         "dist/ng-magic-test-bed"
+      ],
+      "ng-magic-test-bed-4-vitest": [
+        "./dist/ng-magic-test-bed-4-vitest"
       ]
     },
     "declaration": false,
@@ -30,5 +33,13 @@
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
-  }
+  },
+  "references": [
+    {
+      "path": "./projects/ng-magic-test-bed-4-vitest/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/ng-magic-test-bed-4-vitest/tsconfig.spec.json"
+    }
+  ]
 }
