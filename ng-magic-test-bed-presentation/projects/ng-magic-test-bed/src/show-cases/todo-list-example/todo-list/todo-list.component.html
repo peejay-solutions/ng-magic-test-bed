@@ -1,0 +1,7 @@
+<ul *ngIf ="todoService.todos$ | async as todos">
+  <app-todo-item
+    *ngFor="let todo of todos"
+    [todo]="todo"
+    (toggle)="onToggle($event)"
+  ></app-todo-item>
+</ul>

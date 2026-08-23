@@ -44,6 +44,42 @@ Before reading the full API, use this decision tree to pick the correct mock met
 | `import(m)` / `imports(ms)` | Add module to imports |
 | `provider(p)` / `providers(ps)` | Add provider |
 | `schema(s)` / `schemas(ss)` | Add schema (`NO_ERRORS_SCHEMA` included by default) |
+| `keptPipe(c)` | Keep a single pipe as its REAL implementation |
+| `keptDirectives(c)` | Keep a directive as its REAL implementation, returns rendered instances |
+| `keptComponents(c)` | Keep a child component as its REAL implementation, returns rendered instances |
+| `keptComponentImports(cs)` | Keep several pipes/directives/standalone components as their REAL implementation, in one call |
+### Keeping template dependencies real
+**`keptPipe<C>(pipeClass)`**
+Keeps a single pipe as its real implementation (not spied) - it gets added to the fixture component's imports and runs its actual `transform()` logic. Use this when you want to assert on rendered output rather than on whether the pipe was called.
+```typescript
+magic.keptPipe(CurrencyPipe);
+const fixture = magic.fixture(MyComponent);
+expect(fixture.nativeElement.textContent).toContain('$42.00'); // the real pipe ran
+```
+**`keptDirectives<C>(directiveClass): Array<C>`**
+Keeps a directive as its real implementation and returns an array of every instance found in the fixture (usable only after `fixture()` is called - before that it's a placeholder array). Useful when you want the directive's real behavior but still want to inspect its inputs/state on the rendered instance(s).
+```typescript
+const tooltipDirectives = magic.keptDirectives(TooltipDirective);
+const fixture = magic.fixture(MyComponent);
+expect(tooltipDirectives[0].text).toBe('Hello');
+```
+**`keptComponents<C>(componentClass): Array<C>`**
+Same as `keptDirectives()`, but for a child component: keeps its real implementation (real template, real logic) and returns every rendered instance found in the fixture.
+```typescript
+const cards = magic.keptComponents(CardComponent);
+const fixture = magic.fixture(MyListComponent);
+expect(cards.length).toBe(3);
+```
+**`keptComponentImports(cs: Array<Type<any>>)`**
+`fixture()` always replaces a standalone root component's `imports` array with only what was explicitly registered through this test bed. Any structural directive or pipe the template relies on (`NgIf`, `NgFor`, `AsyncPipe`, ...) that you don't explicitly keep will silently stop working — no error, the content driven by it just never renders. `keptComponentImports()` keeps several of them as their real implementation in one call, instead of registering each one individually.
+```typescript
+// Template: <span *ngIf="value$ | async as value">{{ value }}</span>
+const magic = new NgMagicSetupTestBed();
+magic.keptComponentImports([NgIf, AsyncPipe]);
+const fixture = magic.fixture(MyComponent);
+// without the line above, *ngIf's content would never render, even
+// though MyComponent's own template correctly imports NgIf/AsyncPipe
+```
 ### Mocking
 **`serviceMock<S>(serviceClass, mock?, dontSpy?)`**
 Creates and registers a mock for a service. All methods from serviceClass prototype are auto-spied on the mock. Returns `jasmine.SpyObj<S> & M` — a spy object with all prototype methods as spies, plus your mock properties.
@@ -89,14 +125,10 @@ const callArgs = factoryMock.create.calls.mostRecent().args[0];
 Mocks a service provided at the component level (not root).
 **`directiveServiceMock<S>(directiveClass, serviceClass, mock?, dontSpy?)`**
 Mocks a service provided at the directive level.
-**`pipeServiceMock<S>(pipeClass, serviceClass, mock?, dontSpy?)`**
-Mocks a service provided at the pipe level.
 **`componentProviderMock<M>(componentClass, token, mock, dontSpy?)`**
 Mocks an injection token provided by a specific component.
 **`directiveProviderMock<M>(directiveClass, token, mock, dontSpy?)`**
 Mocks an injection token provided by a specific directive.
-**`pipeProviderMock<M>(pipeClass, token, mock, dontSpy?)`**
-Mocks an injection token provided by a specific pipe.
 ### Injection & Fixtures
 **`injection<S>(token)`**
 Resolves a service/class from DI. Triggers TestBed compilation — call after all mocks are registered. Returns the real service type `S`.
@@ -106,14 +138,15 @@ const service = magic.injection(MyService);
 ```
 **`fixture<C>(componentClass, initialInputs?, disableNoErrorSchema?)`**
 Creates a `ComponentFixture<C>`. **May only be called once per `NgMagicSetupTestBed` instance.**
-- `initialInputs` — a `Partial<C>` object whose properties are applied to `componentInstance` **before** the first `detectChanges()`. This is the correct way to set `@Input()` values that are required in `ngOnInit`.
+- `initialInputs` — an object whose properties are applied via `componentRef.setInput()` **before** the first `detectChanges()`. This is the correct way to set `@Input()` values that are required in `ngOnInit`. Works for both classic `@Input()`-decorated properties and signal-based `input()` properties — for a signal input with a `transform`, pass the transform's input type (the same value a template binding would pass); it gets transformed the same way a real binding would.
 - `disableNoErrorSchema` — by default `NO_ERRORS_SCHEMA` is added so unknown child elements/inputs are silently ignored. Pass `true` to disable this and get strict template checking.
 - Returns a standard Angular `ComponentFixture<C>` (same as `TestBed.createComponent()`).
 - Call after all mocks and `componentMocks`/`directiveMocks` are registered.
 ```typescript
-// Basic fixture with initial inputs
+// Basic fixture with initial inputs - works for @Input() label/count and for
+// signal inputs label = input('') / count = input(0) alike
 const fixture = magic.fixture(MyComponent, { label: 'test', count: 42 });
-expect(fixture.componentInstance.label).toBe('test');
+expect(fixture.componentInstance.label).toBe('test'); // or .label() for a signal input
 // Full component test pattern
 function setup() {
   const magic = new NgMagicSetupTestBed();
@@ -176,6 +209,15 @@ const events$ = magic.observer(service.events$);
 expect(events$.next).toHaveBeenCalledWith({ type: 'update' });
 expect(events$.observations).toEqual([{ type: 'update' }]);
 expect(events$.latest).toEqual({ type: 'update' });
+```
+**`outputObserver<T>(output, name?)`**
+Same as `observer()`, but for Angular's signal-based `output()` API (`OutputEmitterRef<T>`) instead of a plain Observable. Use this for a component's `output<T>()`-declared emitters — the counterpart to `observer()` for the older `@Output() = new EventEmitter()` style.
+```typescript
+const fixture = magic.fixture(MyComponent);
+const countChanged$ = magic.outputObserver(fixture.componentInstance.countChanged);
+fixture.componentInstance.countChanged.emit(5);
+expect(countChanged$.next).toHaveBeenCalledWith(5);
+expect(countChanged$.latest).toBe(5);
 ```
 ---
 ## SpyObserver\<T\>

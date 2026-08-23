@@ -21,4 +21,8 @@ export function createSpy(name: string, callback?:(...ary: Array<any>)=> any): S
     return spy;
 }
 
+export function isSpy(method: Func){
+    return jasmine.isSpy(method);
+}
+
 

@@ -1,9 +1,10 @@
 import { TestBed, TestModuleMetadata, ComponentFixture } from '@angular/core/testing';
-import { SchemaMetadata, Type, AbstractType, NO_ERRORS_SCHEMA, isStandalone } from '@angular/core';
+import { SchemaMetadata, Type, AbstractType, NO_ERRORS_SCHEMA, isStandalone, InjectionToken, ProviderToken } from '@angular/core';
 import { spyOnFunctionsOf } from '../spy-on-functions/spy-on-functions-of.function';
 import { SpyObj } from '../spy-framework/spy-framework';
 import { By } from '@angular/platform-browser';
 import { FullTestModuleMetadata } from './full-test-module-meta-data.interface';
+import { MagicFixtureInputs } from './magic-fixture-inputs.type';
 
 export class TestBedConfigurator {
 
@@ -111,8 +112,8 @@ export class TestBedConfigurator {
     /**
     * @ignore
     */
-    public uiThingProviderMock<M>(methodName: string, uiThingClass: Type<any>, token: any, mock: M, dontSpy = false,
-        spySource?: AbstractType<any>): M {
+    public uiThingProviderMock<S, M extends Partial<S>>(methodName: string, uiThingClass: Type<any>, token: ProviderToken<S>, mock: M= <any>{}, dontSpy = false,
+        spySource?: AbstractType<Partial<S>>): S & M | SpyObj<S> & SpyObj<M>{
         this.expectToBePreConfiguration();
         if (!dontSpy) {
             spyOnFunctionsOf(mock, spySource ? spySource.prototype : undefined);
@@ -132,7 +133,7 @@ export class TestBedConfigurator {
                 }
             });
         });
-        return mock;
+        return mock as any;
     }
 
 
@@ -191,7 +192,7 @@ export class TestBedConfigurator {
         return result;
     }
 
-    public fixture<C>(componentClass: Type<C>, initialInputs: Partial<C> = {}, disableNoErrorSchema = false): ComponentFixture<C> {
+    public fixture<C>(componentClass: Type<C>, initialInputs: MagicFixtureInputs<C> = {}, disableNoErrorSchema = false): ComponentFixture<C> {
         if (this.fixtureInstance) {
             throw new Error('.fixture can only be called once per NgMagicTestBed instance');
         }
@@ -219,7 +220,13 @@ export class TestBedConfigurator {
             TestBed.compileComponents();
         }
         this.fixtureInstance = TestBed.createComponent(componentClass);
-        Object.assign(this.fixtureInstance.componentInstance, initialInputs);
+        // setInput() (rather than Object.assign onto componentInstance) is required for signal-based
+        // input()s to work - assigning directly onto the instance would overwrite the InputSignal function
+        // itself with a plain value. setInput() also correctly applies any `transform` the input declares,
+        // and works the same way for classic @Input()-decorated properties, so it's used uniformly here.
+        Object.keys(initialInputs as object).forEach(key => {
+            this.fixtureInstance!.componentRef.setInput(key, (initialInputs as any)[key]);
+        });
         this.fixtureInstance.detectChanges();
         this.fixtureJobs.forEach(job => job());
         return this.fixtureInstance;
@@ -229,8 +236,8 @@ export class TestBedConfigurator {
     /**
     * @ignore
     */
-    public mock<S, M extends Partial<S>>(token?: any, mock: M = <any>{}, dontSpy?: boolean, spySource?: AbstractType<S>):
-        S & M | SpyObj<S> & M | SpyObj<S> {
+    public mock<S, M extends Partial<S>>(token?: ProviderToken<S>, mock: M = <any>{}, dontSpy?: boolean, spySource?: AbstractType<Partial<S>>):
+        S & M | SpyObj<S> & SpyObj<M> {
         if (!dontSpy) {
             spyOnFunctionsOf(mock, spySource ? spySource.prototype : undefined);
         }

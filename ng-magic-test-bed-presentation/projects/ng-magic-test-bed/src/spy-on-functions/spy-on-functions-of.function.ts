@@ -30,21 +30,29 @@ export function spyOnFunctionsOf(target: any, source?: any) {
     return target;
 }
 
+
 function getMethodKeysFromObject(obj: any) {
     const keys: Array<string> = [];
-    let currentPrototype = obj;
-    while (currentPrototype && currentPrototype.constructor !== Object && currentPrototype.constructor !== Array) {
-        const newKeys = Object.getOwnPropertyNames(currentPrototype);
-        newKeys.forEach(key => {
-            try {
-                if (key !== 'constructor' && keys.indexOf(key) < 0 && typeof obj[key] === 'function') {
-                    keys.push(key);
-                }
-            } catch (e) {
 
-            }
-        });
+    collectFunctionKeys(obj, obj, keys);
+
+    let currentPrototype = Object.getPrototypeOf(obj);
+    while (currentPrototype && currentPrototype.constructor !== Object && currentPrototype.constructor !== Array) {
+        collectFunctionKeys(obj, currentPrototype, keys);
         currentPrototype = Object.getPrototypeOf(currentPrototype);
     }
+
     return keys;
+}
+
+function collectFunctionKeys(obj: any, source: any, keys: Array<string>) {
+    Object.getOwnPropertyNames(source).forEach(key => {
+        try {
+            if (key !== 'constructor' && keys.indexOf(key) < 0 && typeof obj[key] === 'function') {
+                keys.push(key);
+            }
+        } catch (e) {
+
+        }
+    });
 }

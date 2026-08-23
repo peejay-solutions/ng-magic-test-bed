@@ -1,12 +1,14 @@
 import { TestBed, TestModuleMetadata, ComponentFixture } from '@angular/core/testing';
-import { SchemaMetadata, Type, AbstractType, Pipe } from '@angular/core';
+import { SchemaMetadata, Type, AbstractType, Pipe, InjectionToken, ProviderToken, OutputEmitterRef } from '@angular/core';
 import { createSpy, Func, Spy, SpyObj } from '../spy-framework/spy-framework';
 import { Observable } from 'rxjs';
 import { observe } from '../observe/observe.function';
 import { SpyObserver } from '../observe/spy-observer.class';
+import { outputToObservable } from '@angular/core/rxjs-interop';
 import { TestBedConfigurator } from './test-bed-configurator.class';
 import { IFactory } from './i-factory.interface';
 import { mockComponent } from '../public-api';
+import { MagicFixtureInputs } from './magic-fixture-inputs.type';
 
 
 export class NgMagicTestBed  {
@@ -94,6 +96,21 @@ export class NgMagicTestBed  {
     }
 
     /**
+     * Declare that you want to keep several pipes/directives/standalone components exactly as they are,
+     * in one call. Each one is added to the imports (or declarations, for non-standalone classes) of your
+     * fixture component and all other kept components - the same effect as calling keptPipe() once per
+     * item, but without the per-item boilerplate and without querying for instances afterward.
+     * Typical use: keeping Angular's own structural directives/pipes (NgIf, NgFor, AsyncPipe, ...) that
+     * your fixture component's template relies on, since overriding a standalone component's imports for
+     * fixture/mock purposes replaces its imports array entirely - see keptDirectives()/keptComponents() if
+     * you also need access to the rendered instances afterward.
+     * @param keptComponentImports array of pipe/directive/component classes to keep as their real implementation.
+     */
+    public keptComponentImports(keptComponentImports: Array<Type<any>>){
+        keptComponentImports.forEach(keptComponentImport =>  this.configurator.addToImportsOrDeclarations(keptComponentImport))
+    }
+
+    /**
     * @param providers providers will be pushed to the providers of the testing module config.
     * check out angular docs for more information
     * https://angular.io/guide/testing-services#angular-testbed
@@ -115,37 +132,6 @@ export class NgMagicTestBed  {
          this.configurator.providers([provider]);
     }
 
-    public pipeServiceMock<S, M extends Partial<S>>(pipeClass: Type<any>, serviceClass: AbstractType<S>, mock: M,
-        dontSpy: true): S & M;
-    public pipeServiceMock<S, M extends Partial<S>>(pipeClass: Type<any>, serviceClass: AbstractType<S>, mock: M):
-        SpyObj<S> & M;
-    public pipeServiceMock<S, M extends Partial<S>>(pipeClass: Type<any>, serviceClass: AbstractType<S>):
-        SpyObj<S>;
-    /**
-    *  If you have pipe that provides a service you can mock it using this method.
-    * @param pipeClass the pipeClass is the reference of the class of your angular pipe.
-    * @param serviceClass the serviceClass is the reference to the class of the service that you want to mock
-    * @param mock the mock mocks the service and should implement a partial of the service class
-    * @param dontSpy optional parameter to prevent the default spy creation on the mock using the prototype of the serviceClass
-    */
-    public pipeServiceMock<S, M extends Partial<S>>(pipeClass: Type<any>, serviceClass: AbstractType<S>,
-        mock?: M, dontSpy?: boolean):
-        SpyObj<S> & M | S & M | SpyObj<S> | S  {
-        return <any> this.componentProviderMock(pipeClass, serviceClass, mock, dontSpy, serviceClass);
-    }
-
-    /**
-     *  If you have pipe that provides a provider you can mock it using this method.
-     * @param pipeClass the pipeClass is the reference of the class of your angular pipe.
-     * @param token the provider token that you want to mock
-     * @param mock the mock
-     * @param dontSpy optional parameter to prevent the default spy creation on the mock
-     */
-    public pipeProviderMock<M>(pipeClass: Type<any>, token: any, mock: M, dontSpy = false,
-        spySource?: AbstractType<any>): M {
-        return this.configurator.uiThingProviderMock('overridePipe', pipeClass, token, mock, dontSpy, spySource);
-    }
-
     /**
     * If you have directive that provides a service you can mock it using this method.
     * @param directiveClass the directiveClass is the reference of the class of your angular directive.
@@ -156,13 +142,13 @@ export class NgMagicTestBed  {
     public directiveServiceMock<S, M extends Partial<S>>(directiveClass: Type<any>, serviceClass: AbstractType<S>, mock: M,
         dontSpy: true): S & M;
     public directiveServiceMock<S, M extends Partial<S>>(directiveClass: Type<any>, serviceClass: AbstractType<S>, mock: M):
-        SpyObj<S> & M;
+        SpyObj<S> & SpyObj<M>;
     public directiveServiceMock<S, M extends Partial<S>>(directiveClass: Type<any>, serviceClass: AbstractType<S>):
         SpyObj<S>;
     public directiveServiceMock<S, M extends Partial<S>>(directiveClass: Type<any>, serviceClass: AbstractType<S>,
         mock?: M, dontSpy?: boolean):
-        S & M | SpyObj<S> & M | SpyObj<S> {
-        return <any> this.componentProviderMock(directiveClass, serviceClass, mock, dontSpy, serviceClass);
+        S & M | SpyObj<S> & SpyObj<M> {
+           return this.directiveProviderMock(directiveClass, serviceClass, mock, dontSpy, serviceClass)
     }
 
     /**
@@ -172,8 +158,8 @@ export class NgMagicTestBed  {
     * @param mock the mock
     * @param dontSpy optional parameter to prevent the default spy creation on the mock
     */
-    public directiveProviderMock<M>(directiveClass: Type<any>, token: any, mock: M, dontSpy = false,
-        spySource?: AbstractType<any>): M {
+    public directiveProviderMock<S, M extends Partial<S>>(directiveClass: Type<any>, token: ProviderToken<S>, mock?: M, dontSpy = false,
+        spySource?: AbstractType<any>):  S & M | SpyObj<S> & SpyObj<M> {
         return this.configurator.uiThingProviderMock('overrideDirective', directiveClass, token, mock, dontSpy, spySource);
     }
 
@@ -181,7 +167,7 @@ export class NgMagicTestBed  {
     public componentServiceMock<S, M extends Partial<S>>(componentClass: Type<any>, serviceClass: AbstractType<S>, mock: M,
         dontSpy: true): S & M;
     public componentServiceMock<S, M extends Partial<S>>(componentClass: Type<any>, serviceClass: AbstractType<S>, mock: M):
-        SpyObj<S> & M;
+        SpyObj<S> & SpyObj<M>;
     public componentServiceMock<S, M extends Partial<S>>(componentClass: Type<any>, serviceClass: AbstractType<S>):
         SpyObj<S>;
     /**
@@ -193,8 +179,8 @@ export class NgMagicTestBed  {
     */
     public componentServiceMock<S, M extends Partial<S>>(componentClass: Type<any>, serviceClass: AbstractType<S>,
         mock?: M, dontSpy?: boolean):
-        S & M | SpyObj<S> & M | SpyObj<S> {
-        return <any>this.componentProviderMock(componentClass, serviceClass, mock, dontSpy, serviceClass);
+        S & M | SpyObj<S> & SpyObj<M> {
+        return this.componentProviderMock(componentClass, serviceClass, mock, dontSpy, serviceClass);
     }
 
     /**
@@ -204,8 +190,8 @@ export class NgMagicTestBed  {
     * @param mock the mock
     * @param dontSpy optional parameter to prevent the default spy creation on the mock
     */
-    public componentProviderMock<M>(componentClass: Type<any>, token: any, mock: M, dontSpy = false,
-        spySource?: AbstractType<any>): M {
+    public componentProviderMock<S, M extends Partial<S>>(componentClass: Type<any>, token: ProviderToken<S>, mock?: M, dontSpy = false,
+        spySource?: AbstractType<Partial<S>>): S & M | SpyObj<S> & SpyObj<M>{
         return this.configurator.uiThingProviderMock('overrideComponent', componentClass, token, mock, dontSpy, spySource);
     }
 
@@ -286,12 +272,16 @@ export class NgMagicTestBed  {
     /**
     *  Use this method to create a component fixture. This method may only be called once per NgMagicTestBed instance.
     * @param componentClass class of the root component you want to compile and create.
+    * @param initialInputs values applied to the component's inputs before the first detectChanges(), via
+    * ComponentRef.setInput() - works for both classic @Input()-decorated properties and signal-based input()
+    * properties. For a signal input created with a `transform`, provide the transform's input type (the same
+    * type you'd write in a template binding) - it will be transformed the same way Angular does for real bindings.
     * @param disableNoErrorSchema by default the NgMagicTestBed uses the NO_ERROR_SCHEMA of angular to prevent the compiler from
     * throwing exceptions e.g. for missing or unknown inputs.
     * @returns a component fixture like standard TestBed.createComponent(componentClass) would have returned it.
     */
-    public fixture<C>(componentClass: Type<C>, initialInputs: Partial<C> = {}, disableNoErrorSchema = false): ComponentFixture<C> {
-        return this.configurator.fixture(componentClass, initialInputs);
+    public fixture<C>(componentClass: Type<C>, initialInputs: MagicFixtureInputs<C> = {}, disableNoErrorSchema = false): ComponentFixture<C> {
+        return this.configurator.fixture(componentClass, initialInputs, disableNoErrorSchema);
     }
 
     /**
@@ -309,7 +299,7 @@ export class NgMagicTestBed  {
     public objectMock<O, M extends Partial<O>>(objectClass: undefined, mock: M): SpyObj<M>;
 
     public objectMock<O, M extends Partial<O>>(objectClass: AbstractType<O> | undefined, mock: M | any, dontSpy = false):
-        O & M | SpyObj<O> & M {
+        O & M | SpyObj<O> & SpyObj<M> {
         return <O & M | SpyObj<O> & M>this.configurator.mock(undefined, mock, dontSpy, objectClass);
     }
 
@@ -323,8 +313,9 @@ export class NgMagicTestBed  {
      * @returns Your mocks methods will be overwritten with spies that call through to the mocks methods like spyOn method of your test framework.
      * In addition to that a spy will be added for each additional method that was found on the objectClass' prototype.
      */
-    public providerMock<M>(token: any, mock: Partial<M>, dontSpy: boolean = false, spySource?: AbstractType<any>) {
-        return this.configurator.mock(token, mock, dontSpy, spySource);
+    public providerMock<S, M extends Partial<S>>(token: ProviderToken<S>, mock: M, dontSpy: boolean = false, spySource?: AbstractType<Partial<S>>):
+    S & M | SpyObj<S> & SpyObj<M> {
+        return this.configurator.mock(token, mock, dontSpy, spySource) as  S & M | SpyObj<S> & SpyObj<M>;
     }
 
 
@@ -334,9 +325,10 @@ export class NgMagicTestBed  {
      * @param callback optional parameter to define default behavior for the mocked provider function
      * @returns spy on the mocked provider function
      */
-    public providerFunctionMock<F extends Func = ()=>{}>(token: any, callback?: (...args: Array<any>)=> any): Spy<F> {
-        const spy = createSpy(token.name, callback);
-        return this.providerMock(token, spy, true);
+    public providerFunctionMock<F extends Func = ()=>{}>(token: InjectionToken<F>, callback?: Partial<F> & Func): Spy<F> {
+        const spy = createSpy('', callback as F) as Spy<F> & F;
+        this.providerMock(token, spy, true);
+        return spy;
     }
 
     /**
@@ -346,7 +338,7 @@ export class NgMagicTestBed  {
    * The first call of mock.create() will return the first item in the instances-array and so on.
    * @returns a mock for the factory. mock.create will return the one of the given instances every time it is called
    */
-    public factoryMock<I, F extends IFactory<I>, M>(factoryClass: AbstractType<F>, instances: Array<M & I>): SpyObj<Partial<F>> {
+    public factoryMock<I, F extends IFactory<I>, M>(factoryClass: AbstractType<F>, instances: Array<M & I>): SpyObj<F> {
         let index = -1;
         return <any>this.configurator.mock(factoryClass, <any>{
             create: (...args: any) => {
@@ -359,7 +351,7 @@ export class NgMagicTestBed  {
     public serviceMock<S, M extends Partial<S>>(serviceClass: AbstractType<S>, mock: M,
         dontSpy: true): S & M;
     public serviceMock<S, M extends Partial<S>>(serviceClass: AbstractType<S>, mock: M):
-        SpyObj<S> & M;
+        SpyObj<S> & SpyObj<M>;
     public serviceMock<S, M extends Partial<S>>(serviceClass: AbstractType<S>): SpyObj<S>;
 
     /**
@@ -371,15 +363,11 @@ export class NgMagicTestBed  {
      * @returns the mock after creating some spies on it (if not disabled)
      */
     public serviceMock<S, M extends Partial<S>>(serviceClass: AbstractType<S>, mock?: M, dontSpy?: boolean):
-        S & M | SpyObj<S> & M | SpyObj<S> {
+        S & M | SpyObj<S> & SpyObj<M> {
         return this.configurator.mock(serviceClass, mock, dontSpy, serviceClass);
     }
 
 
-    public injection<S>(service: AbstractType<S>): S;
-    /* tslint:disable */
-    public injection<S>(token: any): S;
-    /* tslint:enable */
     /**
      *  return you the service or provider for a given token from the angular dependency injection.
      * This will trigger the TestBed configureTestingModule step. After this step you can not create any more mocks.
@@ -388,7 +376,7 @@ export class NgMagicTestBed  {
      * @param token of the provider that you want to inject
      * @return whatever angular dependency injection finds for your token
      */
-    public injection<S>(token: AbstractType<S> | any): S {
+    public injection<S>(token: ProviderToken<S>): S {
         this.configurator.configureTestingModule();
         return TestBed.inject(token);
     }
@@ -410,6 +398,22 @@ export class NgMagicTestBed  {
         return observe(observable, name);
     }
 
+    /**
+    *
+    * Subscribes to a given output and spies on its states and emitted values.
+    * @param output
+    * Output you want to spy
+    * @param name
+    * Optional name that prefixes all spies that are created by the observer. This makes it easier to read the
+    * test output if anything fails.
+    * @returns
+    * outputObserver that can be used to make assertions in your test cases e.g.:
+    * expect(outputObserver.next).toHaveBeenCalledWith(expectedValue);
+    * For more information check SpyObserver documentation
+    */
+    public outputObserver<T>(output: OutputEmitterRef<T>, name?: string): SpyObserver<T>{
+        return observe(outputToObservable(output), name);
+    }
   
     /**
      *  
