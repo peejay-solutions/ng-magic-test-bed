@@ -1,6 +1,9 @@
 {
   "name": "ng-magic-test-bed-4-vitest",
   "version": "0.0.1",
+  "scripts": {
+    "sync:jasmine-source": "node scripts/sync-from-jasmine.mjs"
+  },
   "peerDependencies": {
     "@angular/common": "^21.2.0",
     "@angular/core": "^21.2.0"

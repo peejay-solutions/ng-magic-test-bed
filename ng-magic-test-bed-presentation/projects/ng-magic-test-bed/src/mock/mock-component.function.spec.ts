@@ -73,7 +73,7 @@ describe('mockComponent()', () => {
         const mockInstance = childDebugElement.componentInstance;
         expect(mockInstance.title).toBe('Initial Test Title');
         parentComponent.parentTitle = 'Updated Title';
-        fixture.detectChanges();
+        fixture.changeDetectorRef.detectChanges();
         expect(mockInstance.title).toBe('Updated Title');
     });
 

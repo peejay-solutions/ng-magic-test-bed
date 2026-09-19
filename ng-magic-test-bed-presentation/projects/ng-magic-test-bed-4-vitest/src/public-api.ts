@@ -1,5 +1,13 @@
 /*
- * Public API Surface of ng-magic-test-bed-4-vitest
+ * Public API Surface of ng-magic-test-bed
  */
 
-export * from './lib/ng-magic-test-bed-4-vitest';
+
+
+export * from './spy-on-functions/spy-on-functions-of.function';
+export * from './observe/observe.function';
+export * from './observe/spy-observer.class';
+export * from './test-bed/ng-magic-setup-test-bed.class';
+export * from './mock/mock.function';
+export * from './mock/mock-component.function';
+export * from './test-bed/magic-fixture-inputs.type';

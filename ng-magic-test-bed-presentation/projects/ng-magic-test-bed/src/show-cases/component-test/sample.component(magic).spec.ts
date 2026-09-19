@@ -1,4 +1,4 @@
-import { NgMagicSetupTestBed } from '../../test-bed/ng-magic-setup-test-bed.class';
+import { NgMagicSetupTestBed } from '../../setup-test-bed/ng-magic-setup-test-bed.class';
 import { observe } from '../../observe/observe.function';
 import { ButtonComponent } from './button.component';
 import { HandlerDirective } from './handler.directive';

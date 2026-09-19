@@ -1,4 +1,4 @@
-import { AbstractType, Type } from '@angular/core';
+import { AbstractType } from '@angular/core';
 import { spyOnFunctionsOf } from '../spy-on-functions/spy-on-functions-of.function';
 import { SpyObj } from '../spy-framework/spy-framework';
 
@@ -11,8 +11,8 @@ import { SpyObj } from '../spy-framework/spy-framework';
      * In addition to that a spy will be added for each additional method that was found on the objectClass' prototype.
      */
 
-export function mock<S extends Type<any>, M extends Partial<S>>( spySource?: AbstractType<S>, mock: M = <any>{}, dontSpy?: boolean):
-    S & M |SpyObj<S> & M | SpyObj<S> {
+export function mock<S, M extends Partial<S>>( spySource?: AbstractType<S>, mock: M = <any>{}, dontSpy?: boolean):
+    S & M |SpyObj<S> & SpyObj<M> {
     if (!dontSpy) {
         spyOnFunctionsOf(mock, spySource ? spySource.prototype : undefined);
     }

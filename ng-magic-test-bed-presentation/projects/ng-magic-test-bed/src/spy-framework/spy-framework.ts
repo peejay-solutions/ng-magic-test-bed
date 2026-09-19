@@ -25,4 +25,10 @@ export function isSpy(method: Func){
     return jasmine.isSpy(method);
 }
 
+export function makeSpyReturnValue<T>(spy: Spy<(...args: Array<any>)=>T>, value: T){
+    spy.and.returnValue(value);
+}
 
+export function getSpyName(spy: Spy){
+    return spy.and.identity
+}

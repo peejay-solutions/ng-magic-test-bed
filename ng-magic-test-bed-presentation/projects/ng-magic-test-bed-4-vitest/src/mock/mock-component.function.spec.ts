@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { mockComponent } from './mock-component.function';
-import { describe, it, expect} from 'vitest';
 
 @Component({
     selector: 'lib-child',
