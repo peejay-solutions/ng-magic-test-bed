@@ -1,5 +1,5 @@
 import { Subject } from 'rxjs';
-import { NgMagicSetupTestBed } from '../public-api';
+import { NgMagicTestBed } from '../public-api';
 import { getSpyName } from '../spy-framework/spy-framework';
 
 // Covers observer(observable, name?)
@@ -9,7 +9,7 @@ import { getSpyName } from '../spy-framework/spy-framework';
 describe('observer()', () => {
 
     it('next spy should be called for every emission, in order', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const subject = new Subject<number>();
         const observer = magic.observer(subject);
 
@@ -22,7 +22,7 @@ describe('observer()', () => {
     });
 
     it('observations should collect every emitted value, and latest should be the most recent one', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const subject = new Subject<string>();
         const observer = magic.observer(subject);
 
@@ -34,7 +34,7 @@ describe('observer()', () => {
     });
 
     it('complete spy should be called when the observable completes', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const subject = new Subject<void>();
         const observer = magic.observer(subject);
 
@@ -44,7 +44,7 @@ describe('observer()', () => {
     });
 
     it('error spy should be called with the error when the observable errors', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const subject = new Subject<void>();
         const observer = magic.observer(subject);
         const error = new Error('boom');
@@ -55,7 +55,7 @@ describe('observer()', () => {
     });
 
     it('an optional name should prefix the underlying spies for easier-to-read failures', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const subject = new Subject<void>();
 
         const observer = magic.observer(subject, 'myObservable');

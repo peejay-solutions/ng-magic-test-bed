@@ -7,7 +7,7 @@ import { mockComponent } from '../public-api';
 // (`const componentMock = mockComponent(componentClass);`) - use the
 // standalone version directly if you want the generated mock TYPE itself
 // (e.g. to add it to a raw TestBed config) instead of going through
-// NgMagicSetupTestBed.
+// NgMagicTestBed.
 
 @Component({
     selector: 'app-alert',

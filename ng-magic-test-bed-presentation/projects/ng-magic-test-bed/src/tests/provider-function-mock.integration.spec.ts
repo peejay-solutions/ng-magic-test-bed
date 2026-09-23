@@ -1,5 +1,5 @@
 import { InjectionToken } from '@angular/core';
-import { NgMagicSetupTestBed } from '../public-api';
+import { NgMagicTestBed } from '../public-api';
 import { makeSpyReturnValue } from '../spy-framework/spy-framework';
 
 // Covers providerFunctionMock(token, callback?)
@@ -11,7 +11,7 @@ const FORMAT_CURRENCY = new InjectionToken<(value: number) => string>('FORMAT_CU
 describe('providerFunctionMock()', () => {
 
     it('without a callback should return a spy that returns undefined by default', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const formatCurrencyMock = magic.providerFunctionMock(FORMAT_CURRENCY);
 
         const injectedFn = magic.injection(FORMAT_CURRENCY);
@@ -22,7 +22,7 @@ describe('providerFunctionMock()', () => {
     });
 
     it('with a callback should use it as the default behavior of the spy', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const formatCurrencyMock = magic.providerFunctionMock(
             FORMAT_CURRENCY,
             (value: number) => `$${value.toFixed(2)}`,
@@ -35,7 +35,7 @@ describe('providerFunctionMock()', () => {
     });
 
     it('the returned spy can still have its behavior overridden per test', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const formatCurrencyMock = magic.providerFunctionMock(
             FORMAT_CURRENCY,
             (value: number) => `$${value.toFixed(2)}`,

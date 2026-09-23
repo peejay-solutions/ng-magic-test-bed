@@ -304,6 +304,21 @@ export class NgMagicTestBed  {
     }
 
     /**
+     * Creates a mock object that satisfies the shape of a TypeScript interface I. This does not (and cannot)
+     * replace I anywhere - interfaces have no runtime representation, so there is no prototype to reflect on
+     * the way objectMock() reflects on a class. This means every member of I has to be supplied in mock - only
+     * the methods you actually provide become spies, nothing can be auto-generated for the ones you omit.
+     * Use this instead of objectMock(undefined, mock) purely to avoid casting the result to I & SpyObj<I> yourself.
+     * @param mock an object implementing every member of I.
+     * @param dontSpy optional parameter to prevent the default spy creation on the mock.
+     * @returns your mock, typed as I & SpyObj<I>. Every method on it is a spy that calls through to the
+     * implementation you supplied, like objectMock() does.
+     */
+    public interfaceMock<I>(mock: I, dontSpy = false): I & SpyObj<I> {
+        return <I & SpyObj<I>>this.configurator.mock(undefined, mock, dontSpy, undefined);
+    }
+
+    /**
      * mocks a provider for a given token with a given mock. If wanted your mock can be extended by spies
      * from a given spySource class.
      * @param token token for provider provision

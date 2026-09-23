@@ -1,5 +1,5 @@
 import { Component, inject, Injectable, InjectionToken } from '@angular/core';
-import { NgMagicSetupTestBed } from '../public-api';
+import { NgMagicTestBed } from '../public-api';
 import { isSpy, makeSpyReturnValue } from '../spy-framework/spy-framework';
 
 // Covers componentServiceMock() (all 3 overloads) and componentProviderMock().
@@ -46,7 +46,7 @@ class IdWidgetComponent {
 describe('componentServiceMock()', () => {
 
     it('with no mock argument should auto-spy the component-scoped service', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const counterMock = magic.componentServiceMock(CounterWidgetComponent, ScopedCounterService);
         makeSpyReturnValue(counterMock.increment, 99);
 
@@ -56,7 +56,7 @@ describe('componentServiceMock()', () => {
     });
 
     it('with a partial mock should spy it and use the provided implementation', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const counterMock = magic.componentServiceMock(CounterWidgetComponent, ScopedCounterService, {
             increment: () => 7,
         });
@@ -68,7 +68,7 @@ describe('componentServiceMock()', () => {
     });
 
     it('with dontSpy=true should use the mock exactly as given', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const counterMock = magic.componentServiceMock(
             CounterWidgetComponent,
             ScopedCounterService,
@@ -87,13 +87,13 @@ describe('componentServiceMock()', () => {
 describe('componentProviderMock()', () => {
 
     it('with a primitive mock and the default dontSpy=false, it throws - spyOnFunctionsOf needs an object', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
 
         expect(() => magic.componentProviderMock(IdWidgetComponent, WIDGET_ID, 'mocked-id')).toThrow();
     });
 
     it('with dontSpy=true, a primitive mock replaces the component-scoped token value', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         magic.componentProviderMock(IdWidgetComponent, WIDGET_ID, 'mocked-id', true);
 
         const fixture = magic.fixture(IdWidgetComponent);

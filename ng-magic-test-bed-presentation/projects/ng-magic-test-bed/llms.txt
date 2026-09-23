@@ -30,6 +30,7 @@ Before reading the full API, use this decision tree to pick the correct mock met
 |---|---|---|
 | Class is `@Injectable` and registered in DI | `serviceMock(Class, mock?)` | Registers mock in TestBed as provider |
 | Class is created by a factory via `new` (not in DI) | `objectMock(Class, mock)` | Creates mock without TestBed registration; auto-spies from prototype |
+| Need to mock a TypeScript `interface` (no class/prototype exists) | `interfaceMock<I>(mock)` | Same as `objectMock(undefined, mock)`, but typed as `I` so you don't have to cast |
 | Factory class with `create()` method | `factoryMock(FactoryClass, [instances])` | Registers factory in DI; `create()` returns instances sequentially |
 | Provider registered via injection token | `providerMock(token, mock)` | Registers mock for a non-class token |
 | Service provided at component level | `componentServiceMock(CompClass, SvcClass, mock?)` | Overrides component-level provider |
@@ -107,6 +108,19 @@ const widgetMock = magic.objectMock(Widget, {
 });
 // widgetMock has spies for ALL Widget prototype methods
 // plus the properties you provided
+```
+**`interfaceMock<I>(mock, dontSpy?)`**
+Creates a mock object typed as `I & jasmine.SpyObj<I>` for a plain TypeScript **interface** — no class, no prototype, nothing to auto-spy from. `objectMock(undefined, mock)` does the same thing at runtime, but its return type is only `jasmine.SpyObj<M>` (the shape of `mock`, not the interface), so you'd have to cast it to `I` yourself. `interfaceMock` skips that cast. Because interfaces don't exist at runtime, `mock` must implement **every** member of `I` (not `Partial<I>`) — there is no way to auto-generate a spy for a member you didn't provide, so the compiler enforces completeness instead.
+```typescript
+interface Logger {
+    info(message: string): void;
+    warn(message: string): void;
+}
+const loggerMock = magic.interfaceMock<Logger>({
+    info: () => {},
+    warn: () => {},
+});
+// loggerMock.info / .warn are both spies, no cast needed
 ```
 **`factoryMock<I, F>(factoryClass, instances)`**
 Mocks a factory service in TestBed. The `create()` method returns sequential instances from the provided array. Returns `jasmine.SpyObj<Partial<F>>` — **use this return value directly**, do not fetch the factory via `injection()`.

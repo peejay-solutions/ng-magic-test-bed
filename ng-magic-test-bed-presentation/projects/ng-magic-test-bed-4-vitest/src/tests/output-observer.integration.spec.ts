@@ -1,5 +1,5 @@
 import { Component, output } from '@angular/core';
-import { NgMagicSetupTestBed } from '../public-api';
+import { NgMagicTestBed } from '../public-api';
 import { getSpyName } from '../spy-framework/spy-framework';
 
 // Covers outputObserver(output, name?)
@@ -21,7 +21,7 @@ class CounterWidgetComponent {
 describe('outputObserver()', () => {
 
     it('next spy should be called for every emission, in order', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const fixture = magic.fixture(CounterWidgetComponent);
         const observer = magic.outputObserver(fixture.componentInstance.countChanged);
 
@@ -34,7 +34,7 @@ describe('outputObserver()', () => {
     });
 
     it('observations should collect every emitted value, and latest should be the most recent one', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const fixture = magic.fixture(CounterWidgetComponent);
         const observer = magic.outputObserver(fixture.componentInstance.countChanged);
 
@@ -46,14 +46,14 @@ describe('outputObserver()', () => {
     });
 
     it('should be usable without a name, same as observer()', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const fixture = magic.fixture(CounterWidgetComponent);
 
         expect(() => magic.outputObserver(fixture.componentInstance.countChanged)).not.toThrow();
     });
 
     it('an optional name should prefix the underlying spies, same as observer()', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const fixture = magic.fixture(CounterWidgetComponent);
 
         const observer = magic.outputObserver(fixture.componentInstance.countChanged, 'countChanged');

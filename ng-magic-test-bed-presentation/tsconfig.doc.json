@@ -1,4 +1,4 @@
 {
-    "include": ["projects/src/**/*.ts"],
-    "exclude": ["projects/src/**/*.spec.ts"]
+    "include": ["projects/ng-magic-test-bed/src/**/*.ts"],
+    "exclude": ["projects/ng-magic-test-bed/src/**/*.spec.ts"]
 }

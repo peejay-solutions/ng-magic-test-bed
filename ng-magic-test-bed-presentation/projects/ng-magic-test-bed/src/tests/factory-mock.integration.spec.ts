@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { NgMagicSetupTestBed } from '../public-api';
+import { NgMagicTestBed } from '../public-api';
 
 // Covers factoryMock(factoryClass, instances)
 // Use this for injectable services that follow the "factory" pattern: a
@@ -21,7 +21,7 @@ class WidgetFactory {
 describe('factoryMock()', () => {
 
     it('create() should return the given instances in order, one per call', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const first = new Widget('first');
         const second = new Widget('second');
         const widgetFactoryMock = magic.factoryMock(WidgetFactory, [first, second]);
@@ -34,7 +34,7 @@ describe('factoryMock()', () => {
     });
 
     it('create is a jasmine spy - its calls can be inspected like any other spy', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const widgetFactoryMock = magic.factoryMock(WidgetFactory, [new Widget('only')]);
 
         widgetFactoryMock.create({ size: 42 });
@@ -43,7 +43,7 @@ describe('factoryMock()', () => {
     });
 
     it('calling create() more often than instances were provided returns undefined', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const widgetFactoryMock = magic.factoryMock(WidgetFactory, [new Widget('only')]);
 
         widgetFactoryMock.create({ size: 1 });
@@ -53,7 +53,7 @@ describe('factoryMock()', () => {
     });
 
     it('should register the mock in DI so a consumer of WidgetFactory gets it via constructor injection', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const widget = new Widget('injected');
         const widgetFactoryMock = magic.factoryMock(WidgetFactory, [widget]);
 

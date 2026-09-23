@@ -17,7 +17,9 @@
     "sync-jasmine-into-vitest": "node projects/ng-magic-test-bed-4-vitest/scripts/sync-from-jasmine.mjs",
     "copyLlms": "xcopy /s /y \".\\projects\\ng-magic-test-bed\\llms.txt\" \".\\dist\\ng-magic-test-bed\\\"",
     "buildLib": "ng run ng-magic-test-bed:build:production && npm run copyLlms",
-    "compodoc": "npx compodoc -p ./tsconfig.doc.json projects -d ../docs/"
+    "copyLlmsVitest": "xcopy /s /y \".\\projects\\ng-magic-test-bed-4-vitest\\llms.txt\" \".\\dist\\ng-magic-test-bed-4-vitest\\\"",
+    "buildVitestLib": "ng run ng-magic-test-bed-4-vitest:build:production && npm run copyLlmsVitest",
+    "compodoc": "rmdir /s /q \"..\\docs\" 2>nul & npx compodoc -p ./tsconfig.doc.json projects -d ../docs/"
   },
   "private": true,
   "dependencies": {

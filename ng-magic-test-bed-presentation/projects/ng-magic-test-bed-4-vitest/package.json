@@ -1,13 +1,29 @@
 {
-  "name": "ng-magic-test-bed-4-vitest",
-  "version": "0.0.1",
+  "name": "@ng-magic-test-bed/vitest",
+  "description": "A magic test bed for angular - Vitest edition. Name of jasmine version is @peejay-solutions/ng-magic-test-bed",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/peejay-solutions/ng-magic-test-bed"
+  },
+  "author": {
+    "name": "Philipp Jäckel"
+  },
+  "private": false,
+  "license": "MIT",
+  "version": "0.0.2",
   "scripts": {
     "sync:jasmine-source": "node scripts/sync-from-jasmine.mjs"
   },
-  "peerDependencies": {
-    "@angular/common": "^21.2.0",
-    "@angular/core": "^21.2.0"
+  "publishConfig": {
+    "access": "public"
   },
+  "peerDependencies": {
+    "@angular/common": ">=21",
+    "@angular/core": ">=21",
+    "rxjs": ">=6",
+    "vitest": ">=3"
+  },
+  "llms": "./llms.txt",
   "dependencies": {
     "tslib": "^2.3.0"
   },

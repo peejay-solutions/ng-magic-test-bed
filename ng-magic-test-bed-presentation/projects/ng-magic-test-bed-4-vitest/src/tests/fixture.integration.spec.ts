@@ -1,5 +1,5 @@
 import { booleanAttribute, Component, input, Input } from '@angular/core';
-import { NgMagicSetupTestBed } from '../public-api';
+import { NgMagicTestBed } from '../public-api';
 
 // Covers fixture(componentClass, initialInputs?, disableNoErrorSchema?)
 
@@ -42,7 +42,7 @@ class StandaloneRootWithStandaloneChildComponent {}
 describe('fixture() - initialInputs', () => {
 
     it('should apply given inputs to the component instance before the first detectChanges()', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
 
         const fixture = magic.fixture(InputWidgetComponent, { label: 'custom', count: 5 });
 
@@ -51,7 +51,7 @@ describe('fixture() - initialInputs', () => {
     });
 
     it('without initialInputs the component keeps using its own default values', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
 
         const fixture = magic.fixture(InputWidgetComponent);
 
@@ -63,7 +63,7 @@ describe('fixture() - initialInputs', () => {
 describe('fixture() - initialInputs with signal-based input()', () => {
 
     it('should apply given values to signal inputs before the first detectChanges()', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
 
         const fixture = magic.fixture(SignalInputWidgetComponent, { label: 'custom', count: 5 });
 
@@ -72,7 +72,7 @@ describe('fixture() - initialInputs with signal-based input()', () => {
     });
 
     it('without initialInputs the component keeps using its own default signal values', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
 
         const fixture = magic.fixture(SignalInputWidgetComponent);
 
@@ -80,7 +80,7 @@ describe('fixture() - initialInputs with signal-based input()', () => {
     });
 
     it('should apply the transform for a signal input declared with input(default, { transform })', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
 
         // disabled's transform is booleanAttribute - the empty string '' is the value an attribute
         // binding like [disabled]="" would produce, and booleanAttribute treats it as true.
@@ -94,14 +94,14 @@ describe('fixture() - initialInputs with signal-based input()', () => {
 describe('fixture() - disableNoErrorSchema', () => {
 
     it('by default (disableNoErrorSchema=false), an unknown child element does not throw', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
 
         expect(() => magic.fixture(StandaloneRootWithStandaloneChildComponent)).not.toThrow();
     });
 
     it('with disableNoErrorSchema=true, an unknown child element throws', () => {
         //Depending on angular version there is this flag or the schema needed
-        const magic = new NgMagicSetupTestBed({errorOnUnknownElements: true});
+        const magic = new NgMagicTestBed({errorOnUnknownElements: true});
 
         expect(() => magic.fixture(StandaloneRootWithStandaloneChildComponent, {}, true)).toThrow();
     });
@@ -110,8 +110,8 @@ describe('fixture() - disableNoErrorSchema', () => {
 
 describe('fixture() - can only be called once per instance', () => {
 
-    it('should throw when called a second time on the same NgMagicSetupTestBed instance', () => {
-        const magic = new NgMagicSetupTestBed();
+    it('should throw when called a second time on the same NgMagicTestBed instance', () => {
+        const magic = new NgMagicTestBed();
         magic.fixture(InputWidgetComponent);
 
         expect(() => magic.fixture(InputWidgetComponent)).toThrowError(

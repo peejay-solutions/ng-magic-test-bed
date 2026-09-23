@@ -1,7 +1,7 @@
 import { AsyncPipe, NgIf } from '@angular/common';
 import { Component, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { NgMagicSetupTestBed } from '../public-api';
+import { NgMagicTestBed } from '../public-api';
 
 // Covers keptComponentImports(Array<Type<any>>)
 // Batch shorthand for keeping several pipes/directives/standalone components
@@ -30,7 +30,7 @@ class GreetingHostComponent {
 describe('keptComponentImports()', () => {
 
     it('should keep several structural directives/pipes as their real implementation in one call', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         magic.keptComponentImports([NgIf, AsyncPipe]);
         const greetingServiceMock = magic.serviceMock(GreetingService, {
             greeting$: new BehaviorSubject<string | null>('hello'),
@@ -46,7 +46,7 @@ describe('keptComponentImports()', () => {
     });
 
     it('should not render the *ngIf content when nothing has been kept', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         // fixture() always replaces a standalone root component's imports
         // with its (here: empty) fixtureImports list - without keeping
         // NgIf/AsyncPipe explicitly, they are gone and *ngIf never

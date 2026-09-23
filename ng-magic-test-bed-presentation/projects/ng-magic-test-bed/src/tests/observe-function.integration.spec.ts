@@ -6,7 +6,7 @@ import { getSpyName } from '../spy-framework/spy-framework';
 // magic.observer() is a thin wrapper around exactly this function
 // (`public observer<T>(observable, name?) { return observe(observable, name); }`),
 // so behavior is identical - use this version when you don't have (or don't
-// need) an NgMagicSetupTestBed instance.
+// need) an NgMagicTestBed instance.
 
 describe('observe()', () => {
 

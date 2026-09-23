@@ -136,6 +136,9 @@
       "architect": {
         "build": {
           "builder": "@angular/build:ng-packagr",
+          "options": {
+            "project": "projects/ng-magic-test-bed-4-vitest/ng-package.json"
+          },
           "configurations": {
             "production": {
               "tsConfig": "projects/ng-magic-test-bed-4-vitest/tsconfig.lib.prod.json"

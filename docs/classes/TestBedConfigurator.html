@@ -1,0 +1,1221 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>ng-magic-test-bed-presentation documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">ng-magic-test-bed-presentation documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content class">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li>Classes</li>
+  <li>TestBedConfigurator</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>projects/ng-magic-test-bed/src/test-bed/test-bed-configurator.class.ts</code>
+        </p>
+
+
+
+
+
+            <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#addToImportsOrDeclarations">addToImportsOrDeclarations</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#declarations">declarations</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#fixture">fixture</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#imports">imports</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#keptComponents">keptComponents</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#overrideImportsIfStandalone">overrideImportsIfStandalone</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#providers">providers</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#schemas">schemas</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#useInFixtureAndQueryInstances">useInFixtureAndQueryInstances</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(initialConfig: <a href="https://angular.io/api/core/testing/TestModuleMetadata" target="_blank">TestModuleMetadata</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="44" class="link-to-prism">projects/ng-magic-test-bed/src/test-bed/test-bed-configurator.class.ts:44</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                                    <td>Description</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>initialConfig</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/core/testing/TestModuleMetadata" target="_blank" >TestModuleMetadata</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                        <td>
+                                                                <code><p>initial config which will be extended by the other methods of this NgMagicSetupTestBed instance.
+The final config will be used to call TestBed.configureTestingModule implicitly by
+calling e.g. .injection()</p>
+</code>
+                                                        </td>
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+
+            <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addToImportsOrDeclarations"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Public</span>
+                            addToImportsOrDeclarations
+                        </b>
+                        <a href="#addToImportsOrDeclarations"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>addToImportsOrDeclarations(uiThingClass: Type<any>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="141"
+                            class="link-to-prism">projects/ng-magic-test-bed/src/test-bed/test-bed-configurator.class.ts:141</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>uiThingClass</td>
+                                    <td>
+                                            <code>Type&lt;any&gt;</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="declarations"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Public</span>
+                            declarations
+                        </b>
+                        <a href="#declarations"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>declarations(declarations: Array<any>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="88"
+                            class="link-to-prism">projects/ng-magic-test-bed/src/test-bed/test-bed-configurator.class.ts:88</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>declarations</td>
+                                    <td>
+                                            <code>Array&lt;any&gt;</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="fixture"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Public</span>
+                            fixture
+                        </b>
+                        <a href="#fixture"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>fixture(componentClass: Type<C>, initialInputs: <a href="../undefineds/MagicFixtureInputs.html">MagicFixtureInputs<C></a>, disableNoErrorSchema)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="195"
+                            class="link-to-prism">projects/ng-magic-test-bed/src/test-bed/test-bed-configurator.class.ts:195</a></div>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <b>Type parameters :</b>
+                    <ul class="type-parameters">
+                        <li>C</li>
+                    </ul>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Default value</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>componentClass</td>
+                                    <td>
+                                            <code>Type&lt;C&gt;</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>initialInputs</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/typealiases.html#MagicFixtureInputs" target="_self" >MagicFixtureInputs&lt;C&gt;</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                        <code>{}</code>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>disableNoErrorSchema</td>
+                                    <td>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                        <code>false</code>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>ComponentFixture&lt;C&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="imports"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Public</span>
+                            imports
+                        </b>
+                        <a href="#imports"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>imports(imports: any[])</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="100"
+                            class="link-to-prism">projects/ng-magic-test-bed/src/test-bed/test-bed-configurator.class.ts:100</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>imports</td>
+                                    <td>
+                                            <code>any[]</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="keptComponents"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Public</span>
+                            keptComponents
+                        </b>
+                        <a href="#keptComponents"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>keptComponents(componentClass: Type<C>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="153"
+                            class="link-to-prism">projects/ng-magic-test-bed/src/test-bed/test-bed-configurator.class.ts:153</a></div>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <b>Type parameters :</b>
+                    <ul class="type-parameters">
+                        <li>C</li>
+                    </ul>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>componentClass</td>
+                                    <td>
+                                            <code>Type&lt;C&gt;</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Array&lt;C&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="overrideImportsIfStandalone"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Public</span>
+                            overrideImportsIfStandalone
+                        </b>
+                        <a href="#overrideImportsIfStandalone"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>overrideImportsIfStandalone(componentClass: Type<any>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="159"
+                            class="link-to-prism">projects/ng-magic-test-bed/src/test-bed/test-bed-configurator.class.ts:159</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>componentClass</td>
+                                    <td>
+                                            <code>Type&lt;any&gt;</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="providers"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Public</span>
+                            providers
+                        </b>
+                        <a href="#providers"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>providers(providers: any[])</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="105"
+                            class="link-to-prism">projects/ng-magic-test-bed/src/test-bed/test-bed-configurator.class.ts:105</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>providers</td>
+                                    <td>
+                                            <code>any[]</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="schemas"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Public</span>
+                            schemas
+                        </b>
+                        <a href="#schemas"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>schemas(schemas: Array<SchemaMetadata | []>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="94"
+                            class="link-to-prism">projects/ng-magic-test-bed/src/test-bed/test-bed-configurator.class.ts:94</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>schemas</td>
+                                    <td>
+                                            <code>Array&lt;SchemaMetadata | []&gt;</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="useInFixtureAndQueryInstances"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Public</span>
+                            useInFixtureAndQueryInstances
+                        </b>
+                        <a href="#useInFixtureAndQueryInstances"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>useInFixtureAndQueryInstances(componentClass: Type<C>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="181"
+                            class="link-to-prism">projects/ng-magic-test-bed/src/test-bed/test-bed-configurator.class.ts:181</a></div>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <b>Type parameters :</b>
+                    <ul class="type-parameters">
+                        <li>C</li>
+                    </ul>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>componentClass</td>
+                                    <td>
+                                            <code>Type&lt;C&gt;</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Array&lt;C&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+
+
+
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { TestBed, TestModuleMetadata, ComponentFixture } from &#x27;@angular/core/testing&#x27;;
+import { SchemaMetadata, Type, AbstractType, NO_ERRORS_SCHEMA, isStandalone, InjectionToken, ProviderToken } from &#x27;@angular/core&#x27;;
+import { spyOnFunctionsOf } from &#x27;../spy-on-functions/spy-on-functions-of.function&#x27;;
+import { SpyObj } from &#x27;../spy-framework/spy-framework&#x27;;
+import { By } from &#x27;@angular/platform-browser&#x27;;
+import { FullTestModuleMetadata } from &#x27;./full-test-module-meta-data.interface&#x27;;
+import { MagicFixtureInputs } from &#x27;./magic-fixture-inputs.type&#x27;;
+
+export class TestBedConfigurator {
+
+    /**
+    * @ignore
+    */
+    private config: FullTestModuleMetadata;
+
+    /**
+    * @ignore
+    */
+    private configured &#x3D; false;
+
+    /**
+    * @ignore
+    */
+    private compiled &#x3D; false;
+
+    /**
+    * @ignore
+    */
+    private postConfigureJobs: Array&lt;() &#x3D;&gt; void&gt; &#x3D; [];
+
+    /**
+    * @ignore
+    */
+    private fixtureJobs: Array&lt;() &#x3D;&gt; void&gt; &#x3D; [];
+
+    /**
+    * @ignore
+    */
+    private fixtureInstance?: ComponentFixture&lt;any&gt; &#x3D; undefined;
+
+    /**
+    * @ignore
+    */
+    private fixtureImports: Array&lt;Type&lt;any&gt;&gt; &#x3D; [];
+
+    /**
+    * @param initialConfig  initial config which will be extended by the other methods of this NgMagicSetupTestBed instance.
+    *  The final config will be used to call TestBed.configureTestingModule implicitly by
+    * calling e.g. .injection()
+    */
+    constructor(initialConfig: TestModuleMetadata &#x3D; {}) {
+        this.config &#x3D; {
+            providers: initialConfig.providers ? initialConfig.providers.slice() : [],
+            declarations: initialConfig.declarations ? initialConfig.declarations.slice() : [],
+            imports: initialConfig.imports ? initialConfig.imports.slice() : [],
+            schemas: initialConfig.schemas ? initialConfig.schemas.slice() : [],
+            errorOnUnknownElements: initialConfig.errorOnUnknownElements ?? false,
+            errorOnUnknownProperties: initialConfig.errorOnUnknownProperties ?? false,
+            teardown: {
+                destroyAfterEach: initialConfig.teardown?.destroyAfterEach ?? true,
+                rethrowErrors: initialConfig.teardown?.rethrowErrors ?? false
+            }
+        };
+    }
+
+    /**
+    * @ignore
+    */
+    public configureTestingModule() {
+        if (this.configured) {
+            return;
+        }
+        this.configured &#x3D; true;
+        TestBed.configureTestingModule(this.config);
+        this.postConfigureJobs.forEach(job &#x3D;&gt; job());
+        this.postConfigureJobs.length &#x3D; 0;
+    }
+
+    /**
+    * @ignore
+    */
+    private expectToBePreConfiguration() {
+        if (this.configured) {
+            throw new Error(&#x27;The TestBed has been implicitly configured by calling e.g.&#x27; +
+                &#x27;&quot;injection&quot; or &quot;fixture&quot; the method you called needs a not configured TestBed to be executed&#x27;);
+        }
+    }
+    public declarations(declarations: Array&lt;any&gt;) {
+        this.expectToBePreConfiguration();
+        this.config.declarations.push(...declarations);
+    }
+
+
+    public schemas(schemas: Array&lt;SchemaMetadata | any[]&gt;) {
+        this.expectToBePreConfiguration();
+        this.config.schemas.push(...schemas);
+    }
+
+
+    public imports(imports: any[]) {
+        this.expectToBePreConfiguration();
+        this.config.imports.push(...imports);
+    }
+
+    public providers(providers: any[]) {
+        this.expectToBePreConfiguration();
+        this.config.providers.push(...providers);
+    }
+
+
+
+    /**
+    * @ignore
+    */
+    public uiThingProviderMock&lt;S, M extends Partial&lt;S&gt;&gt;(methodName: string, uiThingClass: Type&lt;any&gt;, token: ProviderToken&lt;S&gt;, mock: M&#x3D; &lt;any&gt;{}, dontSpy &#x3D; false,
+        spySource?: AbstractType&lt;Partial&lt;S&gt;&gt;): S &amp; M | SpyObj&lt;S&gt; &amp; SpyObj&lt;M&gt;{
+        this.expectToBePreConfiguration();
+        if (!dontSpy) {
+            spyOnFunctionsOf(mock, spySource ? spySource.prototype : undefined);
+        }
+        if (!this.config.declarations.includes(uiThingClass) &amp;&amp; !isStandalone(uiThingClass)) {
+            this.config.declarations.push(uiThingClass);
+        }
+        if (isStandalone(uiThingClass) &amp;&amp; !this.config.imports.includes(uiThingClass)) {
+            this.config.imports.push(uiThingClass);
+        }
+        this.postConfigureJobs.push(() &#x3D;&gt; {
+            (TestBed as any)[methodName](uiThingClass, {
+                add: {
+                    providers: [
+                        { provide: token, useValue: mock }
+                    ]
+                }
+            });
+        });
+        return mock as any;
+    }
+
+
+
+    public addToImportsOrDeclarations(uiThingClass: Type&lt;any&gt;) {
+        if (isStandalone(uiThingClass) &amp;&amp; !this.fixtureImports.includes(uiThingClass)) {
+            this.fixtureImports.push(uiThingClass)
+        }
+        if (isStandalone(uiThingClass) &amp;&amp; !this.config.imports.includes(uiThingClass)) {
+            this.config.imports.push(uiThingClass);
+        }
+        if (!isStandalone(uiThingClass) &amp;&amp; !this.config.declarations.includes(uiThingClass)) {
+            this.config.declarations.push(uiThingClass);
+        }
+    }
+
+    public keptComponents&lt;C&gt;(componentClass: Type&lt;C&gt;): Array&lt;C&gt; {
+        const instances &#x3D; this.useInFixtureAndQueryInstances(componentClass);
+        this.overrideImportsIfStandalone(componentClass);
+        return instances;
+    }
+
+    public overrideImportsIfStandalone(componentClass: Type&lt;any&gt;) {
+        if (!isStandalone(componentClass)) {
+            return;
+        }
+        if (!this.configured) {
+            this.postConfigureJobs.push(() &#x3D;&gt; {
+                TestBed.overrideComponent(componentClass, {
+                    set: {
+                        imports: this.fixtureImports
+                    }
+                });
+            });
+        } else {
+            TestBed.overrideComponent(componentClass, {
+                set: {
+                    imports: this.fixtureImports
+                }
+            });
+        }
+
+    }
+
+    public useInFixtureAndQueryInstances&lt;C&gt;(componentClass: Type&lt;C&gt;): Array&lt;C&gt; {
+        const result: Array&lt;any&gt; &#x3D; [&#x27;this array can only be used after fixture() was called&#x27;];
+        this.expectToBePreConfiguration();
+
+        this.addToImportsOrDeclarations(componentClass);
+
+        this.fixtureJobs.push(() &#x3D;&gt; {
+            result.length &#x3D; 0;
+            const componentDebugElements &#x3D; this.fixtureInstance?.debugElement.queryAll(By.directive(componentClass));
+            componentDebugElements?.forEach(componentDebugElement &#x3D;&gt; result.push(componentDebugElement.injector.get(componentClass)));
+        });
+        return result;
+    }
+
+    public fixture&lt;C&gt;(componentClass: Type&lt;C&gt;, initialInputs: MagicFixtureInputs&lt;C&gt; &#x3D; {}, disableNoErrorSchema &#x3D; false): ComponentFixture&lt;C&gt; {
+        if (this.fixtureInstance) {
+            throw new Error(&#x27;.fixture can only be called once per NgMagicTestBed instance&#x27;);
+        }
+        if (!this.config.declarations.includes(componentClass) &amp;&amp; this.configured) {
+            throw new Error(&#x27;Declaration of component needs to be done before you can create the fixture&#x27;);
+        }
+
+        if (isStandalone(componentClass) &amp;&amp; !this.configured) {
+            this.config.imports.push(componentClass);
+        }
+        if (!isStandalone(componentClass) &amp;&amp; !this.config.declarations.includes(componentClass) &amp;&amp; !this.configured) {
+            this.config.declarations.push(componentClass);
+        }
+
+        if (!disableNoErrorSchema &amp;&amp; !this.config.schemas.includes(NO_ERRORS_SCHEMA)) {
+            this.config.schemas.push(NO_ERRORS_SCHEMA);
+        }
+        if (!this.configured) {
+            this.configureTestingModule();
+        }
+        this.overrideImportsIfStandalone(componentClass);
+        if (!this.compiled) {
+            this.compiled &#x3D; true;
+            //TODO: This seems to be declared as async but it in reality it does not seems to be.
+            TestBed.compileComponents();
+        }
+        this.fixtureInstance &#x3D; TestBed.createComponent(componentClass);
+        // setInput() (rather than Object.assign onto componentInstance) is required for signal-based
+        // input()s to work - assigning directly onto the instance would overwrite the InputSignal function
+        // itself with a plain value. setInput() also correctly applies any &#x60;transform&#x60; the input declares,
+        // and works the same way for classic @Input()-decorated properties, so it&#x27;s used uniformly here.
+        Object.keys(initialInputs as object).forEach(key &#x3D;&gt; {
+            this.fixtureInstance!.componentRef.setInput(key, (initialInputs as any)[key]);
+        });
+        this.fixtureInstance.detectChanges();
+        this.fixtureJobs.forEach(job &#x3D;&gt; job());
+        return this.fixtureInstance;
+    }
+
+
+    /**
+    * @ignore
+    */
+    public mock&lt;S, M extends Partial&lt;S&gt;&gt;(token?: ProviderToken&lt;S&gt;, mock: M &#x3D; &lt;any&gt;{}, dontSpy?: boolean, spySource?: AbstractType&lt;Partial&lt;S&gt;&gt;):
+        S &amp; M | SpyObj&lt;S&gt; &amp; SpyObj&lt;M&gt; {
+        if (!dontSpy) {
+            spyOnFunctionsOf(mock, spySource ? spySource.prototype : undefined);
+        }
+        if (token) {
+            this.expectToBePreConfiguration();
+            this.config.providers.push({
+                useValue: mock,
+                provide: token
+            });
+        }
+        return &lt;any&gt;mock;
+    }
+
+
+
+}</code></pre>
+    </div>
+</div>
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'class';
+            var COMPODOC_CURRENT_PAGE_URL = 'TestBedConfigurator.html';
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

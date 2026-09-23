@@ -1,5 +1,5 @@
 import { Component, Input, Pipe, PipeTransform } from '@angular/core';
-import { NgMagicSetupTestBed } from '../public-api';
+import { NgMagicTestBed } from '../public-api';
 
 // Covers pipeMock(pipeName, transform?)
 // Generates a throwaway standalone pipe with the given name and registers it
@@ -27,7 +27,7 @@ class CurrencyHostComponent {
 describe('pipeMock()', () => {
 
     it('without a transform should pass the input value through unchanged (identity)', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         magic.pipeMock('currencyFormat');
 
         const fixture = magic.fixture(CurrencyHostComponent, { amount: 42 });
@@ -36,7 +36,7 @@ describe('pipeMock()', () => {
     });
 
     it('with a custom transform should use it to compute the output', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         magic.pipeMock('currencyFormat', (value: number) => `$${value}`);
 
         const fixture = magic.fixture(CurrencyHostComponent, { amount: 42 });
@@ -45,7 +45,7 @@ describe('pipeMock()', () => {
     });
 
     it('returns a spy that records every call the template makes to the pipe', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const currencyFormatSpy = magic.pipeMock('currencyFormat', (value: number) => `$${value}`);
 
         magic.fixture(CurrencyHostComponent, { amount: 42 });
@@ -54,7 +54,7 @@ describe('pipeMock()', () => {
     });
 
     it('should throw when called without a pipe name', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
 
         expect(() => magic.pipeMock('')).toThrowError('pipeName has to be defined');
     });
@@ -81,7 +81,7 @@ describe('keptPipe() - keeping the REAL pipe', () => {
     }
 
     it('should keep the real transform() logic, not replace it with a spy', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         magic.keptPipe(ShoutPipe);
 
         const fixture = magic.fixture(ShoutHostComponent, { text: 'hello' });

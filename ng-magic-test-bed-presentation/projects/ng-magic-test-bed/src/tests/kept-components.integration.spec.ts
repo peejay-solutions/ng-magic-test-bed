@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { NgMagicSetupTestBed } from '../public-api';
+import { NgMagicTestBed } from '../public-api';
 
 // Covers keptComponents(componentClass)
 //
@@ -15,7 +15,7 @@ import { NgMagicSetupTestBed } from '../public-api';
 //
 // keptComponents() solves this by calling TestBed.overrideComponent() and
 // REPLACING (not merging!) the kept component's own "imports" array with
-// everything this NgMagicSetupTestBed instance has collected so far via
+// everything this NgMagicTestBed instance has collected so far via
 // componentMocks()/directiveMocks()/keptDirectives()/keptPipe()/keptComponents().
 //
 // CAVEAT this test also documents: because it's a REPLACE and not a merge,
@@ -58,7 +58,7 @@ class RootHostComponent {}
 describe('keptComponents()', () => {
 
     function setup() {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         // Mock the innermost (grandchild) component...
         const grandchildMocks = magic.componentMocks(GrandchildComponent);
         // ...while keeping the middle component REAL, so its own logic

@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { NgMagicSetupTestBed } from '../public-api';
+import { NgMagicTestBed } from '../public-api';
 import { makeSpyReturnValue } from '../spy-framework/spy-framework';
 
 // Covers run() and run(callback)
@@ -28,7 +28,7 @@ class Greeting {
 describe('run(callback)', () => {
 
     it('should execute the callback inside a valid injection context', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const greeterMock = magic.serviceMock(GreeterService);
         makeSpyReturnValue(greeterMock.greet, 'mocked greeting');
 
@@ -38,7 +38,7 @@ describe('run(callback)', () => {
     });
 
     it('should return whatever the callback returns', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
 
         const result = magic.run(() => 42);
 
@@ -56,7 +56,7 @@ describe('run(callback)', () => {
 describe('run() without a callback', () => {
 
     it('should just configure the TestBed and return undefined', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
 
         const result = magic.run();
 
@@ -64,7 +64,7 @@ describe('run() without a callback', () => {
     });
 
     it('should be safe to call multiple times (unlike fixture())', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
 
         expect(() => {
             magic.run();

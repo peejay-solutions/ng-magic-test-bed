@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { NgMagicSetupTestBed } from '../public-api';
+import { NgMagicTestBed } from '../public-api';
 
 // Covers serviceMock() for an abstract class, as opposed to a plain concrete
 // @Injectable service. An abstract method has no implementation on the
@@ -46,7 +46,7 @@ abstract class MyAbstractService {
 describe('serviceMock() for an abstract class', () => {
 
     it('should spy the abstract class (via a concrete mock class) and be usable as a dependency of a useFactory-provided service', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const myAbstractHelperServiceMock = magic.serviceMock(MyAbstractHelperService, new MyAbstractHelperServiceMock());
         const myAbstractService = magic.injection(MyAbstractService);
 

@@ -1,5 +1,5 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, InjectionToken, NgModule } from '@angular/core';
-import { NgMagicSetupTestBed } from '../public-api';
+import { NgMagicTestBed } from '../public-api';
 
 // Covers: declaration(), declarations(), import(), imports(), provider(), providers(), schema(), schemas()
 // These are the low-level module-config building blocks. All of them just push
@@ -58,14 +58,14 @@ class MyNgModule{
 describe('provider() / providers()', () => {
 
     it('provider() should register a single provider that injection() can resolve', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         magic.provider({ provide: GREETING, useValue: 'hi' });
 
         expect(magic.injection(GREETING)).toBe('hi');
     });
 
     it('providers() should register several providers at once', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         magic.providers([
             { provide: GREETING, useValue: 'hi' },
             { provide: FAREWELL, useValue: 'bye' },
@@ -80,7 +80,7 @@ describe('provider() / providers()', () => {
 describe('declaration() / declarations()', () => {
 
     it('declaration() should make a single non-standalone component usable in a fixture', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         magic.declaration(DeclaredChildComponent);
 
         const fixture = magic.fixture(DeclaredRootWithDeclaredChildComponent);
@@ -89,7 +89,7 @@ describe('declaration() / declarations()', () => {
     });
 
     it('declarations() should accept several declarations at once', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         magic.declarations([DeclaredChildComponent]);
 
         const fixture = magic.fixture(DeclaredRootWithDeclaredChildComponent);
@@ -102,7 +102,7 @@ describe('declaration() / declarations()', () => {
 describe('import() / imports()', () => {
 
     it('import() should make a single standalone component usable in a fixture', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         magic.import(StandaloneChildComponent);
 
         const fixture = magic.fixture(DeclaredRootWithStandaloneChildComponent);
@@ -111,7 +111,7 @@ describe('import() / imports()', () => {
     });
 
     it('imports() should accept several imports at once', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         magic.imports([StandaloneChildComponent]);
 
         const fixture = magic.fixture(DeclaredRootWithStandaloneChildComponent);
@@ -128,14 +128,14 @@ describe('schema() / schemas()', () => {
     // CUSTOM_ELEMENTS_SCHEMA ourselves instead.
 
     it('schema() should add a single schema', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         magic.schema(CUSTOM_ELEMENTS_SCHEMA);
 
         expect(() => magic.fixture(StandaloneRootWithStandaloneChildComponent, {}, true)).not.toThrow();
     });
 
     it('schemas() should accept several schemas at once', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         magic.schemas([CUSTOM_ELEMENTS_SCHEMA]);
 
         expect(() => magic.fixture(StandaloneRootWithStandaloneChildComponent, {}, true)).not.toThrow();
@@ -143,7 +143,7 @@ describe('schema() / schemas()', () => {
 
     it('without any schema and disableNoErrorSchema=true, an unknown element throws', () => {
           //Depending on angular version there is this flag or the schema needed
-        const magic = new NgMagicSetupTestBed({errorOnUnknownElements: true});
+        const magic = new NgMagicTestBed({errorOnUnknownElements: true});
 
         expect(() => magic.fixture(StandaloneRootWithStandaloneChildComponent, {}, true)).toThrow();
     });

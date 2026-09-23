@@ -5,7 +5,7 @@ import { isSpy } from '../spy-framework/spy-framework';
 // This is functionally IDENTICAL to magic.objectMock() (both end up calling
 // the very same spyOnFunctionsOf() under the hood, and neither ever touches
 // the DI container) - use the standalone version when you don't have (or
-// don't want) an NgMagicSetupTestBed instance at all, e.g. inside a plain
+// don't want) an NgMagicTestBed instance at all, e.g. inside a plain
 // unit test for a class that manually "new"s its own dependencies.
 
 class RealService {
@@ -47,7 +47,7 @@ describe('mock()', () => {
     it('should never register anything in the DI container', () => {
         const myMock = mock(RealService, { doWork: () => 'mocked' });
 
-        // there is no NgMagicSetupTestBed instance involved at all here, so
+        // there is no NgMagicTestBed instance involved at all here, so
         // there is nothing to inject from - this line just documents intent:
         expect(myMock).not.toBeInstanceOf(RealService);
     });

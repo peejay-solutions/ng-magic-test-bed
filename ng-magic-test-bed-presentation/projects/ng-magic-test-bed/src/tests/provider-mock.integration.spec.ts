@@ -1,5 +1,5 @@
 import { InjectionToken } from '@angular/core';
-import { NgMagicSetupTestBed } from '../public-api';
+import { NgMagicTestBed } from '../public-api';
 import { createSpy, isSpy } from '../spy-framework/spy-framework';
 
 // Covers providerMock(token, mock, dontSpy?, spySource?)
@@ -19,7 +19,7 @@ const CALCULATOR = new InjectionToken<Calculator>('CALCULATOR');
 describe('providerMock()', () => {
 
     it('Without a spySource, methods on mock object literal are auto-spied by default', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const calculatorMock = magic.providerMock(CALCULATOR, {
             add: ()=> 0,
             subtract: ()=> 0
@@ -34,7 +34,7 @@ describe('providerMock()', () => {
     });
 
     it('correct pattern: pass spySource to get real auto-spying for a non-class token', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const calculatorMock = magic.providerMock(
             CALCULATOR,
             {
@@ -54,7 +54,7 @@ describe('providerMock()', () => {
     });
 
     it('alternative pattern: provide already-spied functions yourself when there is no class to use as spySource', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const calculatorMock = magic.providerMock(CALCULATOR, {
             add: createSpy('add', () => 100),
         });
@@ -65,7 +65,7 @@ describe('providerMock()', () => {
     });
 
     it('with dontSpy=true should use the mock exactly as given, regardless of spySource', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const calculatorMock = magic.providerMock(
             CALCULATOR,
             {

@@ -1,5 +1,5 @@
 import { Component, Directive, ElementRef, Injectable, InjectionToken, inject } from '@angular/core';
-import { NgMagicSetupTestBed } from '../public-api';
+import { NgMagicTestBed } from '../public-api';
 import { isSpy, makeSpyReturnValue } from '../spy-framework/spy-framework';
 import { TestBed } from '@angular/core/testing';
 
@@ -57,7 +57,7 @@ class PrefixedLabelHostComponent {}
 
 describe('directiveServiceMock()', () => {
     it('with no mock argument should auto-spy the directive-scoped service', async () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         magic.keptDirectives(LabelWidgetDirective);
         const labelServiceMock = magic.directiveServiceMock(LabelWidgetDirective, ScopedLabelService);
         makeSpyReturnValue(labelServiceMock.getLabel, 'mocked label');
@@ -68,7 +68,7 @@ describe('directiveServiceMock()', () => {
     });
 
     it('with a partial mock should spy it and use the provided implementation', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         magic.keptDirectives(LabelWidgetDirective);
         const labelServiceMock = magic.directiveServiceMock(LabelWidgetDirective, ScopedLabelService, {
             getLabel: () => 'custom label',
@@ -81,7 +81,7 @@ describe('directiveServiceMock()', () => {
     });
 
     it('with dontSpy=true should use the mock exactly as given', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         magic.keptDirectives(LabelWidgetDirective);
         const labelServiceMock = magic.directiveServiceMock(
             LabelWidgetDirective,
@@ -100,14 +100,14 @@ describe('directiveServiceMock()', () => {
 describe('directiveProviderMock()', () => {
 
     it('with a primitive mock and the default dontSpy=false, it throws', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         magic.keptDirectives(PrefixedLabelDirective);
 
         expect(() => magic.directiveProviderMock(PrefixedLabelDirective, LABEL_PREFIX, 'mocked-prefix: ')).toThrow();
     });
 
     it('with dontSpy=true, a primitive mock replaces the directive-scoped token value', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         magic.keptDirectives(PrefixedLabelDirective);
         magic.directiveProviderMock(PrefixedLabelDirective, LABEL_PREFIX, 'mocked-prefix: ', true);
 

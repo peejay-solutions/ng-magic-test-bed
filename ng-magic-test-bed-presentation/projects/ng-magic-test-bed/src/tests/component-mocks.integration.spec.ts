@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { NgMagicSetupTestBed } from '../public-api';
+import { NgMagicTestBed } from '../public-api';
 
 // Covers componentMocks(componentClass)
 // Reflects componentClass's real @Input()/@Output() metadata and generates a
@@ -34,7 +34,7 @@ class RootWithSingleBadgeComponent {
 describe('componentMocks()', () => {
 
     it('before fixture() is called, the returned array is a placeholder, not empty/populated data', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const badgeMocks = magic.componentMocks(BadgeComponent);
 
         expect(badgeMocks.length).toBe(1);
@@ -42,7 +42,7 @@ describe('componentMocks()', () => {
     });
 
     it('after fixture() the array is populated with one mock instance per rendered element', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const badgeMocks = magic.componentMocks(BadgeComponent);
 
         magic.fixture(RootWithSingleBadgeComponent);
@@ -51,7 +51,7 @@ describe('componentMocks()', () => {
     });
 
     it('should map @Input()s onto the mock, including aliased inputs', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const badgeMocks = magic.componentMocks(BadgeComponent);
 
         magic.fixture(RootWithSingleBadgeComponent);
@@ -61,7 +61,7 @@ describe('componentMocks()', () => {
     });
 
     it('should map @Output()s onto the mock as real EventEmitters the parent can react to', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const badgeMocks = magic.componentMocks(BadgeComponent);
 
         const fixture = magic.fixture(RootWithSingleBadgeComponent);
@@ -71,7 +71,7 @@ describe('componentMocks()', () => {
     });
 
     it('should NOT execute the real component logic - only inputs/outputs are stubbed', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const badgeMocks = magic.componentMocks(BadgeComponent);
 
         const fixture = magic.fixture(RootWithSingleBadgeComponent);

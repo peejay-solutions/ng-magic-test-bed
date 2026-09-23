@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { NgMagicSetupTestBed } from '../public-api';
+import { NgMagicTestBed } from '../public-api';
 import { isSpy, makeSpyReturnValue } from '../spy-framework/spy-framework';
 
 // Covers all 3 overloads of serviceMock():
@@ -21,7 +21,7 @@ class GreeterService {
 describe('serviceMock()', () => {
 
     it('with no mock argument should return a full auto-spy - every prototype method becomes a spy', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const greeterMock = magic.serviceMock(GreeterService);
 
         makeSpyReturnValue(greeterMock.greet, 'mocked greeting');
@@ -33,7 +33,7 @@ describe('serviceMock()', () => {
     });
 
     it('with a partial mock should still spy every prototype method (yours and the auto-added ones)', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const greeterMock = magic.serviceMock(GreeterService, {
             greet: (name: string) => `Hi, ${name}`,
         });
@@ -46,7 +46,7 @@ describe('serviceMock()', () => {
     });
 
     it('with dontSpy=true should use the mock exactly as given - no auto-spies added', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const greeterMock = magic.serviceMock(
             GreeterService,
             { greet: (name: string) => `Hi, ${name}` },
@@ -62,7 +62,7 @@ describe('serviceMock()', () => {
     });
 
     it('should register the mock in the DI container, replacing the real service', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const greeterMock = magic.serviceMock(GreeterService);
         makeSpyReturnValue(greeterMock.greet, 'mocked');
 

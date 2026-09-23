@@ -1,4 +1,4 @@
-import { NgMagicSetupTestBed } from '../public-api';
+import { NgMagicTestBed } from '../public-api';
 import { isSpy, makeSpyReturnValue } from '../spy-framework/spy-framework';
 
 // Covers all 3 overloads of objectMock():
@@ -25,7 +25,7 @@ class Widget {
 describe('objectMock()', () => {
 
     it('should auto-spy every method found on the given class prototype', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const widgetMock = magic.objectMock(Widget, { id: 'mock-id' });
 
         makeSpyReturnValue(widgetMock.isActive, true);
@@ -39,7 +39,7 @@ describe('objectMock()', () => {
     });
 
     it('with dontSpy=true should return the mock unmodified - real methods still throw', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const widgetMock = magic.objectMock(Widget, { id: 'mock-id' }, true);
 
         expect(widgetMock.id).toBe('mock-id');
@@ -50,7 +50,7 @@ describe('objectMock()', () => {
     });
 
     it('with objectClass=undefined and simple methods on a plain mock object are auto-spied', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const plainMock = magic.objectMock(undefined, {
             doSomething: () => 'done',
         });
@@ -60,7 +60,7 @@ describe('objectMock()', () => {
     });
 
     it('should NOT register anything in the DI container', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         magic.objectMock(Widget, { id: 'mock-id' });
 
         // Widget was never provided anywhere - injecting it directly is not

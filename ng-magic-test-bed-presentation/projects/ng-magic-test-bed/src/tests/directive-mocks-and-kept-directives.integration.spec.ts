@@ -1,5 +1,5 @@
 import { Component, Directive, ElementRef, Input, OnChanges, Renderer2 } from '@angular/core';
-import { NgMagicSetupTestBed } from '../public-api';
+import { NgMagicTestBed } from '../public-api';
 
 // Covers directiveMocks(directiveClass) and keptDirectives(directiveClass).
 //
@@ -59,7 +59,7 @@ class HighlightHostWithStubComponent {}
 describe('keptDirectives() - keeping the REAL directive', () => {
 
     it('should return the real, fully functional directive instances after fixture()', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const highlightInstances = magic.keptDirectives(HighlightDirective);
 
         const fixture = magic.fixture(HighlightHostComponent);
@@ -75,7 +75,7 @@ describe('keptDirectives() - keeping the REAL directive', () => {
 describe('directiveMocks() - using it with a hand-written stub to actually mock a directive', () => {
 
     it('should render the stub instead of the real directive when the stub uses the same selector', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const highlightStubInstances = magic.directiveMocks(HighlightDirectiveStub);
 
         const fixture = magic.fixture(HighlightHostWithStubComponent);
@@ -92,7 +92,7 @@ describe('directiveMocks() - using it with a hand-written stub to actually mock 
 describe('directiveMocks() and keptDirectives() are functionally identical', () => {
 
     it('directiveMocks(RealClass) behaves exactly like keptDirectives(RealClass)', () => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const highlightInstances = magic.directiveMocks(HighlightDirective);
 
         const fixture = magic.fixture(HighlightHostComponent);
