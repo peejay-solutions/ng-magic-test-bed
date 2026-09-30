@@ -1,0 +1,5 @@
+<li [appOverdueHighlight]="todo.dueDate">
+  <input type="checkbox" [checked]="todo.done" (change)="onToggle()" />
+  <span>{{ todo.title }}</span>
+  <small>{{ todo.dueDate | dueIn }}</small>
+</li>

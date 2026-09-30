@@ -1,4 +1,10 @@
 {
-    "include": ["projects/ng-magic-test-bed/src/**/*.ts"],
+    "include": [
+        "projects/ng-magic-test-bed/src/spy-on-functions/**/*.ts",
+        "projects/ng-magic-test-bed/src/observe/**/*.ts",
+        "projects/ng-magic-test-bed/src/setup-test-bed/**/*.ts",
+        "projects/ng-magic-test-bed/src/mock/**/*.ts",
+        "projects/ng-magic-test-bed/src/test-bed/**/*.ts"
+    ],
     "exclude": ["projects/ng-magic-test-bed/src/**/*.spec.ts"]
 }

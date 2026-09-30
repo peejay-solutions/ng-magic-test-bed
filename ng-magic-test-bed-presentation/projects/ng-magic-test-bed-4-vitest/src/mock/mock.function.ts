@@ -12,7 +12,7 @@ import { SpyObj } from '../spy-framework/spy-framework';
      */
 
 export function mock<S, M extends Partial<S>>( spySource?: AbstractType<S>, mock: M = <any>{}, dontSpy?: boolean):
-    S & M |SpyObj<S> & SpyObj<M> {
+    S & M |SpyObj<S> & M {
     if (!dontSpy) {
         spyOnFunctionsOf(mock, spySource ? spySource.prototype : undefined);
     }

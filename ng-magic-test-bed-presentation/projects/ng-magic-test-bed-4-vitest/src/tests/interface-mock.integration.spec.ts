@@ -9,7 +9,7 @@ import { isSpy, makeSpyReturnValue } from '../spy-framework/spy-framework';
 //
 // interfaceMock() never touches the DI container, just like objectMock(undefined, mock).
 
-interface Logger {
+interface ILogger {
     info(message: string): void;
     warn(message: string): void;
 }
@@ -18,7 +18,7 @@ describe('interfaceMock()', () => {
 
     it('should spy every method provided in the mock and call through to it', () => {
         const magic = new NgMagicTestBed();
-        const loggerMock = magic.interfaceMock<Logger>({
+        const loggerMock = magic.interfaceMock<ILogger>({
             info: () => {},
             warn: () => {},
         });
@@ -36,12 +36,22 @@ describe('interfaceMock()', () => {
 
     it('with dontSpy=true should return the mock unmodified', () => {
         const magic = new NgMagicTestBed();
-        const loggerMock = magic.interfaceMock<Logger>({
+        const loggerMock = magic.interfaceMock<ILogger>({
             info: () => {},
             warn: () => {},
         }, true);
 
         expect(isSpy(loggerMock.info)).toBe(false);
+        expect(isSpy(loggerMock.warn)).toBe(false);
+    });
+
+    it('should only create spys for the methods on the partial mock', ()=>{
+        const magic = new NgMagicTestBed();
+        const loggerMock = magic.interfaceMock<ILogger>({
+            info: () => {},
+        });
+
+        expect(isSpy(loggerMock.info)).toBe(true);
         expect(isSpy(loggerMock.warn)).toBe(false);
     });
 

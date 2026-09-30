@@ -142,12 +142,12 @@ export class NgMagicTestBed  {
     public directiveServiceMock<S, M extends Partial<S>>(directiveClass: Type<any>, serviceClass: AbstractType<S>, mock: M,
         dontSpy: true): S & M;
     public directiveServiceMock<S, M extends Partial<S>>(directiveClass: Type<any>, serviceClass: AbstractType<S>, mock: M):
-        SpyObj<S> & SpyObj<M>;
+        SpyObj<S> & M;
     public directiveServiceMock<S, M extends Partial<S>>(directiveClass: Type<any>, serviceClass: AbstractType<S>):
         SpyObj<S>;
     public directiveServiceMock<S, M extends Partial<S>>(directiveClass: Type<any>, serviceClass: AbstractType<S>,
         mock?: M, dontSpy?: boolean):
-        S & M | SpyObj<S> & SpyObj<M> {
+        S & M | SpyObj<S> & M {
            return this.directiveProviderMock(directiveClass, serviceClass, mock, dontSpy, serviceClass)
     }
 
@@ -159,7 +159,7 @@ export class NgMagicTestBed  {
     * @param dontSpy optional parameter to prevent the default spy creation on the mock
     */
     public directiveProviderMock<S, M extends Partial<S>>(directiveClass: Type<any>, token: ProviderToken<S>, mock?: M, dontSpy = false,
-        spySource?: AbstractType<any>):  S & M | SpyObj<S> & SpyObj<M> {
+        spySource?: AbstractType<any>):  S & M | SpyObj<S> & M {
         return this.configurator.uiThingProviderMock('overrideDirective', directiveClass, token, mock, dontSpy, spySource);
     }
 
@@ -167,7 +167,7 @@ export class NgMagicTestBed  {
     public componentServiceMock<S, M extends Partial<S>>(componentClass: Type<any>, serviceClass: AbstractType<S>, mock: M,
         dontSpy: true): S & M;
     public componentServiceMock<S, M extends Partial<S>>(componentClass: Type<any>, serviceClass: AbstractType<S>, mock: M):
-        SpyObj<S> & SpyObj<M>;
+        SpyObj<S> & M;
     public componentServiceMock<S, M extends Partial<S>>(componentClass: Type<any>, serviceClass: AbstractType<S>):
         SpyObj<S>;
     /**
@@ -179,7 +179,7 @@ export class NgMagicTestBed  {
     */
     public componentServiceMock<S, M extends Partial<S>>(componentClass: Type<any>, serviceClass: AbstractType<S>,
         mock?: M, dontSpy?: boolean):
-        S & M | SpyObj<S> & SpyObj<M> {
+        S & M | SpyObj<S> & M {
         return this.componentProviderMock(componentClass, serviceClass, mock, dontSpy, serviceClass);
     }
 
@@ -191,7 +191,7 @@ export class NgMagicTestBed  {
     * @param dontSpy optional parameter to prevent the default spy creation on the mock
     */
     public componentProviderMock<S, M extends Partial<S>>(componentClass: Type<any>, token: ProviderToken<S>, mock?: M, dontSpy = false,
-        spySource?: AbstractType<Partial<S>>): S & M | SpyObj<S> & SpyObj<M>{
+        spySource?: AbstractType<Partial<S>>): S & M | SpyObj<S> & M{
         return this.configurator.uiThingProviderMock('overrideComponent', componentClass, token, mock, dontSpy, spySource);
     }
 
@@ -299,22 +299,24 @@ export class NgMagicTestBed  {
     public objectMock<O, M extends Partial<O>>(objectClass: undefined, mock: M): SpyObj<M>;
 
     public objectMock<O, M extends Partial<O>>(objectClass: AbstractType<O> | undefined, mock: M | any, dontSpy = false):
-        O & M | SpyObj<O> & SpyObj<M> {
+        O & M | SpyObj<O> & M {
         return <O & M | SpyObj<O> & M>this.configurator.mock(undefined, mock, dontSpy, objectClass);
     }
 
     /**
      * Creates a mock object that satisfies the shape of a TypeScript interface I. This does not (and cannot)
      * replace I anywhere - interfaces have no runtime representation, so there is no prototype to reflect on
-     * the way objectMock() reflects on a class. This means every member of I has to be supplied in mock - only
-     * the methods you actually provide become spies, nothing can be auto-generated for the ones you omit.
+     * the way objectMock() reflects on a class. Only the methods you actually provide in mock become spies -
+     * nothing can be auto-generated for members you omit, since there is nothing to reflect on for those either.
+     * mock only has to be a Partial<I>, so omitted members are typed as present (I & SpyObj<I>) but do not
+     * actually exist on the returned object - calling one you didn't provide throws at runtime despite compiling.
      * Use this instead of objectMock(undefined, mock) purely to avoid casting the result to I & SpyObj<I> yourself.
-     * @param mock an object implementing every member of I.
+     * @param mock an object implementing whichever members of I you need for your test.
      * @param dontSpy optional parameter to prevent the default spy creation on the mock.
-     * @returns your mock, typed as I & SpyObj<I>. Every method on it is a spy that calls through to the
+     * @returns your mock, typed as I & SpyObj<I>. Every method you provided is a spy that calls through to the
      * implementation you supplied, like objectMock() does.
      */
-    public interfaceMock<I>(mock: I, dontSpy = false): I & SpyObj<I> {
+    public interfaceMock<I>(mock: Partial<I>, dontSpy = false): I & SpyObj<I> {
         return <I & SpyObj<I>>this.configurator.mock(undefined, mock, dontSpy, undefined);
     }
 
@@ -329,8 +331,8 @@ export class NgMagicTestBed  {
      * In addition to that a spy will be added for each additional method that was found on the objectClass' prototype.
      */
     public providerMock<S, M extends Partial<S>>(token: ProviderToken<S>, mock: M, dontSpy: boolean = false, spySource?: AbstractType<Partial<S>>):
-    S & M | SpyObj<S> & SpyObj<M> {
-        return this.configurator.mock(token, mock, dontSpy, spySource) as  S & M | SpyObj<S> & SpyObj<M>;
+    S & M | SpyObj<S> & M {
+        return this.configurator.mock(token, mock, dontSpy, spySource) as  S & M | SpyObj<S> & M;
     }
 
 
@@ -366,7 +368,7 @@ export class NgMagicTestBed  {
     public serviceMock<S, M extends Partial<S>>(serviceClass: AbstractType<S>, mock: M,
         dontSpy: true): S & M;
     public serviceMock<S, M extends Partial<S>>(serviceClass: AbstractType<S>, mock: M):
-        SpyObj<S> & SpyObj<M>;
+        SpyObj<S> & M;
     public serviceMock<S, M extends Partial<S>>(serviceClass: AbstractType<S>): SpyObj<S>;
 
     /**
@@ -378,7 +380,7 @@ export class NgMagicTestBed  {
      * @returns the mock after creating some spies on it (if not disabled)
      */
     public serviceMock<S, M extends Partial<S>>(serviceClass: AbstractType<S>, mock?: M, dontSpy?: boolean):
-        S & M | SpyObj<S> & SpyObj<M> {
+        S & M | SpyObj<S> & M {
         return this.configurator.mock(serviceClass, mock, dontSpy, serviceClass);
     }
 

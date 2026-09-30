@@ -113,7 +113,7 @@ export class TestBedConfigurator {
     * @ignore
     */
     public uiThingProviderMock<S, M extends Partial<S>>(methodName: string, uiThingClass: Type<any>, token: ProviderToken<S>, mock: M= <any>{}, dontSpy = false,
-        spySource?: AbstractType<Partial<S>>): S & M | SpyObj<S> & SpyObj<M>{
+        spySource?: AbstractType<Partial<S>>): S & M | SpyObj<S> & M{
         this.expectToBePreConfiguration();
         if (!dontSpy) {
             spyOnFunctionsOf(mock, spySource ? spySource.prototype : undefined);
@@ -237,7 +237,7 @@ export class TestBedConfigurator {
     * @ignore
     */
     public mock<S, M extends Partial<S>>(token?: ProviderToken<S>, mock: M = <any>{}, dontSpy?: boolean, spySource?: AbstractType<Partial<S>>):
-        S & M | SpyObj<S> & SpyObj<M> {
+        S & M | SpyObj<S> & M {
         if (!dontSpy) {
             spyOnFunctionsOf(mock, spySource ? spySource.prototype : undefined);
         }
