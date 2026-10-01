@@ -57,14 +57,14 @@ magic.keptPipe(CurrencyPipe);
 const fixture = magic.fixture(MyComponent);
 expect(fixture.nativeElement.textContent).toContain('$42.00'); // the real pipe ran
 ```
-**`keptDirectives<C>(directiveClass): Array<C>`**
-Keeps a directive as its real implementation and returns an array of every instance found in the fixture (usable only after `fixture()` is called - before that it's a placeholder array). Useful when you want the directive's real behavior but still want to inspect its inputs/state on the rendered instance(s).
+**`keptDirectives<C>(directiveClass): MockArray<C>`**
+Keeps a directive as its real implementation and returns an array of every instance found in the fixture (usable only after `fixture()` is called - before that it's a placeholder array). Useful when you want the directive's real behavior but still want to inspect its inputs/state on the rendered instance(s). The array also has `.mockClass` (here: just `directiveClass` itself, since you already have that reference) and `.requery()` - see `componentMocks()` below for what those do.
 ```typescript
 const tooltipDirectives = magic.keptDirectives(TooltipDirective);
 const fixture = magic.fixture(MyComponent);
 expect(tooltipDirectives[0].text).toBe('Hello');
 ```
-**`keptComponents<C>(componentClass): Array<C>`**
+**`keptComponents<C>(componentClass): MockArray<C>`**
 Same as `keptDirectives()`, but for a child component: keeps its real implementation (real template, real logic) and returns every rendered instance found in the fixture.
 ```typescript
 const cards = magic.keptComponents(CardComponent);
@@ -165,7 +165,7 @@ expect(fixture.componentInstance.label).toBe('test'); // or .label() for a signa
 // Full component test pattern
 function setup() {
   const magic = new NgMagicSetupTestBed();
-  const childMocks = magic.componentMocks(MyChildComponentMock);
+  const childMocks = magic.componentMocks(MyChildComponent);  // pass the REAL child component class
   const serviceMock = magic.componentServiceMock(MyComponent, MyService, new MyServiceMock());
   const fixture = magic.fixture(MyComponent, { param: 100 });
   return { fixture, childMocks, serviceMock };
@@ -177,19 +177,18 @@ it('should render with input', () => {
 });
 ```
 **`componentMocks<C>(componentClass)`**
-Reads inputs and outputs of `componentClass` and registeres a mock component in imports or declarations and returns an array that will be populated with all rendered mock instances **after** `fixture()` is called. Must be called before `fixture()`.
+Pass the **real** component class. Reads its `@Input()`/`@Output()` metadata, auto-generates a stub component with the same selector, registers it in imports/declarations, and returns a `MockArray<C>` that gets populated with all rendered mock instances **after** `fixture()` is called. Must be called before `fixture()`.
+
+`MockArray<C>` is a plain `Array<C>` (indexing, `.length`, `.forEach()`, ... all work exactly as before) extended with two extras:
+- `.mockClass` - the auto-generated mock class. Since you never write or import this class yourself, this is what lets you use Angular's own `fixture.debugElement.query(By.directive(...))` on it at any point in your test, not just right after `fixture()` ran.
+- `.requery()` - re-runs the same query against the fixture's **current** DOM and rewrites the array in place. Returns `void`. Does **not** call `detectChanges()` itself - call that first if something changed since `fixture()` ran or since the last `requery()`.
 ```typescript
-// Define a mock component matching the selector you want to stub
-@Component({ selector: 'lib-button', template: '' })
-class MyButtonMock implements Partial<MyButtonComponent> {
-  @Output() click = new EventEmitter();
-}
 function setup() {
   const magic = new NgMagicSetupTestBed();
-  const buttons = magic.componentMocks(MyButtonMock);  // call before fixture
+  const buttons = magic.componentMocks(MyButtonComponent);  // call before fixture, pass the REAL class
   const fixture = magic.fixture(ParentComponent, { param: 100 });
-  const firstButton = buttons[0];                      // usable after fixture
-  return { fixture, firstButton };
+  const firstButton = buttons[0];                           // usable after fixture
+  return { fixture, buttons, firstButton };
 }
 it('should react to child click', () => {
   const { firstButton, fixture } = setup();
@@ -197,9 +196,21 @@ it('should react to child click', () => {
   fixture.detectChanges();
   // assert parent reaction
 });
+it('should find the mock in the DOM at any point, without ever having a reference to its class', () => {
+  const { fixture, buttons } = setup();
+  const debugElement = fixture.debugElement.query(By.directive(buttons.mockClass));
+  expect(debugElement).not.toBeNull();
+});
+it('should reflect components that appear/disappear after fixture() ran', () => {
+  const { fixture, buttons } = setup();
+  fixture.componentInstance.showButton = false;
+  fixture.detectChanges();
+  buttons.requery();
+  expect(buttons.length).toBe(0);
+});
 ```
 **`directiveMocks<C>(directiveClass)`**
-Returns all rendered directive instances after fixture creation. Same call-before-fixture pattern as `componentMocks`.
+Unlike `componentMocks()`, this does NOT auto-generate a stub for you (Angular has no public API to reflect a directive's inputs/outputs the way it does for components) - pass either the real directive class (equivalent to `keptDirectives()`) or your own hand-written stub with the same selector. Returns the same call-before-fixture `MockArray<C>` as `componentMocks`, `.mockClass`/`.requery()` included.
 **`run<T>(fn)`**
 Executes a factory function within Angular's injection context. Use this to instantiate classes that call `inject()` in their constructor or field initializers.
 ```typescript

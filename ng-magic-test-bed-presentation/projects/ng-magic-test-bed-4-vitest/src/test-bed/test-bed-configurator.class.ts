@@ -5,6 +5,7 @@ import { SpyObj } from '../spy-framework/spy-framework';
 import { By } from '@angular/platform-browser';
 import { FullTestModuleMetadata } from './full-test-module-meta-data.interface';
 import { MagicFixtureInputs } from './magic-fixture-inputs.type';
+import { MockArray } from './mock-array.type';
 
 export class TestBedConfigurator {
 
@@ -150,7 +151,7 @@ export class TestBedConfigurator {
         }
     }
 
-    public keptComponents<C>(componentClass: Type<C>): Array<C> {
+    public keptComponents<C>(componentClass: Type<C>): MockArray<C> {
         const instances = this.useInFixtureAndQueryInstances(componentClass);
         this.overrideImportsIfStandalone(componentClass);
         return instances;
@@ -178,17 +179,20 @@ export class TestBedConfigurator {
 
     }
 
-    public useInFixtureAndQueryInstances<C>(componentClass: Type<C>): Array<C> {
-        const result: Array<any> = ['this array can only be used after fixture() was called'];
+    public useInFixtureAndQueryInstances<C>(componentOrDirectiveClass: Type<C>): MockArray<C> {
+        const result = ['this array can only be used after fixture() was called'] as unknown as MockArray<C>;
         this.expectToBePreConfiguration();
 
-        this.addToImportsOrDeclarations(componentClass);
+        this.addToImportsOrDeclarations(componentOrDirectiveClass);
 
-        this.fixtureJobs.push(() => {
+        result.mockClass = componentOrDirectiveClass;
+        result.requery = () => {
             result.length = 0;
-            const componentDebugElements = this.fixtureInstance?.debugElement.queryAll(By.directive(componentClass));
-            componentDebugElements?.forEach(componentDebugElement => result.push(componentDebugElement.injector.get(componentClass)));
-        });
+            const componentDebugElements = this.fixtureInstance?.debugElement.queryAll(By.directive(componentOrDirectiveClass));
+            componentDebugElements?.forEach(componentDebugElement => result.push(componentDebugElement.injector.get(componentOrDirectiveClass)));
+        };
+
+        this.fixtureJobs.push(() => result.requery());
         return result;
     }
 

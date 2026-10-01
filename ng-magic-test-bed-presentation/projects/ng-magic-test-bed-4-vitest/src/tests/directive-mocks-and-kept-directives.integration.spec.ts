@@ -1,4 +1,6 @@
 import { Component, Directive, ElementRef, Input, OnChanges, Renderer2 } from '@angular/core';
+import { NgIf } from '@angular/common';
+import { By } from '@angular/platform-browser';
 import { NgMagicTestBed } from '../public-api';
 
 // Covers directiveMocks(directiveClass) and keptDirectives(directiveClass).
@@ -56,6 +58,16 @@ class HighlightHostComponent {}
 })
 class HighlightHostWithStubComponent {}
 
+@Component({
+    selector: 'highlight-host-with-conditional-stub',
+    standalone: true,
+    imports: [HighlightDirectiveStub, NgIf],
+    template: `<span *ngIf="showSpan" [appHighlight]="'lime'">text</span>`,
+})
+class HighlightHostWithConditionalStubComponent {
+    public showSpan = true;
+}
+
 describe('keptDirectives() - keeping the REAL directive', () => {
 
     it('should return the real, fully functional directive instances after fixture()', () => {
@@ -85,6 +97,34 @@ describe('directiveMocks() - using it with a hand-written stub to actually mock 
         expect(highlightStubInstances[0].wasBound).toBe(true);
         // the stub does not implement the real highlighting logic, so no style is applied:
         expect(span.style.backgroundColor).toBe('');
+    });
+
+    it('mockClass exposes the class that was queried for, usable with fixture.debugElement.query(By.directive())', () => {
+        const magic = new NgMagicTestBed();
+        const highlightStubInstances = magic.directiveMocks(HighlightDirectiveStub);
+
+        const fixture = magic.fixture(HighlightHostWithStubComponent);
+        const debugElement = fixture.debugElement.query(By.directive(highlightStubInstances.mockClass));
+
+        expect(debugElement).not.toBeNull();
+        expect(debugElement.injector.get(HighlightDirectiveStub)).toBe(highlightStubInstances[0]);
+    });
+
+    it('requery() re-reads the fixture\'s current DOM in place, but does NOT call detectChanges() itself', () => {
+        const magic = new NgMagicTestBed();
+        const highlightStubInstances = magic.directiveMocks(HighlightDirectiveStub);
+        magic.keptComponentImports([NgIf]); // HighlightHostWithConditionalStubComponent's *ngIf needs this, see keptComponentImports() docs
+
+        const fixture = magic.fixture(HighlightHostWithConditionalStubComponent);
+        expect(highlightStubInstances.length).toBe(1);
+
+        fixture.componentInstance.showSpan = false;
+        highlightStubInstances.requery();
+        expect(highlightStubInstances.length).toBe(1);
+
+        fixture.changeDetectorRef.detectChanges();
+        highlightStubInstances.requery();
+        expect(highlightStubInstances.length).toBe(0);
     });
 
 });

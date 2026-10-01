@@ -9,6 +9,7 @@ import { TestBedConfigurator } from './test-bed-configurator.class';
 import { IFactory } from './i-factory.interface';
 import { mockComponent } from '../public-api';
 import { MagicFixtureInputs } from './magic-fixture-inputs.type';
+import { MockArray } from './mock-array.type';
 
 
 export class NgMagicTestBed  {
@@ -202,11 +203,13 @@ export class NgMagicTestBed  {
     * Note that this method behaves different to directiveMocks. This is because Angular is missing a public reflectDirectiveType method. 
     * This method will be made smarter as soon as such a method is available.
     * @param directiveClass class of the directive that should be used in the fixture for a specific selector you want to mock.
-    * @returns an array of all component instances that were found statically inside the fixture. The array's members can only be
-    * used after calling .fixture(). Before that time the array is initialized like this:
-    * ['this array can only be used after fixture() was called'].
+    * @returns an array of all component instances that were found statically inside the fixture, extended with mockClass (the
+    * class that was queried for, usable with fixture.debugElement.query(By.directive(...)) at any point in your test) and
+    * requery() (re-runs the same query against the fixture's current DOM and rewrites this array in place - does not call
+    * detectChanges() itself). The array's members can only be used after calling .fixture(). Before that time the array is
+    * initialized like this: ['this array can only be used after fixture() was called'].
     */
-    public directiveMocks<C>(directiveClass: Type<C>): Array<C> {
+    public directiveMocks<C>(directiveClass: Type<C>): MockArray<C> {
         return this.configurator.useInFixtureAndQueryInstances(directiveClass);
     }
 
@@ -241,18 +244,20 @@ export class NgMagicTestBed  {
      * @param directiveClass 
      * @returns 
      */
-    public keptDirectives<C>(directiveClass: Type<C>): Array<C> {
+    public keptDirectives<C>(directiveClass: Type<C>): MockArray<C> {
         return this.directiveMocks(directiveClass);
     }
 
     /**
      * Declare that you want to keep a certain component. This kept component will be added to the imports of your fixture component and all other kept components.
      * @param componentClass 
-     * @returns an array of all component instances that were found statically inside the fixture. The array's members can only be
-    * used after calling .fixture(). Before that time the array is initialized like this:
-    * ['this array can only be used after fixture() was called'].
+     * @returns an array of all component instances that were found statically inside the fixture, extended with mockClass (the
+     * class that was queried for, usable with fixture.debugElement.query(By.directive(...)) at any point in your test) and
+     * requery() (re-runs the same query against the fixture's current DOM and rewrites this array in place - does not call
+     * detectChanges() itself). The array's members can only be used after calling .fixture(). Before that time the array is
+    * initialized like this: ['this array can only be used after fixture() was called'].
      */
-    public keptComponents<C>(componentClass: Type<C>): Array<C> {
+    public keptComponents<C>(componentClass: Type<C>): MockArray<C> {
         return this.configurator.keptComponents(componentClass);
     }
 
@@ -260,11 +265,14 @@ export class NgMagicTestBed  {
     * declare that you want to generically mock all inputs and outputs of a component and retrieve all created component mock instances after fixture
     * creation.
     * @param componentClass class of the component that should be mocked in the fixture.
-    * @returns an array of all component instances that were found statically inside the fixture. The array's members can only be
-    * used after calling .fixture(). Before that time the array is initialized like this:
+    * @returns an array of all component instances that were found statically inside the fixture, extended with mockClass (the
+    * auto-generated mock class that was queried for, usable with fixture.debugElement.query(By.directive(...)) at any point in
+    * your test, since you no longer have a reference to this class yourself) and requery() (re-runs the same query against the
+    * fixture's current DOM and rewrites this array in place - does not call detectChanges() itself). The array's members can
+    * only be used after calling .fixture(). Before that time the array is initialized like this:
     * ['this array can only be used after fixture() was called'].
     */
-    public componentMocks<C>(componentClass: Type<C>): Array<C> {
+    public componentMocks<C>(componentClass: Type<C>): MockArray<C> {
         const componentMock = mockComponent(componentClass);
         return this.configurator.useInFixtureAndQueryInstances(componentMock);
     }
