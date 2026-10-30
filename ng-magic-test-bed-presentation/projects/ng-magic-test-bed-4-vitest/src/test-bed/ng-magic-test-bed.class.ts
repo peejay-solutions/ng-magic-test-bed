@@ -20,7 +20,7 @@ export class NgMagicTestBed  {
     private configurator: TestBedConfigurator;
 
     /**
-    * @param initialConfig  initial config which will be extended by the other methods of this NgMagicSetupTestBed instance.
+    * @param initialConfig  initial config which will be extended by the other methods of this NgMagicTestBed instance.
     *  The final config will be used to call TestBed.configureTestingModule implicitly by
     * calling e.g. .injection()
     */

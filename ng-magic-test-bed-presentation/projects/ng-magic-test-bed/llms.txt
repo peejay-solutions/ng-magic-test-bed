@@ -285,6 +285,14 @@ import { mock } from '@peejay-solutions/ng-magic-test-bed';
 const myMock = mock(MyService, { getData: () => [] });
 // myMock has spies for all MyService methods; getData calls through to the provided fn
 ```
+**`mockInterface<I>(mock, dontSpy?)`**
+Standalone alternative to `magic.interfaceMock()`. Creates a mock object typed as `I & jasmine.SpyObj<I>` for a plain TypeScript interface, without needing a test bed instance. `mock` only has to be a `Partial<I>`; only the methods you provide become spies. **Caveat:** omitted members are typed as present but do not exist at runtime, so calling one throws.
+```typescript
+import { mockInterface } from '@peejay-solutions/ng-magic-test-bed';
+const loggerMock = mockInterface<ILogger>({ info: () => {} });
+loggerMock.info('x');
+expect(loggerMock.info).toHaveBeenCalledWith('x');
+```
 **`spyOnFunctionsOf(target, source?)`**
 Converts all methods of `target` into Jasmine spies in place. Inherited methods are overwritten on the object itself (not on the prototype) to avoid side effects. An optional `source` can add extra spies from another class's prototype.
 ```typescript

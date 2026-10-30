@@ -1,0 +1,9 @@
+{
+    "include": [
+        "src/spy-on-functions/**/*.ts",
+        "src/observe/**/*.ts",
+        "src/mock/**/*.ts",
+        "src/test-bed/**/*.ts"
+    ],
+    "exclude": ["src/**/*.spec.ts"]
+}

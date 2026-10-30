@@ -19,7 +19,10 @@
     "buildLib": "ng run ng-magic-test-bed:build:production && npm run copyLlms",
     "copyLlmsVitest": "xcopy /s /y \".\\projects\\ng-magic-test-bed-4-vitest\\llms.txt\" \".\\dist\\ng-magic-test-bed-4-vitest\\\"",
     "buildVitestLib": "ng run ng-magic-test-bed-4-vitest:build:production && npm run copyLlmsVitest",
-    "compodoc": "rmdir /s /q \"..\\docs\" 2>nul & npx compodoc -p ./tsconfig.doc.json projects -d ../docs/"
+    "docsJasmine": "cd projects\\ng-magic-test-bed && ..\\..\\node_modules\\.bin\\compodoc -p tsconfig.doc.json --disableInternal --disablePrivate -n \"ng-magic-test-bed (Jasmine)\" -d ..\\..\\..\\docs\\jasmine",
+    "docsVitest": "cd projects\\ng-magic-test-bed-4-vitest && ..\\..\\node_modules\\.bin\\compodoc -p tsconfig.doc.json --disableInternal --disablePrivate -n \"ng-magic-test-bed (Vitest)\" -d ..\\..\\..\\docs\\vitest",
+    "docsLanding": "xcopy /y \".\\docs-landing\\index.html\" \"..\\docs\\\"",
+    "compodoc": "rmdir /s /q \"..\\docs\" 2>nul & npm run docsJasmine && npm run docsVitest && npm run docsLanding"
   },
   "private": true,
   "dependencies": {
@@ -41,6 +44,7 @@
     "@angular/build": "^21.2.19",
     "@angular/cli": "^21.2.19",
     "@angular/compiler-cli": "^21.2.18",
+    "@compodoc/compodoc": "^2.0.0",
     "@types/jasmine": "~4.3.0",
     "jasmine-core": "~4.6.0",
     "jsdom": "^28.0.0",

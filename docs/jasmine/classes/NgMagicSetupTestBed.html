@@ -1,0 +1,3681 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>ng-magic-test-bed (Jasmine)</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">ng-magic-test-bed (Jasmine)</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search">
+    <button type="button"
+        class="search-input-clear"
+        aria-label="Clear search"
+        data-search-input-clear>&times;</button>
+</div>
+            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content class">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Classes</li>
+  <li class="breadcrumb-item" >NgMagicSetupTestBed</li>
+</ol>
+
+<div class="io-file io-file-path" data-compodoc="entity-file-path">
+    <span class="icon ion-ios-document" aria-hidden="true"></span>
+    <code>src/setup-test-bed/ng-magic-setup-test-bed.class.ts</code>
+</div>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#api" 
+                class="nav-link"
+                
+                role="tab" id="api-tab" data-bs-toggle="tab" data-link="api">API</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+
+
+            <p class="comment">
+                <h3>Extends</h3>
+            </p>
+            <p class="comment">
+                            <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+            </p>
+
+
+
+                <section data-compodoc="block-relationships">
+            <h3>Relationships</h3>
+
+            <div class="row pt-3">
+                <div class="col-sm-6">
+                    <h4>Used by</h4>
+                        <p class="comment"><i>No results matching.</i></p>
+                </div>
+
+                <div class="col-sm-6">
+                    <h4>Depends on</h4>
+                        <ul class="list-unstyled relationships-list">
+                                <li>
+                                            <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+                                </li>
+                        </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="tab-pane fade " id="api">
+            <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+
+        <table class="table table-sm table-bordered index-table">
+            <tbody>
+                <tr>
+                    <td class="col-md-3">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                    <td class="col-md-9">
+                        <ul class="index-list">
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#componentMocks" >componentMocks</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#componentProviderMock" >componentProviderMock</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#componentServiceMock" >componentServiceMock</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#declaration" >declaration</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#declarations" >declarations</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#directiveMocks" >directiveMocks</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#directiveProviderMock" >directiveProviderMock</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#directiveServiceMock" >directiveServiceMock</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#factoryMock" >factoryMock</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#fixture" >fixture</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#import" >import</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#imports" >imports</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#injection" >injection</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#interfaceMock" >interfaceMock</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#keptComponentImports" >keptComponentImports</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#keptComponents" >keptComponents</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#keptDirectives" >keptDirectives</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#keptPipe" >keptPipe</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#objectMock" >objectMock</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#observer" >observer</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#outputObserver" >outputObserver</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#pipeMock" >pipeMock</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#provider" >provider</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#providerFunctionMock" >providerFunctionMock</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#providerMock" >providerMock</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#providers" >providers</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#run" >run</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#schema" >schema</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#schemas" >schemas</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#serviceMock" >serviceMock</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+
+
+
+</section>
+
+
+
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="componentMocks"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>componentMocks</b></span>
+                        <a href="#componentMocks"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>componentMocks&lt;C&gt;(componentClass: Type<C>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:275</a></code>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Type parameters :</b>
+                            <ul class="type-parameters">
+                                    <li>C</li>
+                            </ul>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>declare that you want to generically mock all inputs and outputs of a component and retrieve all created component mock instances after fixture
+creation.
+auto-generated mock class that was queried for, usable with fixture.debugElement.query(By.directive(...)) at any point in
+your test, since you no longer have a reference to this class yourself) and requery() (re-runs the same query against the
+fixture&#39;s current DOM and rewrites this array in place - does not call detectChanges() itself). The array&#39;s members can
+only be used after calling .fixture(). Before that time the array is initialized like this:
+[&#39;this array can only be used after fixture() was called&#39;].</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>componentClass</td>
+                                            <td>
+                                                        <code>Type&lt;C&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>class of the component that should be mocked in the fixture.</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../miscellaneous/typealiases.html#MockArray" target="_self" >MockArray&lt;C&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>an array of all component instances that were found statically inside the fixture, extended with mockClass (the
+auto-generated mock class that was queried for, usable with fixture.debugElement.query(By.directive(...)) at any point in
+your test, since you no longer have a reference to this class yourself) and requery() (re-runs the same query against the
+fixture&#39;s current DOM and rewrites this array in place - does not call detectChanges() itself). The array&#39;s members can
+only be used after calling .fixture(). Before that time the array is initialized like this:
+[&#39;this array can only be used after fixture() was called&#39;].</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="componentProviderMock"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>componentProviderMock</b></span>
+                        <a href="#componentProviderMock"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>componentProviderMock&lt;S, M&gt;(componentClass: Type<any>, token: ProviderToken<S>, mock?: M, dontSpy: unknown, spySource?: AbstractType<Partial<S>>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:194</a></code>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Type parameters :</b>
+                            <ul class="type-parameters">
+                                    <li>S</li>
+                                    <li>M</li>
+                            </ul>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p> If you have component provides a provider you can mock it using this method.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Default value</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>componentClass</td>
+                                            <td>
+                                                        <code>Type&lt;any&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                            <td>
+                                                    <p>the componentClass is the reference of the class of your angular component.</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>token</td>
+                                            <td>
+                                                        <code>ProviderToken&lt;S&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                            <td>
+                                                    <p>the provider token that you want to mock</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>mock</td>
+                                            <td>
+                                                        <code>M</code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                            <td>
+                                                    <p>the mock</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>dontSpy</td>
+                                            <td>
+                                                        <code>unknown</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                                    <code>false</code>
+                                            </td>
+
+                                            <td>
+                                                    <p>optional parameter to prevent the default spy creation on the mock</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>spySource</td>
+                                            <td>
+                                                        <code>AbstractType&lt;Partial&lt;S&gt;&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                            <td>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown | unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="componentServiceMock"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>componentServiceMock</b></span>
+                        <a href="#componentServiceMock"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>componentServiceMock&lt;S, M&gt;(componentClass: Type<any>, serviceClass: AbstractType<S>, mock: M, dontSpy: unknown)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:168</a></code>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Type parameters :</b>
+                            <ul class="type-parameters">
+                                    <li>S</li>
+                                    <li>M</li>
+                            </ul>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>componentClass</td>
+                                            <td>
+                                                        <code>Type&lt;any&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>serviceClass</td>
+                                            <td>
+                                                        <code>AbstractType&lt;S&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>mock</td>
+                                            <td>
+                                                        <code>M</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>dontSpy</td>
+                                            <td>
+                                                        <code>unknown</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>S &amp; M</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="declaration"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>declaration</b></span>
+                        <a href="#declaration"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>declaration(declaration: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:49</a></code>
+</div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>check out angular docs for more information
+<a href="https://angular.io/guide/testing-services#angular-testbed">https://angular.io/guide/testing-services#angular-testbed</a>
+<a href="https://angular.io/api/core/testing/TestBed#configuretestingmodule">https://angular.io/api/core/testing/TestBed#configuretestingmodule</a>
+<a href="https://angular.io/api/core/testing/TestModuleMetadata">https://angular.io/api/core/testing/TestModuleMetadata</a></p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>declaration</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>declaration will be pushed to the declarations of the testing module config.
+check out angular docs for more information
+<a href="https://angular.io/guide/testing-services#angular-testbed">https://angular.io/guide/testing-services#angular-testbed</a>
+<a href="https://angular.io/api/core/testing/TestBed#configuretestingmodule">https://angular.io/api/core/testing/TestBed#configuretestingmodule</a>
+<a href="https://angular.io/api/core/testing/TestModuleMetadata">https://angular.io/api/core/testing/TestModuleMetadata</a></p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="declarations"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>declarations</b></span>
+                        <a href="#declarations"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>declarations(declarations: Array<any>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:38</a></code>
+</div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>check out angular docs for more information
+<a href="https://angular.io/guide/testing-services#angular-testbed">https://angular.io/guide/testing-services#angular-testbed</a>
+<a href="https://angular.io/api/core/testing/TestBed#configuretestingmodule">https://angular.io/api/core/testing/TestBed#configuretestingmodule</a>
+<a href="https://angular.io/api/core/testing/TestModuleMetadata">https://angular.io/api/core/testing/TestModuleMetadata</a></p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>declarations</td>
+                                            <td>
+                                                        <code>Array&lt;any&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>declarations will be pushed to the declarations of the testing module config.
+check out angular docs for more information
+<a href="https://angular.io/guide/testing-services#angular-testbed">https://angular.io/guide/testing-services#angular-testbed</a>
+<a href="https://angular.io/api/core/testing/TestBed#configuretestingmodule">https://angular.io/api/core/testing/TestBed#configuretestingmodule</a>
+<a href="https://angular.io/api/core/testing/TestModuleMetadata">https://angular.io/api/core/testing/TestModuleMetadata</a></p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="directiveMocks"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>directiveMocks</b></span>
+                        <a href="#directiveMocks"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>directiveMocks&lt;C&gt;(directiveClass: Type<C>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:212</a></code>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Type parameters :</b>
+                            <ul class="type-parameters">
+                                    <li>C</li>
+                            </ul>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p> declare that you want to mock a directive for a selector and retrieve all created component mock instances after fixture
+creation.
+Note that this method behaves different to directiveMocks. This is because Angular is missing a public reflectDirectiveType method.
+This method will be made smarter as soon as such a method is available.
+class that was queried for, usable with fixture.debugElement.query(By.directive(...)) at any point in your test) and
+requery() (re-runs the same query against the fixture&#39;s current DOM and rewrites this array in place - does not call
+detectChanges() itself). The array&#39;s members can only be used after calling .fixture(). Before that time the array is
+initialized like this: [&#39;this array can only be used after fixture() was called&#39;].</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>directiveClass</td>
+                                            <td>
+                                                        <code>Type&lt;C&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>class of the directive that should be used in the fixture for a specific selector you want to mock.</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../miscellaneous/typealiases.html#MockArray" target="_self" >MockArray&lt;C&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>an array of all component instances that were found statically inside the fixture, extended with mockClass (the
+class that was queried for, usable with fixture.debugElement.query(By.directive(...)) at any point in your test) and
+requery() (re-runs the same query against the fixture&#39;s current DOM and rewrites this array in place - does not call
+detectChanges() itself). The array&#39;s members can only be used after calling .fixture(). Before that time the array is
+initialized like this: [&#39;this array can only be used after fixture() was called&#39;].</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="directiveProviderMock"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>directiveProviderMock</b></span>
+                        <a href="#directiveProviderMock"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>directiveProviderMock&lt;S, M&gt;(directiveClass: Type<any>, token: ProviderToken<S>, mock?: M, dontSpy: unknown, spySource?: AbstractType<any>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:162</a></code>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Type parameters :</b>
+                            <ul class="type-parameters">
+                                    <li>S</li>
+                                    <li>M</li>
+                            </ul>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p> If you have directive that provides a provider you can mock it using this method.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Default value</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>directiveClass</td>
+                                            <td>
+                                                        <code>Type&lt;any&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                            <td>
+                                                    <p>the directiveClass is the reference of the class of your angular directive.</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>token</td>
+                                            <td>
+                                                        <code>ProviderToken&lt;S&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                            <td>
+                                                    <p>the provider token that you want to mock</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>mock</td>
+                                            <td>
+                                                        <code>M</code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                            <td>
+                                                    <p>the mock</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>dontSpy</td>
+                                            <td>
+                                                        <code>unknown</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                                    <code>false</code>
+                                            </td>
+
+                                            <td>
+                                                    <p>optional parameter to prevent the default spy creation on the mock</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>spySource</td>
+                                            <td>
+                                                        <code>AbstractType&lt;any&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                            <td>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown | unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="directiveServiceMock"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>directiveServiceMock</b></span>
+                        <a href="#directiveServiceMock"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>directiveServiceMock&lt;S, M&gt;(directiveClass: Type<any>, serviceClass: AbstractType<S>, mock: M, dontSpy: unknown)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:143</a></code>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Type parameters :</b>
+                            <ul class="type-parameters">
+                                    <li>S</li>
+                                    <li>M</li>
+                            </ul>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>If you have directive that provides a service you can mock it using this method.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>directiveClass</td>
+                                            <td>
+                                                        <code>Type&lt;any&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>the directiveClass is the reference of the class of your angular directive.</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>serviceClass</td>
+                                            <td>
+                                                        <code>AbstractType&lt;S&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>the serviceClass is the reference to the class of the service that you want to mock</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>mock</td>
+                                            <td>
+                                                        <code>M</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>the mock mocks the service and should implement a partial of the service class</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>dontSpy</td>
+                                            <td>
+                                                        <code>unknown</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>optional parameter to prevent the default spy creation on the mock using the prototype of the serviceClass</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>S &amp; M</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="factoryMock"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>factoryMock</b></span>
+                        <a href="#factoryMock"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>factoryMock&lt;I, F, M&gt;(factoryClass: AbstractType<F>, instances: Array<M & I>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:366</a></code>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Type parameters :</b>
+                            <ul class="type-parameters">
+                                    <li>I</li>
+                                    <li>F</li>
+                                    <li>M</li>
+                            </ul>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p> mocks a service that has a &quot;create&quot; method.
+The first call of mock.create() will return the first item in the instances-array and so on.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>factoryClass</td>
+                                            <td>
+                                                        <code>AbstractType&lt;F&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>service that has a &quot;create&quot; method that you want to mock.</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>instances</td>
+                                            <td>
+                                                        <code>Array&lt;M &amp; I&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>will be returned by the mock this method return when &quot;create&quot; is called.
+The first call of mock.create() will return the first item in the instances-array and so on.</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>SpyObj&lt;F&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>a mock for the factory. mock.create will return the one of the given instances every time it is called</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="fixture"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>fixture</b></span>
+                        <a href="#fixture"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>fixture&lt;C&gt;(componentClass: Type<C>, initialInputs: <a href="../miscellaneous/typealiases.html#MagicFixtureInputs" target="_self">MagicFixtureInputs&lt;C&gt;</a>, disableNoErrorSchema: unknown)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:291</a></code>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Type parameters :</b>
+                            <ul class="type-parameters">
+                                    <li>C</li>
+                            </ul>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p> Use this method to create a component fixture. This method may only be called once per NgMagicTestBed instance.
+ComponentRef.setInput() - works for both classic @Input()-decorated properties and signal-based input()
+properties. For a signal input created with a <code>transform</code>, provide the transform&#39;s input type (the same
+type you&#39;d write in a template binding) - it will be transformed the same way Angular does for real bindings.
+throwing exceptions e.g. for missing or unknown inputs.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Default value</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>componentClass</td>
+                                            <td>
+                                                        <code>Type&lt;C&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                            <td>
+                                                    <p>class of the root component you want to compile and create.</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>initialInputs</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#MagicFixtureInputs" target="_self" >MagicFixtureInputs&lt;C&gt;</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                                    <code>{}</code>
+                                            </td>
+
+                                            <td>
+                                                    <p>values applied to the component&#39;s inputs before the first detectChanges(), via
+ComponentRef.setInput() - works for both classic</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>disableNoErrorSchema</td>
+                                            <td>
+                                                        <code>unknown</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                                    <code>false</code>
+                                            </td>
+
+                                            <td>
+                                                    <p>by default the NgMagicTestBed uses the NO_ERROR_SCHEMA of angular to prevent the compiler from
+throwing exceptions e.g. for missing or unknown inputs.</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>ComponentFixture&lt;C&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>a component fixture like standard TestBed.createComponent(componentClass) would have returned it.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="import"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>import</b></span>
+                        <a href="#import"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>import(aImport: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:95</a></code>
+</div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>check out angular docs for more information
+<a href="https://angular.io/guide/testing-services#angular-testbed">https://angular.io/guide/testing-services#angular-testbed</a>
+<a href="https://angular.io/api/core/testing/TestBed#configuretestingmodule">https://angular.io/api/core/testing/TestBed#configuretestingmodule</a>
+<a href="https://angular.io/api/core/testing/TestModuleMetadata">https://angular.io/api/core/testing/TestModuleMetadata</a></p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>aImport</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="imports"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>imports</b></span>
+                        <a href="#imports"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>imports(imports: any[])</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:84</a></code>
+</div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>check out angular docs for more information
+<a href="https://angular.io/guide/testing-services#angular-testbed">https://angular.io/guide/testing-services#angular-testbed</a>
+<a href="https://angular.io/api/core/testing/TestBed#configuretestingmodule">https://angular.io/api/core/testing/TestBed#configuretestingmodule</a>
+<a href="https://angular.io/api/core/testing/TestModuleMetadata">https://angular.io/api/core/testing/TestModuleMetadata</a></p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>imports</td>
+                                            <td>
+                                                        <code>any[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>imports will be pushed to the imports of the testing module config.
+check out angular docs for more information
+<a href="https://angular.io/guide/testing-services#angular-testbed">https://angular.io/guide/testing-services#angular-testbed</a>
+<a href="https://angular.io/api/core/testing/TestBed#configuretestingmodule">https://angular.io/api/core/testing/TestBed#configuretestingmodule</a>
+<a href="https://angular.io/api/core/testing/TestModuleMetadata">https://angular.io/api/core/testing/TestModuleMetadata</a></p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="injection"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>injection</b></span>
+                        <a href="#injection"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>injection&lt;S&gt;(token: ProviderToken<S>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:404</a></code>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Type parameters :</b>
+                            <ul class="type-parameters">
+                                    <li>S</li>
+                            </ul>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p> return you the service or provider for a given token from the angular dependency injection.
+This will trigger the TestBed configureTestingModule step. After this step you can not create any more mocks.
+Make sure you create all your mocks before calling this method.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>token</td>
+                                            <td>
+                                                        <code>ProviderToken&lt;S&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>of the provider that you want to inject</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>S</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>whatever angular dependency injection finds for your token</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="interfaceMock"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>interfaceMock</b></span>
+                        <a href="#interfaceMock"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>interfaceMock&lt;I&gt;(mock: Partial<I>, dontSpy: unknown)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:327</a></code>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Type parameters :</b>
+                            <ul class="type-parameters">
+                                    <li>I</li>
+                            </ul>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Creates a mock object that satisfies the shape of a TypeScript interface I. This does not (and cannot)
+replace I anywhere - interfaces have no runtime representation, so there is no prototype to reflect on
+the way objectMock() reflects on a class. Only the methods you actually provide in mock become spies -
+nothing can be auto-generated for members you omit, since there is nothing to reflect on for those either.
+mock only has to be a Partial<I>, so omitted members are typed as present (I &amp; SpyObj<I>) but do not
+actually exist on the returned object - calling one you didn&#39;t provide throws at runtime despite compiling.
+Use this instead of objectMock(undefined, mock) purely to avoid casting the result to I &amp; SpyObj<I> yourself.
+implementation you supplied, like objectMock() does.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Default value</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>mock</td>
+                                            <td>
+                                                        <code>Partial&lt;I&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                            <td>
+                                                    <p>an object implementing whichever members of I you need for your test.</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>dontSpy</td>
+                                            <td>
+                                                        <code>unknown</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                                    <code>false</code>
+                                            </td>
+
+                                            <td>
+                                                    <p>optional parameter to prevent the default spy creation on the mock.</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>I &amp; SpyObj</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>your mock, typed as I &amp; SpyObj<I>. Every method you provided is a spy that calls through to the
+implementation you supplied, like objectMock() does.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="keptComponentImports"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>keptComponentImports</b></span>
+                        <a href="#keptComponentImports"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>keptComponentImports(keptComponentImports: Array<Type<any>>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:110</a></code>
+</div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Declare that you want to keep several pipes/directives/standalone components exactly as they are,
+in one call. Each one is added to the imports (or declarations, for non-standalone classes) of your
+fixture component and all other kept components - the same effect as calling keptPipe() once per
+item, but without the per-item boilerplate and without querying for instances afterward.
+Typical use: keeping Angular&#39;s own structural directives/pipes (NgIf, NgFor, AsyncPipe, ...) that
+your fixture component&#39;s template relies on, since overriding a standalone component&#39;s imports for
+fixture/mock purposes replaces its imports array entirely - see keptDirectives()/keptComponents() if
+you also need access to the rendered instances afterward.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>keptComponentImports</td>
+                                            <td>
+                                                        <code>Array&lt;Type&lt;any&gt;&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>array of pipe/directive/component classes to keep as their real implementation.</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="keptComponents"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>keptComponents</b></span>
+                        <a href="#keptComponents"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>keptComponents&lt;C&gt;(componentClass: Type<C>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:260</a></code>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Type parameters :</b>
+                            <ul class="type-parameters">
+                                    <li>C</li>
+                            </ul>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Declare that you want to keep a certain component. This kept component will be added to the imports of your fixture component and all other kept components.
+class that was queried for, usable with fixture.debugElement.query(By.directive(...)) at any point in your test) and
+requery() (re-runs the same query against the fixture&#39;s current DOM and rewrites this array in place - does not call
+detectChanges() itself). The array&#39;s members can only be used after calling .fixture(). Before that time the array is
+initialized like this: [&#39;this array can only be used after fixture() was called&#39;].</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>componentClass</td>
+                                            <td>
+                                                        <code>Type&lt;C&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../miscellaneous/typealiases.html#MockArray" target="_self" >MockArray&lt;C&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>an array of all component instances that were found statically inside the fixture, extended with mockClass (the
+class that was queried for, usable with fixture.debugElement.query(By.directive(...)) at any point in your test) and
+requery() (re-runs the same query against the fixture&#39;s current DOM and rewrites this array in place - does not call
+detectChanges() itself). The array&#39;s members can only be used after calling .fixture(). Before that time the array is
+initialized like this: [&#39;this array can only be used after fixture() was called&#39;].</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="keptDirectives"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>keptDirectives</b></span>
+                        <a href="#keptDirectives"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>keptDirectives&lt;C&gt;(directiveClass: Type<C>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:247</a></code>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Type parameters :</b>
+                            <ul class="type-parameters">
+                                    <li>C</li>
+                            </ul>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Declare that you want to keep a certain directive. This kept directive will be added to the imports of your fixture component and all kept components.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>directiveClass</td>
+                                            <td>
+                                                        <code>Type&lt;C&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../miscellaneous/typealiases.html#MockArray" target="_self" >MockArray&lt;C&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="keptPipe"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>keptPipe</b></span>
+                        <a href="#keptPipe"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>keptPipe&lt;C&gt;(pipeClass: Type<C>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:238</a></code>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Type parameters :</b>
+                            <ul class="type-parameters">
+                                    <li>C</li>
+                            </ul>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>declare that you want to keep a pipe for a selector.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>pipeClass</td>
+                                            <td>
+                                                        <code>Type&lt;C&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>class of the pipe that you want to keep to use it in your fixture and all kept components.</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="objectMock"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>objectMock</b></span>
+                        <a href="#objectMock"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>objectMock&lt;O, M&gt;(objectClass: AbstractType<O>, mock: M, dontSpy: unknown)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:303</a></code>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Type parameters :</b>
+                            <ul class="type-parameters">
+                                    <li>O</li>
+                                    <li>M</li>
+                            </ul>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Can be used to create a mock for an object that should not be registered at angular TestBed.
+In addition to that a spy will be added for each additional method that was found on the objectClass&#39; prototype.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>objectClass</td>
+                                            <td>
+                                                        <code>AbstractType&lt;O&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>This class&#39; prototype will be used to extend the result mock by a spy for each method on the prototype.</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>mock</td>
+                                            <td>
+                                                        <code>M</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>An object that should implement partial of objectClass and contain all methods that you want to return something.</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>dontSpy</td>
+                                            <td>
+                                                        <code>unknown</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>optional parameter to prevent the default spy creation on the mock.</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>O &amp; M</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Your mocks methods will be overwritten with spies that call through to the mocks methods like spyOn method of your test framework.
+In addition to that a spy will be added for each additional method that was found on the objectClass&#39; prototype.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="observer"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>observer</b></span>
+                        <a href="#observer"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>observer&lt;T&gt;(observable: Observable<T>, name?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:422</a></code>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Type parameters :</b>
+                            <ul class="type-parameters">
+                                    <li>T</li>
+                            </ul>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Subscribes to a given observable and spies on its states and emitted values.
+Observable you want to spy
+Optional name that prefixes all spies that are created by the observer. This makes it easier to read the
+test output if anything fails.
+observer that can be used to make assertions in your test cases e.g.:
+expect(observer.next).toHaveBeenCalledWith(expectedValue);
+For more information check SpyObserver documentation</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>observable</td>
+                                            <td>
+                                                        <code>Observable&lt;T&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>Observable you want to spy</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>name</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                            <td>
+                                                    <p>Optional name that prefixes all spies that are created by the observer. This makes it easier to read the
+test output if anything fails.</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/SpyObserver.html" target="_self" >SpyObserver&lt;T&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>observer that can be used to make assertions in your test cases e.g.:
+expect(observer.next).toHaveBeenCalledWith(expectedValue);
+For more information check SpyObserver documentation</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="outputObserver"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>outputObserver</b></span>
+                        <a href="#outputObserver"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>outputObserver&lt;T&gt;(output: OutputEmitterRef<T>, name?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:439</a></code>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Type parameters :</b>
+                            <ul class="type-parameters">
+                                    <li>T</li>
+                            </ul>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Subscribes to a given output and spies on its states and emitted values.
+Output you want to spy
+Optional name that prefixes all spies that are created by the observer. This makes it easier to read the
+test output if anything fails.
+outputObserver that can be used to make assertions in your test cases e.g.:
+expect(outputObserver.next).toHaveBeenCalledWith(expectedValue);
+For more information check SpyObserver documentation</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>output</td>
+                                            <td>
+                                                        <code>OutputEmitterRef&lt;T&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>Output you want to spy</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>name</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                            <td>
+                                                    <p>Optional name that prefixes all spies that are created by the observer. This makes it easier to read the
+test output if anything fails.</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../classes/SpyObserver.html" target="_self" >SpyObserver&lt;T&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>outputObserver that can be used to make assertions in your test cases e.g.:
+expect(outputObserver.next).toHaveBeenCalledWith(expectedValue);
+For more information check SpyObserver documentation</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="pipeMock"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>pipeMock</b></span>
+                        <a href="#pipeMock"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>pipeMock&lt;C&gt;(pipeName: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, transform?: (value?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:220</a></code>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Type parameters :</b>
+                            <ul class="type-parameters">
+                                    <li>C</li>
+                            </ul>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>declare that you want to mock a pipe for a selector.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>pipeName</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>transform</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/function" target="_blank" >function</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Spy</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="provider"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>provider</b></span>
+                        <a href="#provider"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>provider(provider: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:132</a></code>
+</div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>check out angular docs for more information
+<a href="https://angular.io/guide/testing-services#angular-testbed">https://angular.io/guide/testing-services#angular-testbed</a>
+<a href="https://angular.io/api/core/testing/TestBed#configuretestingmodule">https://angular.io/api/core/testing/TestBed#configuretestingmodule</a>
+<a href="https://angular.io/api/core/testing/TestModuleMetadata">https://angular.io/api/core/testing/TestModuleMetadata</a></p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>provider</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>import will be pushed to the providers of the testing module config.
+check out angular docs for more information
+<a href="https://angular.io/guide/testing-services#angular-testbed">https://angular.io/guide/testing-services#angular-testbed</a>
+<a href="https://angular.io/api/core/testing/TestBed#configuretestingmodule">https://angular.io/api/core/testing/TestBed#configuretestingmodule</a>
+<a href="https://angular.io/api/core/testing/TestModuleMetadata">https://angular.io/api/core/testing/TestModuleMetadata</a></p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="providerFunctionMock"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>providerFunctionMock</b></span>
+                        <a href="#providerFunctionMock"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>providerFunctionMock&lt;F&gt;(token: InjectionToken<F>, callback?: Partial<F> & Func)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:353</a></code>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Type parameters :</b>
+                            <ul class="type-parameters">
+                                    <li>F</li>
+                            </ul>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>replaces a function that is provided with an angular provider token with a spy</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>token</td>
+                                            <td>
+                                                        <code>InjectionToken&lt;F&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>token that is used to provide a function</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>callback</td>
+                                            <td>
+                                                        <code>Partial&lt;F&gt; &amp; Func</code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                            <td>
+                                                    <p>optional parameter to define default behavior for the mocked provider function</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Spy&lt;F&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>spy on the mocked provider function</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="providerMock"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>providerMock</b></span>
+                        <a href="#providerMock"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>providerMock&lt;S, M&gt;(token: ProviderToken<S>, mock: M, dontSpy: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>, spySource?: AbstractType<Partial<S>>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:341</a></code>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Type parameters :</b>
+                            <ul class="type-parameters">
+                                    <li>S</li>
+                                    <li>M</li>
+                            </ul>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>mocks a provider for a given token with a given mock. If wanted your mock can be extended by spies
+from a given spySource class.
+In addition to that a spy will be added for each additional method that was found on the objectClass&#39; prototype.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Default value</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>token</td>
+                                            <td>
+                                                        <code>ProviderToken&lt;S&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                            <td>
+                                                    <p>token for provider provision</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>mock</td>
+                                            <td>
+                                                        <code>M</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                            <td>
+                                                    <p>mock that will be registered for the token</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>dontSpy</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                                    <code>false</code>
+                                            </td>
+
+                                            <td>
+                                                    <p>optional parameter to prevent the default spy creation on the mock.</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>spySource</td>
+                                            <td>
+                                                        <code>AbstractType&lt;Partial&lt;S&gt;&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                            <td>
+                                                    <p>for each method in spySources prototype an additional spy will be created on the mock</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown | unknown</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Your mocks methods will be overwritten with spies that call through to the mocks methods like spyOn method of your test framework.
+In addition to that a spy will be added for each additional method that was found on the objectClass&#39; prototype.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="providers"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>providers</b></span>
+                        <a href="#providers"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>providers(providers: any[])</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:121</a></code>
+</div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>check out angular docs for more information
+<a href="https://angular.io/guide/testing-services#angular-testbed">https://angular.io/guide/testing-services#angular-testbed</a>
+<a href="https://angular.io/api/core/testing/TestBed#configuretestingmodule">https://angular.io/api/core/testing/TestBed#configuretestingmodule</a>
+<a href="https://angular.io/api/core/testing/TestModuleMetadata">https://angular.io/api/core/testing/TestModuleMetadata</a></p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>providers</td>
+                                            <td>
+                                                        <code>any[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>providers will be pushed to the providers of the testing module config.
+check out angular docs for more information
+<a href="https://angular.io/guide/testing-services#angular-testbed">https://angular.io/guide/testing-services#angular-testbed</a>
+<a href="https://angular.io/api/core/testing/TestBed#configuretestingmodule">https://angular.io/api/core/testing/TestBed#configuretestingmodule</a>
+<a href="https://angular.io/api/core/testing/TestModuleMetadata">https://angular.io/api/core/testing/TestModuleMetadata</a></p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="run"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>run</b></span>
+                        <a href="#run"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>run()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:452</a></code>
+</div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Can be used to run a callback in injection context. Like TestBed.runInInjectionContext().
+Additionally this will trigger the TestBed configureTestingModule step. After this step you can not create any more mocks.
+Make sure you create all your mocks before calling this method.
+This method can be used to configure the testing module when used without</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>what</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="schema"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>schema</b></span>
+                        <a href="#schema"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>schema(schema: SchemaMetadata | any[])</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:73</a></code>
+</div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>is pushed by default. This can be disabled when calling .fixture().
+check out angular docs for more information
+<a href="https://angular.io/guide/testing-services#angular-testbed">https://angular.io/guide/testing-services#angular-testbed</a>
+<a href="https://angular.io/api/core/testing/TestBed#configuretestingmodule">https://angular.io/api/core/testing/TestBed#configuretestingmodule</a>
+<a href="https://angular.io/api/core/testing/TestModuleMetadata">https://angular.io/api/core/testing/TestModuleMetadata</a></p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>schema</td>
+                                            <td>
+                                                        <code>SchemaMetadata | any[]</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>schema will be pushed to the schemas of the testing module config. Note that the NO_ERRORS_SCHEMA
+is pushed by default. This can be disabled when calling .fixture().
+check out angular docs for more information
+<a href="https://angular.io/guide/testing-services#angular-testbed">https://angular.io/guide/testing-services#angular-testbed</a>
+<a href="https://angular.io/api/core/testing/TestBed#configuretestingmodule">https://angular.io/api/core/testing/TestBed#configuretestingmodule</a>
+<a href="https://angular.io/api/core/testing/TestModuleMetadata">https://angular.io/api/core/testing/TestModuleMetadata</a></p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="schemas"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>schemas</b></span>
+                        <a href="#schemas"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>schemas(schemas: Array<SchemaMetadata | []>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:61</a></code>
+</div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>is pushed by default. This can be disabled when calling .fixture().
+check out angular docs for more information
+<a href="https://angular.io/guide/testing-services#angular-testbed">https://angular.io/guide/testing-services#angular-testbed</a>
+<a href="https://angular.io/api/core/testing/TestBed#configuretestingmodule">https://angular.io/api/core/testing/TestBed#configuretestingmodule</a>
+<a href="https://angular.io/api/core/testing/TestModuleMetadata">https://angular.io/api/core/testing/TestModuleMetadata</a></p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>schemas</td>
+                                            <td>
+                                                        <code>Array&lt;SchemaMetadata | []&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>schemas will be pushed to the schemas of the testing module config. Note that the NO_ERRORS_SCHEMA
+is pushed by default. This can be disabled when calling .fixture().
+check out angular docs for more information
+<a href="https://angular.io/guide/testing-services#angular-testbed">https://angular.io/guide/testing-services#angular-testbed</a>
+<a href="https://angular.io/api/core/testing/TestBed#configuretestingmodule">https://angular.io/api/core/testing/TestBed#configuretestingmodule</a>
+<a href="https://angular.io/api/core/testing/TestModuleMetadata">https://angular.io/api/core/testing/TestModuleMetadata</a></p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="serviceMock"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>serviceMock</b></span>
+                        <a href="#serviceMock"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>serviceMock&lt;S, M&gt;(serviceClass: AbstractType<S>, mock: M, dontSpy: unknown)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/NgMagicTestBed.html" target="_self" >NgMagicTestBed</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/NgMagicTestBed.html#source" target="_self" >NgMagicTestBed:376</a></code>
+</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-md-4">
+                            <b>Type parameters :</b>
+                            <ul class="type-parameters">
+                                    <li>S</li>
+                                    <li>M</li>
+                            </ul>
+                        </td>
+                    </tr>
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>serviceClass</td>
+                                            <td>
+                                                        <code>AbstractType&lt;S&gt;</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>mock</td>
+                                            <td>
+                                                        <code>M</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>dontSpy</td>
+                                            <td>
+                                                        <code>unknown</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>S &amp; M</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+
+
+
+
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { NgMagicTestBed } from &quot;../test-bed/ng-magic-test-bed.class&quot;;
+
+
+
+export class NgMagicSetupTestBed extends NgMagicTestBed {
+}
+</code></pre>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'class';
+            var COMPODOC_CURRENT_PAGE_URL = 'NgMagicSetupTestBed.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var updateDarkModeSwitchOffset = function () {
+                    var content = document.querySelector('.content');
+                    var scrollbarWidth = 0;
+
+                    if (content) {
+                         scrollbarWidth = Math.max(0, content.offsetWidth - content.clientWidth);
+                    }
+
+                    document.documentElement.style.setProperty(
+                         '--content-scrollbar-width',
+                         scrollbarWidth + 'px'
+                    );
+               };
+
+               updateDarkModeSwitchOffset();
+               requestAnimationFrame(updateDarkModeSwitchOffset);
+               window.addEventListener('resize', updateDarkModeSwitchOffset);
+
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

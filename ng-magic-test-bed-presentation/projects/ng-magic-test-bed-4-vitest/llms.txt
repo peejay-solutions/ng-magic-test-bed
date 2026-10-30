@@ -1,17 +1,17 @@
 # @ng-magic-test-bed/vitest
 > Streamlined Angular unit test setup utility for Vitest. Replaces verbose `TestBed.configureTestingModule` boilerplate with a fluent, type-safe API. Uses Vitest mock functions (`vi.fn` / `vi.spyOn`) automatically. Automatically extends all mocks with all methods of the class to be mocked.
 Docs: https://peejay-solutions.github.io/ng-magic-test-bed/
-This is the Vitest port of `@peejay-solutions/ng-magic-test-bed` (Jasmine). Same API surface, different spy primitives — see "Vitest specifics" below.
+This is the Vitest port of `@peejay-solutions/ng-magic-test-bed` (Jasmine). Same API surface, different spy primitives — see "Vitest specifics" below. The entry point is `NgMagicTestBed`; the Jasmine package additionally exports `NgMagicSetupTestBed`, an empty subclass of it, which this package does not have.
 ## Installation
 ```bash
 npm install @ng-magic-test-bed/vitest --save-dev
 ```
 ## Core Usage Pattern
 ```typescript
-import { NgMagicSetupTestBed } from '@ng-magic-test-bed/vitest';
+import { NgMagicTestBed } from '@ng-magic-test-bed/vitest';
 describe('MyService', () => {
   function setup() {
-    const magic = new NgMagicSetupTestBed();
+    const magic = new NgMagicTestBed();
     const dependencyServiceMock = magic.serviceMock(DependencyService);
     const service = magic.injection(MyService);
     return { service, dependencyServiceMock };
@@ -57,7 +57,7 @@ Before reading the full API, use this decision tree to pick the correct mock met
 | Need to assert observable emissions | `observer(observable$)` | Subscribes and tracks all emissions with spies |
 | Need the real service instance from DI | `injection(Class)` | Resolves from TestBed; triggers configuration |
 ---
-## NgMagicSetupTestBed API
+## NgMagicTestBed API
 ### Module Setup (call before injection)
 | Method | Description |
 |---|---|
@@ -95,7 +95,7 @@ expect(cards.length).toBe(3);
 `fixture()` always replaces a standalone root component's `imports` array with only what was explicitly registered through this test bed. Any structural directive or pipe the template relies on (`NgIf`, `NgFor`, `AsyncPipe`, ...) that you don't explicitly keep will silently stop working — no error, the content driven by it just never renders. `keptComponentImports()` keeps several of them as their real implementation in one call, instead of registering each one individually.
 ```typescript
 // Template: <span *ngIf="value$ | async as value">{{ value }}</span>
-const magic = new NgMagicSetupTestBed();
+const magic = new NgMagicTestBed();
 magic.keptComponentImports([NgIf, AsyncPipe]);
 const fixture = magic.fixture(MyComponent);
 // without the line above, *ngIf's content would never render, even
@@ -172,7 +172,7 @@ Note: For factories mocked via `factoryMock()`, use the `factoryMock` return val
 const service = magic.injection(MyService);
 ```
 **`fixture<C>(componentClass, initialInputs?, disableNoErrorSchema?)`**
-Creates a `ComponentFixture<C>`. **May only be called once per `NgMagicSetupTestBed` instance.**
+Creates a `ComponentFixture<C>`. **May only be called once per `NgMagicTestBed` instance.**
 - `initialInputs` — an object whose properties are applied via `componentRef.setInput()` **before** the first `detectChanges()`. This is the correct way to set `@Input()` values that are required in `ngOnInit`. Works for both classic `@Input()`-decorated properties and signal-based `input()` properties — for a signal input with a `transform`, pass the transform's input type (the same value a template binding would pass); it gets transformed the same way a real binding would.
 - `disableNoErrorSchema` — by default `NO_ERRORS_SCHEMA` is added so unknown child elements/inputs are silently ignored. Pass `true` to disable this and get strict template checking.
 - Returns a standard Angular `ComponentFixture<C>` (same as `TestBed.createComponent()`).
@@ -184,7 +184,7 @@ const fixture = magic.fixture(MyComponent, { label: 'test', count: 42 });
 expect(fixture.componentInstance.label).toBe('test'); // or .label() for a signal input
 // Full component test pattern
 function setup() {
-  const magic = new NgMagicSetupTestBed();
+  const magic = new NgMagicTestBed();
   const childMocks = magic.componentMocks(MyChildComponent);  // pass the REAL child component class
   const serviceMock = magic.componentServiceMock(MyComponent, MyService, new MyServiceMock());
   const fixture = magic.fixture(MyComponent, { param: 100 });
@@ -204,7 +204,7 @@ Pass the **real** component class. Reads its `@Input()`/`@Output()` metadata, au
 - `.requery()` - re-runs the same query against the fixture's **current** DOM and rewrites the array in place. Returns `void`. Does **not** call `detectChanges()` itself - call that first if something changed since `fixture()` ran or since the last `requery()`.
 ```typescript
 function setup() {
-  const magic = new NgMagicSetupTestBed();
+  const magic = new NgMagicTestBed();
   const buttons = magic.componentMocks(MyButtonComponent);  // call before fixture, pass the REAL class
   const fixture = magic.fixture(ParentComponent, { param: 100 });
   const firstButton = buttons[0];                           // usable after fixture
@@ -239,7 +239,7 @@ class MyObject {
   getValue() { return this.service.getValue(); }
 }
 it('should support inject()-based classes', () => {
-  const magic = new NgMagicSetupTestBed();
+  const magic = new NgMagicTestBed();
   const serviceMock = magic.serviceMock(MyService);
   serviceMock.getValue.mockReturnValue(42);
   const obj = magic.run(() => new MyObject());
@@ -292,7 +292,7 @@ Only provide a property in the mock when you need a specific return value. Auto-
 ---
 ## Standalone Functions
 **`observe<T>(observable$, name?)`**
-Standalone alternative to `magic.observer()`. Use when you don't have (or need) an `NgMagicSetupTestBed` instance.
+Standalone alternative to `magic.observer()`. Use when you don't have (or need) an `NgMagicTestBed` instance.
 ```typescript
 import { observe } from '@ng-magic-test-bed/vitest';
 const spy = observe(myService.events$, 'events');
@@ -307,6 +307,14 @@ const myMock = mock(MyService, { getData: () => [] });
 ```
 **`mockComponent<T>(ComponentClass)`**
 Derives a mock component class from `ComponentClass`: same selector, empty template, all inputs and outputs preserved. Returns `Type<MockedComponent<T>>`, usable wherever a component class is expected.
+**`mockInterface<I>(mock, dontSpy?)`**
+Standalone alternative to `magic.interfaceMock()`. Creates a mock object typed as `I & SpyObj<I>` for a plain TypeScript interface, without needing a test bed instance. `mock` only has to be a `Partial<I>`; only the methods you provide become spies. **Caveat:** omitted members are typed as present but do not exist at runtime, so calling one throws.
+```typescript
+import { mockInterface } from '@ng-magic-test-bed/vitest';
+const loggerMock = mockInterface<ILogger>({ info: () => {} });
+loggerMock.info('x');
+expect(loggerMock.info).toHaveBeenCalledWith('x');
+```
 **`spyOnFunctionsOf(target, source?)`**
 Converts all methods of `target` into Vitest mock functions in place. Inherited methods are overwritten on the object itself (not on the prototype) to avoid side effects. An optional `source` can add extra spies from another class's prototype.
 ```typescript

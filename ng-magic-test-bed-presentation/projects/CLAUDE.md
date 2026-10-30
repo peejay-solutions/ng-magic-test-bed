@@ -65,7 +65,7 @@ find-and-replace:
   compare Magic against a *genuine* best-practice standard baseline, and
   that only holds up if the baseline is genuine).
 - The **`(magic)`** variant can stay close in structure between the two
-  ports, since `NgMagicSetupTestBed`'s own API surface is the whole point
+  ports, since `NgMagicTestBed`'s own API surface is the whole point (the Vitest port has no `NgMagicSetupTestBed`, see below)
   of being framework-agnostic - but still double check idiomatic details
   (e.g. whether `beforeEach` vs. a local `setup()` function is more
   natural in each ecosystem) rather than assuming a straight copy is right.

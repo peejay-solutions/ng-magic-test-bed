@@ -31,6 +31,7 @@ export function spyOnFunctionsOf(target: any, source?: any) {
 }
 
 
+/** @internal */
 function getMethodKeysFromObject(obj: any) {
     const keys: Array<string> = [];
 
@@ -45,6 +46,7 @@ function getMethodKeysFromObject(obj: any) {
     return keys;
 }
 
+/** @internal */
 function collectFunctionKeys(obj: any, source: any, keys: Array<string>) {
     Object.getOwnPropertyNames(source).forEach(key => {
         try {

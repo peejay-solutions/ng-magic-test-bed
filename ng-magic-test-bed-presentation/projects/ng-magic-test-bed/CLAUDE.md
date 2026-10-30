@@ -19,12 +19,15 @@ boilerplate of manually creating `jasmine.SpyObj`s and wiring up
 
 - `NgMagicTestBed` (`src/test-bed/ng-magic-test-bed.class.ts`) is the actual
   implementation — all public methods live here.
-- `NgMagicSetupTestBed` (`src/test-bed/ng-magic-setup-test-bed.class.ts`) is
+- `NgMagicSetupTestBed` (`src/setup-test-bed/ng-magic-setup-test-bed.class.ts`) is
   an **empty subclass** of `NgMagicTestBed` — no added members. It's the
   name used throughout `llms.txt`, the showcases, and most tests. A handful
   of older specs still instantiate `NgMagicTestBed` directly; both work
   identically. Default to `NgMagicSetupTestBed` in new code, matching the
-  public docs.
+  public docs. **Jasmine only:** the Vitest port (`ng-magic-test-bed-4-vitest`)
+  deliberately has no `NgMagicSetupTestBed` - it only exports `NgMagicTestBed`,
+  and `sync-from-jasmine.mjs` filters the export out of `public-api.ts`. In
+  synced code (`test-bed/`, `tests/`, ...) always use `NgMagicTestBed`.
 - `TestBedConfigurator` (`src/test-bed/test-bed-configurator.class.ts`) is
   the internal engine `NgMagicTestBed` delegates to — it accumulates
   `TestModuleMetadata` (providers, imports, declarations, schemas) and

@@ -3,9 +3,9 @@ import { isSpy, makeSpyReturnValue } from '../spy-framework/spy-framework';
 
 // interfaceMock() mocks a TypeScript interface - a compile-time-only construct with no
 // runtime representation. Unlike objectMock(objectClass, mock), there is no prototype to
-// reflect on, so mock must implement every member of the interface - only the methods you
-// actually provide become spies, nothing is auto-generated for members you'd omit (and the
-// compiler won't let you omit any, since mock is typed as I, not Partial<I>).
+// reflect on, so only the methods you actually provide in mock become spies - nothing is
+// auto-generated for members you omit. mock only has to be a Partial<I>, so omitted members
+// are typed as present on the result but do not exist at runtime.
 //
 // interfaceMock() never touches the DI container, just like objectMock(undefined, mock).
 

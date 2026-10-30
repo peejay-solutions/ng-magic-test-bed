@@ -10,6 +10,8 @@
  *                      makeSpyReturnValue, getSpyName, Spy<T>, SpyObj<T>) on
  *                      top of each framework's own primitives, maintained by
  *                      hand on both sides so everything else can rely on it)
+ *   - setup-test-bed/ (NgMagicSetupTestBed exists in the Jasmine package only;
+ *                      its export is filtered out of public-api.ts)
  *
  * Everything copied here works unmodified in both projects specifically
  * *because* it only ever calls the spy-framework abstraction - never a
@@ -21,7 +23,7 @@
  * Usage: npm run sync:jasmine-source
  */
 
-import { cpSync, rmSync, existsSync } from 'node:fs';
+import { cpSync, rmSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -40,6 +42,14 @@ const FOLDERS_TO_SYNC = [
 
 const FILES_TO_SYNC = [
     'public-api.ts',
+];
+
+// The Jasmine package exports NgMagicSetupTestBed (an empty subclass of
+// NgMagicTestBed). The Vitest package deliberately does not have it:
+//   - the folder is never synced (and removed from the target if present)
+//   - its export line is filtered out of public-api.ts while copying
+const FOLDERS_ONLY_IN_JASMINE = [
+    'setup-test-bed',
 ];
 
 if (!existsSync(SOURCE_ROOT)) {
@@ -64,6 +74,14 @@ for (const folder of FOLDERS_TO_SYNC) {
     console.log(`Synced ${folder}/`);
 }
 
+for (const folder of FOLDERS_ONLY_IN_JASMINE) {
+    const target = join(TARGET_ROOT, folder);
+    if (existsSync(target)) {
+        rmSync(target, { recursive: true, force: true });
+        console.log(`Removed ${folder}/ (Jasmine only)`);
+    }
+}
+
 for (const file of FILES_TO_SYNC) {
     const source = join(SOURCE_ROOT, file);
     const target = join(TARGET_ROOT, file);
@@ -71,7 +89,15 @@ for (const file of FILES_TO_SYNC) {
         console.warn(`Skipping missing source file: ${source}`);
         continue;
     }
-    cpSync(source, target);
+    if (file === 'public-api.ts') {
+        // keep the line endings of the source file, drop exports of Jasmine-only folders
+        const lines = readFileSync(source, 'utf8').split(/(?<=\n)/);
+        const kept = lines.filter(line =>
+            !FOLDERS_ONLY_IN_JASMINE.some(folder => line.includes(`'./${folder}/`)));
+        writeFileSync(target, kept.join(''));
+    } else {
+        cpSync(source, target);
+    }
     console.log(`Synced ${file}`);
 }
 

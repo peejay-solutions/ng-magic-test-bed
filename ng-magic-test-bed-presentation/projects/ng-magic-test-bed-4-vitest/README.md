@@ -1,64 +1,68 @@
-# NgMagicTestBed4Vitest
+# ng-magic-test-bed
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.0.
+A streamlined unit test setup for Angular. It replaces verbose `TestBed.configureTestingModule` boilerplate with a small, type-safe API, and it creates spies for you: every mock is automatically extended with spies for all methods of the class being mocked.
 
-## Code scaffolding
+## Pick your flavor
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+ng-magic-test-bed exists for two test runners. Install **one** of them, never both.
 
-```bash
-ng generate component component-name
+| | Jasmine | Vitest |
+|---|---|---|
+| Package | `@peejay-solutions/ng-magic-test-bed` | `@ng-magic-test-bed/vitest` |
+| Install | `npm install @peejay-solutions/ng-magic-test-bed --save-dev` | `npm install @ng-magic-test-bed/vitest --save-dev` |
+| API docs | [Jasmine API docs](https://peejay-solutions.github.io/ng-magic-test-bed/jasmine/) | [Vitest API docs](https://peejay-solutions.github.io/ng-magic-test-bed/vitest/) |
+
+Both packages have the same API. They are built from the same implementation and the same regression tests: the Jasmine package is the source, and the Vitest package is kept in sync with it. There are two differences. Spies look different, because each package uses the spy primitives of its own test runner:
+
+| Jasmine | Vitest |
+|---|---|
+| `spy.and.returnValue(x)` | `spy.mockReturnValue(x)` |
+| `spy.and.callFake(fn)` | `spy.mockImplementation(fn)` |
+| `spy.calls.mostRecent().args` | `spy.mock.lastCall` |
+
+And the entry point has a different name: the Jasmine package exports `NgMagicSetupTestBed` (an empty subclass of `NgMagicTestBed`), while the Vitest package only exports `NgMagicTestBed`.
+
+## Quick start
+
+```typescript
+import { NgMagicTestBed } from '@ng-magic-test-bed/vitest';
+
+describe('MyService', () => {
+  function setup() {
+    const magic = new NgMagicTestBed();
+    const dependencyMock = magic.serviceMock(DependencyService);
+    const service = magic.injection(MyService); // triggers the TestBed configuration, call it after all mocks are set up
+    return { service, dependencyMock };
+  }
+
+  it('should do X when Y', () => {
+    const { service, dependencyMock } = setup();
+    dependencyMock.someMethod.mockReturnValue('value');
+    expect(service.doSomething()).toBe('expected');
+  });
+});
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## What you get
 
-```bash
-ng generate --help
-```
+- `serviceMock`, `objectMock`, `interfaceMock`, `factoryMock` and `providerMock` for mocking dependencies, with automatic spies.
+- `componentMocks` and `directiveMocks` for replacing child components and directives in a fixture.
+- `fixture` for creating a component fixture with initial inputs.
+- `observer` for asserting observable emissions.
+- Standalone functions `mock`, `mockInterface`, `mockComponent`, `observe` and `spyOnFunctionsOf` for use without a test bed instance.
 
-## Building
+See the API docs linked above for the full reference.
 
-To build the library, run:
+## Requirements
 
-```bash
-ng build ng-magic-test-bed-4-vitest
-```
+- Angular 21 or newer
+- RxJS 6 or newer
+- Vitest 3 or newer (Vitest package only)
 
-This command will compile your project, and the build artifacts will be placed in the `dist/` directory.
+## AI agents and LLM tools
 
-### Publishing the Library
+The package ships a concise API reference as `llms.txt` (see the `llms` field in its `package.json`).
 
-Once the project is built, you can publish your library by following these steps:
+## License
 
-1. Navigate to the `dist` directory:
-
-   ```bash
-   cd dist/ng-magic-test-bed-4-vitest
-   ```
-
-2. Run the `npm publish` command to publish your library to the npm registry:
-   ```bash
-   npm publish
-   ```
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+MIT

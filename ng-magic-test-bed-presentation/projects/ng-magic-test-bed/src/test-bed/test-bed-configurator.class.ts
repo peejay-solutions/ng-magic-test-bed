@@ -7,6 +7,10 @@ import { FullTestModuleMetadata } from './full-test-module-meta-data.interface';
 import { MagicFixtureInputs } from './magic-fixture-inputs.type';
 import { MockArray } from './mock-array.type';
 
+/**
+ * Implementation detail of NgMagicTestBed - not part of the public API.
+ * @internal
+ */
 export class TestBedConfigurator {
 
     /**
@@ -45,7 +49,7 @@ export class TestBedConfigurator {
     private fixtureImports: Array<Type<any>> = [];
 
     /**
-    * @param initialConfig  initial config which will be extended by the other methods of this NgMagicSetupTestBed instance.
+    * @param initialConfig  initial config which will be extended by the other methods of this NgMagicTestBed instance.
     *  The final config will be used to call TestBed.configureTestingModule implicitly by
     * calling e.g. .injection()
     */
