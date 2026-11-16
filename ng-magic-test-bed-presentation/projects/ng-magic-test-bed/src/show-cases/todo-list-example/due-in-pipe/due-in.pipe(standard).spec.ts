@@ -24,14 +24,14 @@ describe('DueInPipe(standard)', () => {
 
     it('should render an empty string when there is no due date', () => {
         fixture.componentInstance.dueDate = null;
-        fixture.detectChanges();
+        fixture.changeDetectorRef.detectChanges();
 
         expect(fixture.nativeElement.textContent.trim()).toBe('');
     });
 
     it('should render "due today" when the due date is today', () => {
         fixture.componentInstance.dueDate = new Date();
-        fixture.detectChanges();
+        fixture.changeDetectorRef.detectChanges();
 
         expect(fixture.nativeElement.textContent.trim()).toBe('due today');
     });
@@ -39,7 +39,7 @@ describe('DueInPipe(standard)', () => {
     it('should render "overdue" when the due date is in the past', () => {
         const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
         fixture.componentInstance.dueDate = yesterday;
-        fixture.detectChanges();
+        fixture.changeDetectorRef.detectChanges();
 
         expect(fixture.nativeElement.textContent.trim()).toBe('overdue');
     });

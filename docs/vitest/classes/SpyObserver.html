@@ -206,6 +206,24 @@
             </tbody>
         </table>
 
+        <table class="table table-sm table-bordered index-table">
+            <tbody>
+                <tr>
+                    <td class="col-md-3">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                    <td class="col-md-9">
+                        <ul class="index-list">
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                <a href="#unsubscribe" >unsubscribe</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
 
 
@@ -241,7 +259,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="39" class="link-to-prism">src/observe/spy-observer.class.ts:39</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/observe/spy-observer.class.ts:50</a></div>
                             </td>
                         </tr>
 
@@ -456,6 +474,54 @@ Can be uses like this: expect(observer.next).toHaveBeenCalledWith(expectedValue)
     </table>
 </section>
 
+            <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="unsubscribe"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>unsubscribe</b></span>
+                        <a href="#unsubscribe"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>unsubscribe()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="48"
+                                    class="link-to-prism">src/observe/spy-observer.class.ts:48</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Stops observing. Values the observable emits afterwards are neither recorded in observations nor passed to the
+next spy. The values and calls recorded so far stay available. Calling it more than once is harmless.</p>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
 
 
 
@@ -506,7 +572,7 @@ Can be uses like this: expect(observer.next).toHaveBeenCalledWith(expectedValue)
 
 
     <div class="tab-pane fade  tab-source-code" id="source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Observable } from &#x27;rxjs&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Observable, Subscription } from &#x27;rxjs&#x27;;
 import { Spy, spyFunctionOf } from &#x27;../spy-framework/spy-framework&#x27;;
 
 
@@ -545,6 +611,17 @@ export class SpyObserver&lt;T&gt; {
     public get latest(): T {
         return this.observations[this.observations.length - 1];
     }
+
+    private readonly subscription: Subscription;
+
+    /**
+     * @description
+     * Stops observing. Values the observable emits afterwards are neither recorded in observations nor passed to the
+     * next spy. The values and calls recorded so far stay available. Calling it more than once is harmless.
+     */
+    public unsubscribe(): void {
+        this.subscription.unsubscribe();
+    }
     /**
      * @param observable
      * The observable that you want to spy with this observer instance.
@@ -563,7 +640,7 @@ export class SpyObserver&lt;T&gt; {
         this.complete &#x3D; inner[prefix + &#x27;complete&#x27;] as Spy;
         this.error &#x3D; inner[prefix + &#x27;error&#x27;] as Spy;
         this.observations &#x3D; new Array&lt;T&gt;();
-        observable.subscribe(next &#x3D;&gt; {
+        this.subscription &#x3D; observable.subscribe(next &#x3D;&gt; {
             this.observations.push(next);
             this.next(next);
         }, this.error, this.complete);

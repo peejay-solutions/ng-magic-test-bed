@@ -24,7 +24,7 @@ describe('OverdueHighlightDirective(standard)', () => {
 
     it('should not add the "overdue" class when there is no due date', () => {
         fixture.componentInstance.dueDate = null;
-        fixture.detectChanges();
+        fixture.changeDetectorRef.detectChanges();
         const span: HTMLElement = fixture.nativeElement.querySelector('span');
 
         expect(span.classList.contains('overdue')).toBe(false);
@@ -33,7 +33,7 @@ describe('OverdueHighlightDirective(standard)', () => {
     it('should add the "overdue" class when the due date is in the past', () => {
         const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
         fixture.componentInstance.dueDate = yesterday;
-        fixture.detectChanges();
+        fixture.changeDetectorRef.detectChanges();
         const span: HTMLElement = fixture.nativeElement.querySelector('span');
 
         expect(span.classList.contains('overdue')).toBe(true);

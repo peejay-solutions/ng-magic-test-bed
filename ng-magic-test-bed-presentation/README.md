@@ -39,9 +39,10 @@ Deliberately **not** synced:
 | `npm run sync-jasmine-into-vitest` | Syncs the Jasmine sources into the Vitest library (see above). |
 | `npm run buildLib` | Builds the Jasmine library and copies its `llms.txt` into `dist`. |
 | `npm run buildVitestLib` | Builds the Vitest library and copies its `llms.txt` into `dist`. |
+| `npm run gate` | The full check before a push or release: builds both libraries, runs both test suites once and headless (`testLibCi`, `testVitestLibCi`), then generates the API docs. Stops at the first failure. |
 | `npm run compodoc` | Cleans `../docs`, generates the API docs of both libraries into `../docs/jasmine` and `../docs/vitest`, and copies the landing page to `../docs`. |
 
-Compodoc is a devDependency (`@compodoc/compodoc`), so run `npm install` once before `npm run compodoc`. The scripts `copyLlms`, `copyLlmsVitest`, `docsJasmine`, `docsVitest` and `docsLanding` are building blocks of the scripts above. The scripts use Windows `cmd` syntax (`xcopy`, `rmdir`).
+Compodoc is a devDependency (`@compodoc/compodoc`), so run `npm install` once before `npm run compodoc`. The scripts `testLibCi`, `testVitestLibCi`, `copyLlms`, `copyLlmsVitest`, `docsJasmine`, `docsVitest` and `docsLanding` are building blocks of the scripts above. The scripts use Windows `cmd` syntax (`xcopy`, `rmdir`).
 
 ## API docs (Compodoc)
 

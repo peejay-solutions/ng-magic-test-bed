@@ -1,4 +1,4 @@
-import { NgMagicSetupTestBed } from '../../../public-api';
+import { NgMagicTestBed } from '../../../public-api';
 import { IdGeneratorService } from '../id-generator-service/id-generator.service';
 import { Todo, TodoFactory } from './todo.factory';
 
@@ -8,7 +8,7 @@ import { Todo, TodoFactory } from './todo.factory';
 describe('TodoFactory(magic)', () => {
 
     function setup() {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const idGeneratorServiceMock = magic.serviceMock(IdGeneratorService);
         const todoFactory = magic.injection(TodoFactory);
         return { todoFactory, idGeneratorServiceMock };

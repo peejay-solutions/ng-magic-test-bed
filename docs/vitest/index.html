@@ -118,7 +118,7 @@
 <tr><td>API docs</td><td><a href="https://peejay-solutions.github.io/ng-magic-test-bed/jasmine/">Jasmine API docs</a></td><td><a href="https://peejay-solutions.github.io/ng-magic-test-bed/vitest/">Vitest API docs</a></td></tr>
 </tbody>
 </table>
-<p>Both packages have the same API. They are built from the same implementation and the same regression tests: the Jasmine package is the source, and the Vitest package is kept in sync with it. There are two differences. Spies look different, because each package uses the spy primitives of its own test runner:</p>
+<p>Both packages have the same API. They are built from the same implementation and the same regression tests: the Jasmine package is the source, and the Vitest package is kept in sync with it. The only difference is how spies look, because each package uses the spy primitives of its own test runner:</p>
 <table class="table table-bordered compodoc-table">
 <thead>
 <tr><th>Jasmine</th><th>Vitest</th></tr>
@@ -129,7 +129,7 @@
 <tr><td><code>spy.calls.mostRecent().args</code></td><td><code>spy.mock.lastCall</code></td></tr>
 </tbody>
 </table>
-<p>And the entry point has a different name: the Jasmine package exports <code>NgMagicSetupTestBed</code> (an empty subclass of <code>NgMagicTestBed</code>), while the Vitest package only exports <code>NgMagicTestBed</code>.</p>
+<p>Both packages use <code>NgMagicTestBed</code> as the entry point. The Jasmine package additionally exports <code>NgMagicSetupTestBed</code>, an empty subclass of it with identical behavior; the Vitest package does not have it.</p>
 <h2>Quick start</h2>
 <b>Example :</b><div><pre class="line-numbers"><code class="language-typescript">import { NgMagicTestBed } from &#39;&#64;ng-magic-test-bed/vitest&#39;;
 

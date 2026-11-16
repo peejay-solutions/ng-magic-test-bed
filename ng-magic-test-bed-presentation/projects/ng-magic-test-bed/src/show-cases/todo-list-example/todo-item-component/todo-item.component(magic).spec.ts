@@ -1,5 +1,5 @@
 import { By } from '@angular/platform-browser';
-import { NgMagicSetupTestBed } from '../../../public-api';
+import { NgMagicTestBed } from '../../../public-api';
 import { Todo } from '../todo-factory/todo.factory';
 import { TodoItemComponent } from './todo-item.component';
 import { AsyncPipe } from '@angular/common';
@@ -7,7 +7,7 @@ import { AsyncPipe } from '@angular/common';
 describe('TodoItemComponent(magic)', () => {
 
     function setup() {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         // This component is self-contained (its own pipe + directive), so
         // fixture() alone is enough - nothing to mock here.
         const todoMock = magic.objectMock(Todo, {

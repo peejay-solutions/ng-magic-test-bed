@@ -1,16 +1,17 @@
 # ng-magic-test-bed
 > Streamlined Angular unit test setup utility. Replaces verbose `TestBed.configureTestingModule` boilerplate with a fluent, type-safe API. Uses Jasmine spies automatically. Automatically extends all mocks with all methods of the class to be mocked.
-Docs: https://peejay-solutions.github.io/ng-magic-test-bed/
+Docs: https://peejay-solutions.github.io/ng-magic-test-bed/jasmine/
+The entry point is `NgMagicTestBed`. This (Jasmine) package additionally exports `NgMagicSetupTestBed`, an empty subclass of it with identical behavior; the Vitest package does not have it.
 ## Installation
 ```bash
 npm install @peejay-solutions/ng-magic-test-bed --save-dev
 ```
 ## Core Usage Pattern
 ```typescript
-import { NgMagicSetupTestBed } from '@peejay-solutions/ng-magic-test-bed';
+import { NgMagicTestBed } from '@peejay-solutions/ng-magic-test-bed';
 describe('MyService', () => {
   function setup() {
-    const magic = new NgMagicSetupTestBed();
+    const magic = new NgMagicTestBed();
     const dependencyServiceMock = magic.serviceMock(DependencyService);
     const service = magic.injection(MyService);
     return { service, dependencyServiceMock };
@@ -37,7 +38,7 @@ Before reading the full API, use this decision tree to pick the correct mock met
 | Need to assert observable emissions | `observer(observable$)` | Subscribes and tracks all emissions with spies |
 | Need the real service instance from DI | `injection(Class)` | Resolves from TestBed; triggers configuration |
 ---
-## NgMagicSetupTestBed API
+## NgMagicTestBed API
 ### Module Setup (call before injection)
 | Method | Description |
 |---|---|
@@ -75,7 +76,7 @@ expect(cards.length).toBe(3);
 `fixture()` always replaces a standalone root component's `imports` array with only what was explicitly registered through this test bed. Any structural directive or pipe the template relies on (`NgIf`, `NgFor`, `AsyncPipe`, ...) that you don't explicitly keep will silently stop working — no error, the content driven by it just never renders. `keptComponentImports()` keeps several of them as their real implementation in one call, instead of registering each one individually.
 ```typescript
 // Template: <span *ngIf="value$ | async as value">{{ value }}</span>
-const magic = new NgMagicSetupTestBed();
+const magic = new NgMagicTestBed();
 magic.keptComponentImports([NgIf, AsyncPipe]);
 const fixture = magic.fixture(MyComponent);
 // without the line above, *ngIf's content would never render, even
@@ -104,7 +105,7 @@ Creates a mock object **without** TestBed registration. Use this for instances t
 ```typescript
 const widgetMock = magic.objectMock(Widget, {
     id: 'mock-id',
-    dataSource: { itemCreated: null } as any
+    dataSource: { itemCreated: new Subject<IItemCreatedEvent>() } // a real Subject, never null or `as any`
 });
 // widgetMock has spies for ALL Widget prototype methods
 // plus the properties you provided
@@ -152,8 +153,9 @@ Note: For factories mocked via `factoryMock()`, use the `factoryMock` return val
 const service = magic.injection(MyService);
 ```
 **`fixture<C>(componentClass, initialInputs?, disableNoErrorSchema?)`**
-Creates a `ComponentFixture<C>`. **May only be called once per `NgMagicSetupTestBed` instance.**
+Creates a `ComponentFixture<C>`. **May only be called once per `NgMagicTestBed` instance.**
 - `initialInputs` — an object whose properties are applied via `componentRef.setInput()` **before** the first `detectChanges()`. This is the correct way to set `@Input()` values that are required in `ngOnInit`. Works for both classic `@Input()`-decorated properties and signal-based `input()` properties — for a signal input with a `transform`, pass the transform's input type (the same value a template binding would pass); it gets transformed the same way a real binding would.
+- A later `fixture.componentRef.setInput(...)` during the test only marks the change as pending. Follow it with `fixture.changeDetectorRef.detectChanges()` so `ngOnChanges` runs, otherwise side effects are silently skipped and the test passes for the wrong reason. Prefer `changeDetectorRef.detectChanges()` over `fixture.detectChanges()`; it is the safer call and works the same in both packages.
 - `disableNoErrorSchema` — by default `NO_ERRORS_SCHEMA` is added so unknown child elements/inputs are silently ignored. Pass `true` to disable this and get strict template checking.
 - Returns a standard Angular `ComponentFixture<C>` (same as `TestBed.createComponent()`).
 - Call after all mocks and `componentMocks`/`directiveMocks` are registered.
@@ -164,7 +166,7 @@ const fixture = magic.fixture(MyComponent, { label: 'test', count: 42 });
 expect(fixture.componentInstance.label).toBe('test'); // or .label() for a signal input
 // Full component test pattern
 function setup() {
-  const magic = new NgMagicSetupTestBed();
+  const magic = new NgMagicTestBed();
   const childMocks = magic.componentMocks(MyChildComponent);  // pass the REAL child component class
   const serviceMock = magic.componentServiceMock(MyComponent, MyService, new MyServiceMock());
   const fixture = magic.fixture(MyComponent, { param: 100 });
@@ -184,7 +186,7 @@ Pass the **real** component class. Reads its `@Input()`/`@Output()` metadata, au
 - `.requery()` - re-runs the same query against the fixture's **current** DOM and rewrites the array in place. Returns `void`. Does **not** call `detectChanges()` itself - call that first if something changed since `fixture()` ran or since the last `requery()`.
 ```typescript
 function setup() {
-  const magic = new NgMagicSetupTestBed();
+  const magic = new NgMagicTestBed();
   const buttons = magic.componentMocks(MyButtonComponent);  // call before fixture, pass the REAL class
   const fixture = magic.fixture(ParentComponent, { param: 100 });
   const firstButton = buttons[0];                           // usable after fixture
@@ -193,7 +195,7 @@ function setup() {
 it('should react to child click', () => {
   const { firstButton, fixture } = setup();
   firstButton.click.emit();
-  fixture.detectChanges();
+  fixture.changeDetectorRef.detectChanges();
   // assert parent reaction
 });
 it('should find the mock in the DOM at any point, without ever having a reference to its class', () => {
@@ -204,7 +206,7 @@ it('should find the mock in the DOM at any point, without ever having a referenc
 it('should reflect components that appear/disappear after fixture() ran', () => {
   const { fixture, buttons } = setup();
   fixture.componentInstance.showButton = false;
-  fixture.detectChanges();
+  fixture.changeDetectorRef.detectChanges();
   buttons.requery();
   expect(buttons.length).toBe(0);
 });
@@ -219,7 +221,7 @@ class MyObject {
   getValue() { return this.service.getValue(); }
 }
 it('should support inject()-based classes', () => {
-  const magic = new NgMagicSetupTestBed();
+  const magic = new NgMagicTestBed();
   const serviceMock = magic.serviceMock(MyService);
   serviceMock.getValue.and.returnValue(42);
   const obj = magic.run(() => new MyObject());
@@ -236,6 +238,7 @@ expect(events$.next).toHaveBeenCalledWith({ type: 'update' });
 expect(events$.observations).toEqual([{ type: 'update' }]);
 expect(events$.latest).toEqual({ type: 'update' });
 ```
+`latest` is `undefined` until the first emission. A `BehaviorSubject` delivers its current value right when the observer subscribes. Call `events$.unsubscribe()` to stop observing: later emissions are no longer recorded, what was recorded so far stays. For an `@Output()` `EventEmitter` use `observe(...)` or `observer(...)`; for a signal-based `output()` use `outputObserver(...)`.
 **`outputObserver<T>(output, name?)`**
 Same as `observer()`, but for Angular's signal-based `output()` API (`OutputEmitterRef<T>`) instead of a plain Observable. Use this for a component's `output<T>()`-declared emitters — the counterpart to `observer()` for the older `@Output() = new EventEmitter()` style.
 ```typescript
@@ -255,6 +258,7 @@ Returned by `magic.observer()`. Wraps an observable with Jasmine spies.
 | `complete` | `jasmine.Spy` | Called on completion |
 | `observations` | `T[]` | Array of all emitted values |
 | `latest` | `T` | Most recently emitted value |
+| `unsubscribe()` | `void` | Stops observing. Later emissions are not recorded, recorded values and calls stay |
 ---
 ## Common Anti-Patterns
 ### Do not use `injection()` for your mocks because then you need to cast back to SpyObj<T> or to the Mock class
@@ -269,10 +273,62 @@ mock.doWork.and.returnValue('result');
 ```
 ### Do not mock methods the test doesn't use
 Only provide a property in the mock when you need a specific return value. Auto-spied methods return `undefined` by default, which is sufficient for unused code paths.
+### Mock methods are already spies - do not re-cast
+`serviceMock`, `objectMock` and `factoryMock` return `jasmine.SpyObj<...>`. Call `.and.returnValue(...)` directly, no cast to `jasmine.Spy` needed.
+```typescript
+// Bad
+(myMock.doWork as jasmine.Spy).and.returnValue('result');
+// Good
+myMock.doWork.and.returnValue('result');
+```
+### Do not cast mock observables to `Observable<T>`
+Keep the `Subject<T>`/`BehaviorSubject<T>` you put into the mock, so `.next()` stays callable in the test. Do not use `null` or `as any` for an observable property either: optional chaining such as `?.pipe(...)` in the code under test then skips silently.
+```typescript
+// Bad - hides .next()
+selectionObservable: new Subject<string>() as Observable<string>
+// Good
+selectionObservable: new Subject<string>()
+```
+### Do not cast to `BehaviorSubject` to call `getValue()`
+Use `magic.observer(obs$).latest` instead.
+```typescript
+// Bad
+const value = (instance.someValue$ as BehaviorSubject<string>).getValue();
+// Good
+const someValue$ = magic.observer(instance.someValue$);
+expect(someValue$.latest).toBe('expected');
+```
+### Do not combine `objectMock` and `serviceMock` for the same class
+`serviceMock` already creates the mock and registers it in one call.
+```typescript
+// Bad
+const mock = magic.objectMock(MyService, {});
+magic.serviceMock(MyService, mock);
+// Good
+const mock = magic.serviceMock(MyService, {});
+```
+### Do not subscribe manually with a spy
+Use `observe()` / `magic.observer()` (or `magic.outputObserver()` for signal-based `output()`).
+```typescript
+// Bad
+const spy = jasmine.createSpy();
+component.someOutput.subscribe(spy);
+// Good
+const someOutput = observe(component.someOutput);
+expect(someOutput.next).toHaveBeenCalledWith('value');
+```
+### Casts must target a single property, never the whole mock
+A cast on the whole object throws away type safety for every other property.
+```typescript
+// Bad
+magic.objectMock(MyClass, { a: {}, b: new Subject() } as unknown as Partial<MyClass>);
+// Good
+magic.objectMock(MyClass, { a: {} as Partial<A>, b: new Subject<string>() });
+```
 ---
 ## Standalone Functions
 **`observe<T>(observable$, name?)`**
-Standalone alternative to `magic.observer()`. Use when you don't have (or need) an `NgMagicSetupTestBed` instance.
+Standalone alternative to `magic.observer()`. Use when you don't have (or need) an `NgMagicTestBed` instance.
 ```typescript
 import { observe } from '@peejay-solutions/ng-magic-test-bed';
 const spy = observe(myService.events$, 'events');

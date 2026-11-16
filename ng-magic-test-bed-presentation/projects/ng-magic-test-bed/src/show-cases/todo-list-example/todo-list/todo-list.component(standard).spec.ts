@@ -38,7 +38,7 @@ describe('TodoListComponent(standard)', () => {
         });
      
         fixture = TestBed.createComponent(TodoListComponent);
-        fixture.detectChanges();
+        fixture.changeDetectorRef.detectChanges();
         todoItemMocks = fixture.debugElement
             .queryAll(By.directive(TodoItemComponentStub))
             .map((debugElement) => debugElement.componentInstance);
@@ -47,7 +47,7 @@ describe('TodoListComponent(standard)', () => {
 
 
   it('should render todos from todoService.todos$', () => {
-        fixture.detectChanges();
+        fixture.changeDetectorRef.detectChanges();
 
         expect(todoItemMocks.length).toBe(2);
         expect(todoItemMocks[0].todo).toEqual(todoMocks[0]);
@@ -55,7 +55,7 @@ describe('TodoListComponent(standard)', () => {
     });
 
     it('should toggle a todo via the service when a todo item emits toggle', () => {
-        fixture.detectChanges();
+        fixture.changeDetectorRef.detectChanges();
 
         todoItemMocks[0].toggle.emit(todoMocks[0]);
 

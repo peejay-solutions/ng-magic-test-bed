@@ -1,10 +1,10 @@
-import { NgMagicSetupTestBed } from '../../../public-api';
+import { NgMagicTestBed } from '../../../public-api';
 import { IdGeneratorService } from './id-generator.service';
 
 describe('IdGeneratorService(magic)', () => {
 
     function setup() {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         // No dependencies to mock at all - injection() is enough on its own.
         const idGeneratorService = magic.injection(IdGeneratorService);
         return { idGeneratorService };

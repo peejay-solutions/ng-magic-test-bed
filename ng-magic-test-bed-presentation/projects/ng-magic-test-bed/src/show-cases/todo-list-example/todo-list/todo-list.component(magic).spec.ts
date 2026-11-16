@@ -1,5 +1,5 @@
 import { BehaviorSubject, of } from 'rxjs';
-import { NgMagicSetupTestBed, mock } from '../../../public-api';
+import { NgMagicTestBed, mock } from '../../../public-api';
 import { Todo } from '../todo-factory/todo.factory';
 import { TodoItemComponent } from '../todo-item-component/todo-item.component';
 import { TodoService } from '../todo-service/todo.service';
@@ -8,7 +8,7 @@ import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 
 describe('TodoListComponent(magic)', () => {
     function setup() {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         // componentMocks() replaces the REAL TodoItemComponent with an
         // auto-generated stub (same selector, same inputs/outputs) and
         // returns every rendered instance of it.
@@ -35,7 +35,7 @@ describe('TodoListComponent(magic)', () => {
 
     it('should toggle a todo via the service when a todo item emits toggle', () => {
         const { fixture, todoServiceMock, todoItemMocks, todoMocks } = setup();
-        fixture.detectChanges();
+        fixture.changeDetectorRef.detectChanges();
 
         todoItemMocks[0].toggle.emit(todoMocks[0]);
 

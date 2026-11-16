@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
-import { NgMagicSetupTestBed } from '../../../public-api';
+import { NgMagicTestBed } from '../../../public-api';
 import { Todo } from '../todo-factory/todo.factory';
 import { TodoFactory } from '../todo-factory/todo.factory';
 import { TodoService } from './todo.service';
@@ -9,7 +9,7 @@ import { fakeAsync, flush } from '@angular/core/testing';
 describe('TodoService(magic)', () => {
 
     function setup() {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         // HttpClient has no @Injectable of our own to mock manually - serviceMock()
         // auto-spies every prototype method (get/post/put/...) in one line.
         const httpClientMock = magic.serviceMock(HttpClient);

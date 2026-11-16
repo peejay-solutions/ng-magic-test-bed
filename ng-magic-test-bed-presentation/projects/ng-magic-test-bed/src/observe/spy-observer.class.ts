@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Spy, spyFunctionOf } from '../spy-framework/spy-framework';
 
 
@@ -37,6 +37,17 @@ export class SpyObserver<T> {
     public get latest(): T {
         return this.observations[this.observations.length - 1];
     }
+
+    private readonly subscription: Subscription;
+
+    /**
+     * @description
+     * Stops observing. Values the observable emits afterwards are neither recorded in observations nor passed to the
+     * next spy. The values and calls recorded so far stay available. Calling it more than once is harmless.
+     */
+    public unsubscribe(): void {
+        this.subscription.unsubscribe();
+    }
     /**
      * @param observable
      * The observable that you want to spy with this observer instance.
@@ -55,7 +66,7 @@ export class SpyObserver<T> {
         this.complete = inner[prefix + 'complete'] as Spy;
         this.error = inner[prefix + 'error'] as Spy;
         this.observations = new Array<T>();
-        observable.subscribe(next => {
+        this.subscription = observable.subscribe(next => {
             this.observations.push(next);
             this.next(next);
         }, this.error, this.complete);

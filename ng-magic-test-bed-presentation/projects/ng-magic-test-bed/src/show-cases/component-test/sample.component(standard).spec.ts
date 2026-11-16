@@ -47,7 +47,7 @@ describe('SampleComponent(standard)', () => {
 
         fixture = TestBed.createComponent(SampleComponent);
         fixture.componentInstance.param = 100;
-        fixture.detectChanges();
+        fixture.changeDetectorRef.detectChanges();
         buttonComponentMock = fixture.debugElement.query(By.directive(ButtonComponentMock)).componentInstance;
     });
 

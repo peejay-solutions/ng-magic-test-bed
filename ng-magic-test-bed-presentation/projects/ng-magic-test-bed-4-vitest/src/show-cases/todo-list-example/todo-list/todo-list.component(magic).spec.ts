@@ -35,7 +35,7 @@ describe('TodoListComponent(magic)', () => {
 
     it('should toggle a todo via the service when a todo item emits toggle', () => {
         const { fixture, todoServiceMock, todoItemMocks, todoMocks } = setup();
-        fixture.detectChanges();
+        fixture.changeDetectorRef.detectChanges();
 
         todoItemMocks[0].toggle.emit(todoMocks[0]);
 

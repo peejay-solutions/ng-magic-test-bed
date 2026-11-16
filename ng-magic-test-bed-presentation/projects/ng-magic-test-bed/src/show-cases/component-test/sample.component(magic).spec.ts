@@ -1,4 +1,4 @@
-import { NgMagicSetupTestBed } from '../../setup-test-bed/ng-magic-setup-test-bed.class';
+import { NgMagicTestBed } from '../../test-bed/ng-magic-test-bed.class';
 import { observe } from '../../observe/observe.function';
 import { ButtonComponent } from './button.component';
 import { HandlerDirective } from './handler.directive';
@@ -9,7 +9,7 @@ import { SampleComponent } from './sample.component';
 describe('SampleComponent(magic)', () => {
 
     function setup() {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const buttonComponentMocks = magic.componentMocks(ButtonComponent);
         const myComponentServiceMock = magic.componentServiceMock(SampleComponent, MyComponentService, {
             returnSomething: () => 3,

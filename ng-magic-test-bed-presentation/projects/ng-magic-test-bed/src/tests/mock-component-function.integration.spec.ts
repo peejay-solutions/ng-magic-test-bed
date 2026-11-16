@@ -71,7 +71,7 @@ describe('mockComponent()', () => {
 
         TestBed.configureTestingModule({ imports: [AliasInputHostComponent] });
         const fixture = TestBed.createComponent(AliasInputHostComponent);
-        fixture.detectChanges();
+        fixture.changeDetectorRef.detectChanges();
 
         const alertMockInstance = fixture.debugElement.children[0].componentInstance;
         expect(alertMockInstance.message).toBe('hi');
@@ -97,7 +97,7 @@ describe('mockComponent()', () => {
 
         TestBed.configureTestingModule({ imports: [AliasOutputHostComponent] });
         const fixture = TestBed.createComponent(AliasOutputHostComponent);
-        fixture.detectChanges();
+        fixture.changeDetectorRef.detectChanges();
 
         const alertMockInstance = fixture.debugElement.children[0].componentInstance;
         alertMockInstance.closeRequested.emit();

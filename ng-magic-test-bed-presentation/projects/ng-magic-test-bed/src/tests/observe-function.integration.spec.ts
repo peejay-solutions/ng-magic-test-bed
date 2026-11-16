@@ -29,4 +29,15 @@ describe('observe()', () => {
         expect(getSpyName(spyObserver.next)).toContain('myStream.next');
     });
 
+    it('unsubscribe() should stop recording, but keep what was recorded so far', () => {
+        const subject = new Subject<number>();
+
+        const spyObserver = observe(subject);
+        subject.next(1);
+        spyObserver.unsubscribe();
+        subject.next(2);
+
+        expect(spyObserver.observations).toEqual([1]);
+    });
+
 });

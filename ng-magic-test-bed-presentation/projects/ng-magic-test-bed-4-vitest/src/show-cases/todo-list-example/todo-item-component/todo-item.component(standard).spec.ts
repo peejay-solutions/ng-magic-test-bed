@@ -17,7 +17,7 @@ describe('TodoItemComponent(standard)', () => {
         });
         fixture = TestBed.createComponent(TodoItemComponent);
         fixture.componentInstance.todo = todoMock
-        fixture.detectChanges();
+        fixture.changeDetectorRef.detectChanges();
     });
 
     it('should render the todo title', () => {

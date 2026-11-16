@@ -52,7 +52,7 @@ describe('mockComponent()', () => {
 
         const fixture = TestBed.createComponent(ParentComponent);
         const parentComponent = fixture.componentInstance;
-        fixture.detectChanges();
+        fixture.changeDetectorRef.detectChanges();
 
         const childDebugElement = fixture.debugElement.query(By.css('lib-child'));
         return {
@@ -83,7 +83,7 @@ describe('mockComponent()', () => {
         expect(mockInstance.action).toBeTruthy();
         expect(typeof mockInstance.action.emit).toBe('function');
         mockInstance.action.emit('Hello from the mock!');
-        fixture.detectChanges();
+        fixture.changeDetectorRef.detectChanges();
         expect(parentComponent.receivedValue).toBe('Hello from the mock!');
     });
 

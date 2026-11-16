@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
-import { NgMagicSetupTestBed } from '../../../public-api';
+import { NgMagicTestBed } from '../../../public-api';
 import { DueInPipe } from './due-in.pipe';
 
 // A pipe has no template of its own, so it needs a small host component
@@ -20,7 +20,7 @@ describe('DueInPipe(magic)', () => {
     let fixture: ComponentFixture<DueInHostComponent>;
 
     beforeEach(() => {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         // keptPipe() keeps the REAL pipe in the template instead of stubbing
         // it - we want to test its actual transform() logic here.
         magic.keptPipe(DueInPipe);
@@ -29,14 +29,14 @@ describe('DueInPipe(magic)', () => {
 
     it('should render an empty string when there is no due date', () => {
         fixture.componentInstance.dueDate = null;
-        fixture.detectChanges();
+        fixture.changeDetectorRef.detectChanges();
 
         expect(fixture.nativeElement.textContent.trim()).toBe('');
     });
 
     it('should render "due today" when the due date is today', () => {
         fixture.componentInstance.dueDate = new Date();
-        fixture.detectChanges();
+        fixture.changeDetectorRef.detectChanges();
 
         expect(fixture.nativeElement.textContent.trim()).toBe('due today');
     });
@@ -44,7 +44,7 @@ describe('DueInPipe(magic)', () => {
     it('should render "overdue" when the due date is in the past', () => {
         const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
         fixture.componentInstance.dueDate = yesterday;
-        fixture.detectChanges();
+        fixture.changeDetectorRef.detectChanges();
 
         expect(fixture.nativeElement.textContent.trim()).toBe('overdue');
     });

@@ -23,7 +23,7 @@ describe('AppComponent', () => {
 
   it('should render title', () => {
    const {fixture} = setup();
-    fixture.detectChanges();
+    fixture.changeDetectorRef.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('.content span')?.textContent).toContain('ng-magic-test-bed-presentation app is running!');
   });

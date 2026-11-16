@@ -1,13 +1,12 @@
-import { TestBed } from "@angular/core/testing";
 import { ExampleService } from "./example.service";
 import { HelperService } from "./helper.service";
-import { NgMagicSetupTestBed } from "@peejay-solutions/ng-magic-test-bed";
+import { NgMagicTestBed } from "../../public-api";
 
 
 describe('ExampleService', () => {
 
     function setup() {
-        const magic = new NgMagicSetupTestBed();
+        const magic = new NgMagicTestBed();
         const helperServiceMock = magic.serviceMock(HelperService);
         const exampleService = magic.injection(ExampleService);
         return { exampleService, helperServiceMock };

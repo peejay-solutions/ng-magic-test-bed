@@ -12,7 +12,7 @@ ng-magic-test-bed exists for two test runners. Install **one** of them, never bo
 | Install | `npm install @peejay-solutions/ng-magic-test-bed --save-dev` | `npm install @ng-magic-test-bed/vitest --save-dev` |
 | API docs | [Jasmine API docs](https://peejay-solutions.github.io/ng-magic-test-bed/jasmine/) | [Vitest API docs](https://peejay-solutions.github.io/ng-magic-test-bed/vitest/) |
 
-Both packages have the same API. They are built from the same implementation and the same regression tests: the Jasmine package is the source, and the Vitest package is kept in sync with it. There are two differences. Spies look different, because each package uses the spy primitives of its own test runner:
+Both packages have the same API. They are built from the same implementation and the same regression tests: the Jasmine package is the source, and the Vitest package is kept in sync with it. The only difference is how spies look, because each package uses the spy primitives of its own test runner:
 
 | Jasmine | Vitest |
 |---|---|
@@ -20,7 +20,7 @@ Both packages have the same API. They are built from the same implementation and
 | `spy.and.callFake(fn)` | `spy.mockImplementation(fn)` |
 | `spy.calls.mostRecent().args` | `spy.mock.lastCall` |
 
-And the entry point has a different name: the Jasmine package exports `NgMagicSetupTestBed` (an empty subclass of `NgMagicTestBed`), while the Vitest package only exports `NgMagicTestBed`.
+Both packages use `NgMagicTestBed` as the entry point. The Jasmine package additionally exports `NgMagicSetupTestBed`, an empty subclass of it with identical behavior; the Vitest package does not have it.
 
 ## Quick start
 
